@@ -23,7 +23,7 @@ The data is presented in an interactive data visualisation tool: [Power BI](http
 
 [Link to interactive DataViz](https://app.powerbi.com/view?r=eyJrIjoiMDNjZDY3YzEtMmM3OC00YWVkLTlmODUtNmRlMTM2YTJmMTg5IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D)
 
-[![Click to view and interact with the report](https://app.powerbi.com/view?r=eyJrIjoiMDNjZDY3YzEtMmM3OC00YWVkLTlmODUtNmRlMTM2YTJmMTg5IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D]
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations%20AUS%20vs%20adult.png)](https://app.powerbi.com/view?r=eyJrIjoiMDNjZDY3YzEtMmM3OC00YWVkLTlmODUtNmRlMTM2YTJmMTg5IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D)
 
 
 THIS REPORT IS NOT HEALTH ADVICE - REFER TO YOUR LOCAL HEALTH AUTHORITY.
