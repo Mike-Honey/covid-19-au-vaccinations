@@ -15,9 +15,7 @@ This project seeks to boil down the many figures on vaccinations into an easily 
 - How many people are protected?
 - How many to go?
 
-The "waffle chart" visual chosen by Andrew presents the vaccination data standardised by the population of various Geographies. 
-
-Data transparency on Vaccinations has not lived up to the announcements - reporting is patchy and 
+The "waffle chart" visual chosen by Andrew presents the vaccination data, standardised by the population of various Geographies.  Geographies of wildly differing populations (e.g. New South Wales vs Tasmania) can be easily compared.
 
 The data is presented in an interactive data visualisation tool: [Power BI](https://powerbi.microsoft.com). This allows interactive filtering of the data (e.g. by Geography).  
 
