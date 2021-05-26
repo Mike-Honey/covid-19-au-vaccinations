@@ -3,7 +3,7 @@ DataViz on Australian Vaccinations for COVID-19
 
 **Reference:**
 
-Data on Australian Vaccinations from [covidlive.com.au](https://covidlive.com.au/report/vaccinations-people).
+Data on Australian Vaccinations from [covidlive.com.au](https://covidlive.com.au/report/vaccinations-people).  This is the source for Australian numbers presented in [Our World In Data](https://ourworldindata.org/). Unfortunately concise government sources are not available, so there is a significant citizen data science effort to collate these figures in a consistent way.
 
 Data on Australian Population from [abs.gov.au](https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population/sep-2020).
 
