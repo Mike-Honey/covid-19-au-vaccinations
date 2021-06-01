@@ -28,4 +28,4 @@ The dataviz is refreshed automatically, roughly every 2 hours during the AEST da
 
 THIS REPORT IS NOT HEALTH ADVICE - REFER TO YOUR LOCAL HEALTH AUTHORITY.
 
-Note: Prior to 31 May 2021, the figure shown for % 1st dose (and the pale green boxes representing that figure) were overstated - I misunderstood the meaning of the total 1st dose count as excluding people who received a 2nd dose, when in fact they are included.
+Note: Prior to 1 June 2021, the figure shown for % 1st dose (and the pale green boxes representing that figure) were overstated - I misunderstood the meaning of the total 1st dose count as excluding people who received a 2nd dose, when in fact they are included.
