@@ -19,7 +19,7 @@ The "waffle chart" visual chosen by Andrew presents the vaccination data, standa
 
 The data is presented in an interactive data visualisation tool: [Power BI](https://powerbi.microsoft.com). This allows interactive filtering of the data (e.g. by Geography or Date), and includes supporting charts and data tables.  
 
-The dataviz is refreshed automatically, roughly every 2 hours during the AEST daytime. 
+The dataviz is refreshed automatically, roughly every 2 hours during the daytime (AEST GMT+10). 
 
 [Link to interactive DataViz](https://app.powerbi.com/view?r=eyJrIjoiMDNjZDY3YzEtMmM3OC00YWVkLTlmODUtNmRlMTM2YTJmMTg5IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D)
 
