@@ -1,5 +1,5 @@
 # covid-19-au-vaccinations
-DataViz of Australian Vaccinations for COVID-19
+DataViz of Australian COVID-19 Vaccinations
 
 [Link to interactive DataViz](https://app.powerbi.com/view?r=eyJrIjoiMDNjZDY3YzEtMmM3OC00YWVkLTlmODUtNmRlMTM2YTJmMTg5IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D)
 
