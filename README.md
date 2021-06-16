@@ -5,6 +5,8 @@ DataViz of Australian COVID-19 Vaccinations
 
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations%20AUS%20vs%20adult.png)](https://app.powerbi.com/view?r=eyJrIjoiNDI4ZWJjY2QtMjM3NC00NGQzLWJiMjQtOWYzNDczN2VjZWRkIiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D)
 
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations%20AUS%20page.png)](https://app.powerbi.com/view?r=eyJrIjoiNDI4ZWJjY2QtMjM3NC00NGQzLWJiMjQtOWYzNDczN2VjZWRkIiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D)
+
 
 **Reference:**
 
@@ -25,6 +27,10 @@ The "waffle chart" visual chosen by Marta presents the vaccination data, standar
 The data is presented in an interactive data visualisation tool: [Power BI](https://powerbi.microsoft.com). This allows interactive filtering of the data (e.g. by Geography or Date), and includes supporting charts and data tables.  
 
 The dataviz is refreshed automatically, roughly every 2 hours during the daytime (AEST GMT+10). 
+
+I have similar projects running for other countries:
+ - [World](https://github.com/Mike-Honey/covid-19-world-vaccinations#readme) (select country, countries, continents or global summary)
+ - [New Zealand](https://github.com/Mike-Honey/covid-19-nz-vaccinations#readme) (select country, or Area/DHB)
 
 
 THIS REPORT IS NOT HEALTH ADVICE - REFER TO YOUR LOCAL HEALTH AUTHORITY.
