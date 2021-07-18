@@ -1,6 +1,8 @@
 # covid-19-au-vaccinations
 DataViz of Australian COVID-19 Vaccinations
 
+## Infographic
+
 [Link to interactive DataViz](https://app.powerbi.com/view?r=eyJrIjoiNDI4ZWJjY2QtMjM3NC00NGQzLWJiMjQtOWYzNDczN2VjZWRkIiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D)
 
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations%20AUS.png)](https://app.powerbi.com/view?r=eyJrIjoiNDI4ZWJjY2QtMjM3NC00NGQzLWJiMjQtOWYzNDczN2VjZWRkIiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D)
