@@ -11,6 +11,10 @@ DataViz of Australian COVID-19 Vaccinations
 
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations%20AUS%20page.png)](https://app.powerbi.com/view?r=eyJrIjoiNDI4ZWJjY2QtMjM3NC00NGQzLWJiMjQtOWYzNDczN2VjZWRkIiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D)
 
+## Impact of Vaccinations page
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-Impact.png)](https://app.powerbi.com/view?r=eyJrIjoiNDI4ZWJjY2QtMjM3NC00NGQzLWJiMjQtOWYzNDczN2VjZWRkIiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectione587960dd650b25bd82c)
+
 ## Doses page
 
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations%20Daily%20page.png)](https://app.powerbi.com/view?r=eyJrIjoiNDI4ZWJjY2QtMjM3NC00NGQzLWJiMjQtOWYzNDczN2VjZWRkIiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection882ed22d8cd78465ae9a)
@@ -24,6 +28,9 @@ Data on Australian Population from [abs.gov.au](https://www.abs.gov.au/statistic
 
 Following the visualisation design of [Marta Fioni](https://twitter.com/martafioni), as featured on the [UK government "equivalent" dashboard](https://coronavirus.data.gov.uk/) - we can dream...
 
+For the Impact of Vaccination analysis, following the visualisation design of [John Burn-Murdoch](https://twitter.com/jburnmurdoch), as featured in the [Financial Times](https://www.ft.com/content/fa4f248a-a476-491d-a5ce-f128360e9f24).
+
+
 ## Summary
 
 This project seeks to boil down the many figures on vaccinations into an easily digested infographic. I've been looking for inspiration on this for quite a while - the key questions in my mind are:
@@ -31,6 +38,8 @@ This project seeks to boil down the many figures on vaccinations into an easily 
 - How many to go?
 
 The "waffle chart" visual chosen by Marta presents the vaccination data, standardised by the population of various Geographies.  Geographies of wildly differing populations (e.g. New South Wales vs Tasmania) can be easily compared.
+
+The Impact of Vaccination page contrasts two key statistics - Cases vs Deaths. Vaccinations reduce the number of cases somewhat, but should dramatically reduce the number of deaths that follow.
 
 The data is presented in an interactive data visualisation tool: [Power BI](https://powerbi.microsoft.com). This allows interactive filtering of the data (e.g. by Geography or Date), and includes supporting charts and data tables.  
 
