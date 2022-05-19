@@ -27,6 +27,10 @@ DataViz of Australian COVID-19 Vaccinations and other related statistics
 
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-CHID.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection91578759c19e481761b9)
 
+## Cases and hospitalisation vs CDC Community Levels page
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-CDC.png)]([https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection91578759c19e481761b9](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectiona1b250d0385452ccd901))
+
 
 ## Reference:
 
@@ -39,6 +43,14 @@ Infographic was inspired by the visualisation design of [Marta Fioni](https://tw
 The cases, deaths, tesing, vaccinations analyses were inspired by the visualisation design of [John Burn-Murdoch](https://twitter.com/jburnmurdoch), as featured in the [Financial Times](https://www.ft.com/content/fa4f248a-a476-491d-a5ce-f128360e9f24).
 
 The Cases, hospitalisation, ICU, deaths analysis was inspired by the visualisation design of [Louis Rossouw](https://twitter.com/lrossouw/status/1517260154491781123?s=20&t=VS_5aQlDK7yRLL0CuxQKAg).
+
+The Cases and hospitalisation vs CDC Community Levels analysis compares case and hospitalisation rates with [Community Levels set by the US CDC](https://www.cdc.gov/coronavirus/2019-ncov/science/community-levels.html). 
+
+The first metric they look at is "Cases per 100,000 people for the past 7 days", being fewer than or more than 200.  All regions of Australia have been well over that mark for the Omicron outbreak. So I'm focussing on the last 2 rows in the CDC table.
+
+Their next metric is Admissions per 100K (7-day total). Australia doesn't publish that data, but you can see from the first 2 charts on this OWID page the "in Hospital" numbers are a very close proxy, for the US and other comparable countries. https://ourworldindata.org/covid-hospitalizations
+
+The last CDC metric is % of staffed inpatient beds occupied.  I don't have data on hand for that for Australia. But as Australia is well into the "High" zone on the first 2 indicators, and the CDC instruction is "Use the Highest Level that applies", that metric is not needed.
 
 ## Summary
 
