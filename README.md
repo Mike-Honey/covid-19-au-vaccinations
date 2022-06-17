@@ -19,6 +19,10 @@ DataViz of Australian COVID-19 Vaccinations and other related statistics
 
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-WCDTV.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectione587960dd650b25bd82c)
 
+## Cases, Reff & deaths snapshot page
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-CRD.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection74d82835c604c41e4ede)
+
 ## 7-day cases, deaths, tesing, vaccinations page
 
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-7DCDTV.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectione3057c40e574e7c8ec25)
