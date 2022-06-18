@@ -68,6 +68,8 @@ The cases, deaths, tesing, vaccinations pages contrasts two key statistics - Cas
 
 The Cases, hospitalisation, ICU, deaths analysis page shows multiple key statistics as time-series on a single line chart. A log-scale Y-Axis helps comparison of growth for metrics that are at widely varying scales. Testing % positive is shown as this informs the understanding of reported cases - when % positive is high, the true infection count is much higher than reported cases. 
 
+Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
+
 The data is presented in an interactive data visualisation tool: [Power BI](https://powerbi.microsoft.com). This allows interactive filtering of the data (e.g. by Geography or Date), and includes supporting charts and data tables.  
 
 The dataviz is refreshed automatically, roughly every 2 hours during the daytime (AEST GMT+10). 
