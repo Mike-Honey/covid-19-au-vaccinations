@@ -1,11 +1,29 @@
 # covid-19-au-vaccinations
 DataViz of Australian COVID-19 Vaccinations and other related statistics
 
-## Infographic
+## Cases, Reff & deaths snapshot page
 
-[Link to interactive DataViz](https://app.powerbi.com/view?r=eyJrIjoiNDI4ZWJjY2QtMjM3NC00NGQzLWJiMjQtOWYzNDczN2VjZWRkIiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D)
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-CRD.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection74d82835c604c41e4ede)
 
-[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations%20AUS.png)](https://app.powerbi.com/view?r=eyJrIjoiNDI4ZWJjY2QtMjM3NC00NGQzLWJiMjQtOWYzNDczN2VjZWRkIiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D)
+## Statistics by geography page - pick a stat (any stat) for a time series
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-stats.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection6bde8867e42411bb318d)
+
+## Cases, hospitalisation, ICU, deaths page
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-CHID.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection91578759c19e481761b9)
+
+## 7-day cases, deaths, tesing, vaccinations page
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-7DCDTV.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectione3057c40e574e7c8ec25)
+
+## Weekly cases, deaths, tesing, vaccinations page
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-WCDTV.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectione587960dd650b25bd82c)
+
+## Infographic on Vaccinations
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations%20AUS.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection6ad011d3450097120932)
 
 ## Infographic page
 
@@ -14,22 +32,6 @@ DataViz of Australian COVID-19 Vaccinations and other related statistics
 ## Daily Doses page
 
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations%20Daily%20page.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection882ed22d8cd78465ae9a)
-
-## Weekly cases, deaths, tesing, vaccinations page
-
-[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-WCDTV.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectione587960dd650b25bd82c)
-
-## Cases, Reff & deaths snapshot page
-
-[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-CRD.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection74d82835c604c41e4ede)
-
-## 7-day cases, deaths, tesing, vaccinations page
-
-[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-7DCDTV.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectione3057c40e574e7c8ec25)
-
-## Cases, hospitalisation, ICU, deaths page
-
-[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-CHID.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection91578759c19e481761b9)
 
 ## Cases and hospitalisation vs CDC Community Levels page
 
@@ -58,17 +60,21 @@ The last CDC metric is % of staffed inpatient beds occupied.  I don't have data 
 
 ## Summary
 
-This project seeks to boil down the many figures on vaccinations into an easily digested infographic. I've been looking for inspiration on this for quite a while - the key questions in my mind are:
-- How many people are protected?
-- How many to go?
+The cases, deaths, Reff snapshot page compresses the recent trends on cases and deaths into a dense infographic. The latest number in each category (by Geography) is supported by a sparkline to show the recent trends.
 
-The "waffle chart" visual chosen by Marta presents the vaccination data, standardised by the population of various Geographies.  Geographies of wildly differing populations (e.g. New South Wales vs Tasmania) can be easily compared.
+Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
+
+The Statistics by Geography page shows a time series chart with a line for each Geography (states & territories, plus the national aggregate). A wide range of statistics are available, covering cases, hospitalisations, ICU, deaths, testing, vaccinations. I favour ratios per X population for comparison of the Geographies, as their population varies widely. The raw numbers are also available. You can choose which Geographies to include, and the time period.
 
 The cases, deaths, tesing, vaccinations pages contrasts two key statistics - Cases vs Deaths. Testing % positive is shown as this informs the understanding of reported cases - when % positive is high, the true infection count is much higher than reported cases. Vaccinations are reported as % of the population (outcomes perspective, not work done).
 
 The Cases, hospitalisation, ICU, deaths analysis page shows multiple key statistics as time-series on a single line chart. A log-scale Y-Axis helps comparison of growth for metrics that are at widely varying scales. Testing % positive is shown as this informs the understanding of reported cases - when % positive is high, the true infection count is much higher than reported cases. 
 
-Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
+The infographic seeks to boil down the many figures on vaccinations into an easily digested picture. I'd been looking for inspiration on this for quite a while - the key questions in my mind are:
+- How many people are protected?
+- How many to go?
+
+The "waffle chart" visual chosen by Marta presents the vaccination data, standardised by the population of various Geographies.  Geographies of wildly differing populations (e.g. New South Wales vs Tasmania) can be easily compared.
 
 The data is presented in an interactive data visualisation tool: [Power BI](https://powerbi.microsoft.com). This allows interactive filtering of the data (e.g. by Geography or Date), and includes supporting charts and data tables.  
 
