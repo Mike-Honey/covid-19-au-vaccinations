@@ -58,6 +58,8 @@ Data on Australian Vaccinations and other covid-19 statistics from [covidlive.co
 
 Data on Australian Population from [abs.gov.au](https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population/sep-2020). Summarised population is unsuitable as their bands of age ranges do not align with the "Adult = 16+" definition used by Health Departments. So the method used is to get the most detailed time series spreadsheets, e.g. "Population - Victoria". Each column represents a single year age, by Gender.  The columns for "Persons" Gender are selected. "Adult" is derived by summing the columns for ages 16+ (note: split across 2 sheets). The latest row available (dated June 2020) is selected.
 
+Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
+
 Infographic was inspired by the visualisation design of [Marta Fioni](https://twitter.com/martafioni), as featured on the [UK government "equivalent" dashboard](https://coronavirus.data.gov.uk/).
 
 The cases, deaths, tesing, vaccinations analyses were inspired by the visualisation design of [John Burn-Murdoch](https://twitter.com/jburnmurdoch), as featured in the [Financial Times](https://www.ft.com/content/fa4f248a-a476-491d-a5ce-f128360e9f24).
@@ -73,8 +75,6 @@ Their next metric is Admissions per 100K (7-day total). Australia doesn't publis
 The last CDC metric is % of staffed inpatient beds occupied.  I don't have data on hand for that for Australia. But as Australia is well into the "High" zone on the first 2 indicators, and the CDC instruction is "Use the Highest Level that applies", that metric is not needed.
 
 ## Summary
-
-Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
 
 The Statistics by Geography page shows a time series chart with a line for each Geography (states & territories, plus the national aggregate). A wide range of statistics are available, covering cases, hospitalisations, ICU, deaths, testing, vaccinations. I favour ratios per X population for comparison of the Geographies, as their population varies widely. The raw numbers are also available. You can choose which Geographies to include, and the time period.
 
