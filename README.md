@@ -74,11 +74,15 @@ The last CDC metric is % of staffed inpatient beds occupied.  I don't have data 
 
 ## Summary
 
-The cases, deaths, Reff snapshot page compresses the recent trends on cases and deaths into a dense infographic. The latest number in each category (by Geography) is supported by a sparkline to show the recent trends.
-
 Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
 
 The Statistics by Geography page shows a time series chart with a line for each Geography (states & territories, plus the national aggregate). A wide range of statistics are available, covering cases, hospitalisations, ICU, deaths, testing, vaccinations. I favour ratios per X population for comparison of the Geographies, as their population varies widely. The raw numbers are also available. You can choose which Geographies to include, and the time period.
+
+The Statistics by Geography - log axis page shows a time series chart with a line for each selected statistic, for a selected Geography (states & territories, plus the national aggregate). The default statistics selected are cases, hospitalisations, ICU & deaths. You can deleselect any of those and select any other statistics you want to compare. This presentation helps compare growth trends and align the timing of momentum changes.
+
+The Statistics by Geography - forecast page shows a time series chart with a line for a selected statistic and Geography (states & territories, plus the national aggregate). A 10-day forecast is shown (where possible) using a logistic regression algorithm. Grey bands show the 95% Confidence Intervals.
+
+The cases, deaths, Reff snapshot page compresses the recent trends on cases and deaths into a dense infographic. The latest number in each category (by Geography) is supported by a sparkline to show the recent trends.
 
 The cases, deaths, tesing, vaccinations pages contrasts two key statistics - Cases vs Deaths. Testing % positive is shown as this informs the understanding of reported cases - when % positive is high, the true infection count is much higher than reported cases. Vaccinations are reported as % of the population (outcomes perspective, not work done).
 
