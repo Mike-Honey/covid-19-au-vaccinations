@@ -56,6 +56,9 @@ DataViz of Australian COVID-19 Vaccinations and other related statistics
 
 Data on Australian Vaccinations and other covid-19 statistics from [covidlive.com.au](https://covidlive.com.au/report/vaccinations-people).  This is the source for Australian numbers presented in [Our World In Data](https://ourworldindata.org/). Unfortunately concise government sources are not available, so there is a significant citizen data science effort to collate these figures in a consistent way.
 
+For Victoria, a further citizen data effort is used to provide the daily key statistics from September 2022 onwards.
+https://github.com/dbRaevn/covid19
+
 Data on Australian Population from [abs.gov.au](https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population/sep-2020). Summarised population is unsuitable as their bands of age ranges do not align with the "Adult = 16+" definition used by Health Departments. So the method used is to get the most detailed time series spreadsheets, e.g. "Population - Victoria". Each column represents a single year age, by Gender.  The columns for "Persons" Gender are selected. "Adult" is derived by summing the columns for ages 16+ (note: split across 2 sheets). The latest row available (dated June 2020) is selected.
 
 Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
