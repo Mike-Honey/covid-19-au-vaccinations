@@ -35,6 +35,10 @@ DataViz of Australian COVID-19 Vaccinations and other related statistics
 
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-CRD.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection74d82835c604c41e4ede)
 
+## Risk Analysis page
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-risk.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection74e73e32cffa64fee0e3)
+
 ## Infographic on Vaccinations
 
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations%20AUS.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection6ad011d3450097120932)
@@ -62,6 +66,12 @@ https://github.com/dbRaevn/covid19
 Data on Australian Population from [abs.gov.au](https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population/sep-2020). Summarised population is unsuitable as their bands of age ranges do not align with the "Adult = 16+" definition used by Health Departments. So the method used is to get the most detailed time series spreadsheets, e.g. "Population - Victoria". Each column represents a single year age, by Gender.  The columns for "Persons" Gender are selected. "Adult" is derived by summing the columns for ages 16+ (note: split across 2 sheets). The latest row available (dated June 2020) is selected.
 
 Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
+
+The Risk Analysis page uses 2 user inputs to estimate the % prevalence of infectious cases in each Jurisdiction, shown as a time series.
+ - Median Infectious Period (days) - how long a typical case is infectious. This could be asymptomatic, before or after testing positive.
+ - Under-reporting Factor - what factor should reported cases be multiplied by to arrive at true cases.
+ 
+These are both subjective inputs, so I use default values of 10 for both, but any user is free to change these to their own estimates.
 
 Infographic was inspired by the visualisation design of [Marta Fioni](https://twitter.com/martafioni), as featured on the [UK government "equivalent" dashboard](https://coronavirus.data.gov.uk/).
 
