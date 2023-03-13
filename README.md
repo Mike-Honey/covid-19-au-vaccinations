@@ -95,6 +95,8 @@ https://github.com/dbRaevn/covid19
 
 Data on Australian Population from [abs.gov.au](https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population/sep-2020). Summarised population is unsuitable as their bands of age ranges do not align with the "Adult = 16+" definition used by Health Departments. So the method used is to get the most detailed time series spreadsheets, e.g. "Population - Victoria". Each column represents a single year age, by Gender.  The columns for "Persons" Gender are selected. "Adult" is derived by summing the columns for ages 16+ (note: split across 2 sheets). The latest row available (dated June 2020) is selected.
 
+Data on Australian Mortality from COVID-19 is from [abs.gov.au]([https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population/sep-2020](https://www.abs.gov.au/statistics/health/causes-death/provisional-mortality-statistics)). The weekly data provided is spread randomly among days of the week.
+
 Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
 
 The Risk Analysis page uses 2 user inputs to estimate the % prevalence of infectious cases in each Jurisdiction, shown as a time series.
@@ -102,6 +104,8 @@ The Risk Analysis page uses 2 user inputs to estimate the % prevalence of infect
  - Under-reporting Factor - what factor should reported cases be multiplied by to arrive at true cases.
  
 These are both subjective inputs, so I use default values of 10 for both, but any user is free to change these to their own estimates.
+
+The Death Toll charts were inspired by a NY Times visualisation, showing each death as a small black point. The data source is the Australian Mortality data from the ABS. To provide contrast to the Date axis, a random spread is introduced on the other axis.
 
 Infographic was inspired by the visualisation design of [Marta Fioni](https://twitter.com/martafioni), as featured on the [UK government "equivalent" dashboard](https://coronavirus.data.gov.uk/).
 
@@ -139,7 +143,9 @@ The "waffle chart" visual chosen by Marta presents the vaccination data, standar
 
 The data is presented in an interactive data visualisation tool: [Power BI](https://powerbi.microsoft.com). This allows interactive filtering of the data (e.g. by Geography or Date), and includes supporting charts and data tables.  
 
-The dataviz is refreshed automatically, roughly every 2 hours during the daytime (AEST GMT+10). 
+The Death Toll charts use the [Deneb Custom visual](https://deneb-viz.github.io/), which wraps the [Vega-Lite grammar for interactive graphics](https://vega.github.io/vega-lite/) in a convenient container for Power BI authors.
+
+The dataviz is refreshed automatically, every Friday. 
 
 I have a similar projects running for other countries globally:
  - [World](https://github.com/Mike-Honey/covid-19-world-vaccinations#readme) (select country, countries, continents or global summary)
