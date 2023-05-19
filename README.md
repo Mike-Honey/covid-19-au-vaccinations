@@ -86,6 +86,17 @@ DataViz of Australian COVID-19 Vaccinations and other related statistics
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-CDC.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectiona1b250d0385452ccd901)
 
 
+
+## Days Since page
+
+An analysis based on the last date that CMOs/CHOs etc in each jurisdiction last held a press conference or similar and took questions from the media on COVID.
+
+[Link to interactive dataviz](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectionfb137d7e83e6a12106a0)
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-days-since.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectionfb137d7e83e6a12106a0)
+
+
+
 ## Reference:
 
 Data on Australian Vaccinations and other covid-19 statistics from [covidlive.com.au](https://covidlive.com.au/report/vaccinations-people).  This is the source for Australian numbers presented in [Our World In Data](https://ourworldindata.org/). Unfortunately concise government sources are not available, so there is a significant citizen data science effort to collate these figures in a consistent way.
@@ -120,6 +131,8 @@ The first metric they look at is "Cases per 100,000 people for the past 7 days",
 Their next metric is Admissions per 100K (7-day total). Australia doesn't publish that data, but you can see from the first 2 charts on this OWID page the "in Hospital" numbers are a very close proxy, for the US and other comparable countries. https://ourworldindata.org/covid-hospitalizations
 
 The last CDC metric is % of staffed inpatient beds occupied.  I don't have data on hand for that for Australia. But as Australia is well into the "High" zone on the first 2 indicators, and the CDC instruction is "Use the Highest Level that applies", that metric is not needed.
+
+The Days Since analysis is based on [crowdsourced data](https://github.com/Mike-Honey/covid-19-au-vaccinations/blob/main/Days-since-Health-Leadership-faced-the-public-on-COVID.xlsx) for the last date that CMOs/CHOs etc in each jurisdiction last held a press conference or similar and took questions from the media on COVID.  The number of days since that event is derived and used to present a "league table", along with some key COVID statistics that have been reported from that jurisdiction in that period (after the Last Media Date).
 
 ## Summary
 
