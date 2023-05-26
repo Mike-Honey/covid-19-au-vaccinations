@@ -99,7 +99,9 @@ An analysis based on the last date that CMOs/CHOs etc in each jurisdiction last 
 
 ## Reference:
 
-Data on Australian Vaccinations and other covid-19 statistics from [covidlive.com.au](https://covidlive.com.au/report/vaccinations-people).  This is the source for Australian numbers presented in [Our World In Data](https://ourworldindata.org/). Unfortunately concise government sources are not available, so there is a significant citizen data science effort to collate these figures in a consistent way.
+Data on Australian COVID-19 statistics from [health.gov.au](https://www.health.gov.au/health-alerts/covid-19/case-numbers-and-statistics), via a crucial citizen data science effort to convert that into useful data by [dbRaevn](https://github.com/dbRaevn/covid19/tree/main/pandemic#readme). 
+
+Data on Australian Vaccinations and other COVID-19 statistics from [covidlive.com.au](https://covidlive.com.au/report/vaccinations-people).  This is the source for Australian numbers presented in [Our World In Data](https://ourworldindata.org/). Unfortunately concise government sources are not available, so there is a significant citizen data science effort to collate these figures in a consistent way.
 
 For Victoria, a further citizen data effort is used to provide the daily key statistics from September 2022 onwards.
 https://github.com/dbRaevn/covid19
