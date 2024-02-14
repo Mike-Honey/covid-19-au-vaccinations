@@ -160,6 +160,10 @@ The data is presented in an interactive data visualisation tool: [Power BI](http
 
 The Death Toll charts use the [Deneb Custom visual](https://deneb-viz.github.io/), which wraps the [Vega-Lite grammar for interactive graphics](https://vega.github.io/vega-lite/) in a convenient container for Power BI authors.
 
+The Deneb Templates for the two styles of charts used for the Death Toll are available:
+- [Density Cloud Timeline - 1x1](https://github.com/Mike-Honey/covid-19-au-vaccinations/blob/main/Density%20Cloud%20Timeline%20-%201x1.json)
+- [Density Cloud Timeline - vertical scroll](https://github.com/Mike-Honey/covid-19-au-vaccinations/blob/main/Density%20Cloud%20Timeline%20-%20vertical%20scroll.json)
+
 The dataviz is refreshed automatically, every Friday. 
 
 I have a similar projects running for other countries globally:
