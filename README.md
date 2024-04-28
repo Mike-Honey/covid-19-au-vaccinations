@@ -110,6 +110,8 @@ Data on Australian Population from [abs.gov.au](https://www.abs.gov.au/statistic
 
 Data on Australian Mortality from COVID-19 for the **Death Toll** pages is from [the Australian Bureau of Statistics - Provisional Mortality Statistics](https://www.abs.gov.au/statistics/health/causes-death/provisional-mortality-statistics). The weekly data provided is spread randomly among days of the week.  It is updated monthly, but due to the death certification process it typically lags by 4 months or so.
 
+Data is scraped from the PDF reports presented on the page [COVID-19 outbreaks in Australian residential aged care facilities](https://www.health.gov.au/resources/collections/covid-19-outbreaks-in-australian-residential-aged-care-facilities), using the python notebook shown in the **health-aged-care** folder. The current targets are the stats on Molnupiravir and Paxlovid prescriptions. The results are collated into a file: **health-aged-care.xlsx**, stored in that sub-folder.
+
 Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
 
 The Death Toll charts were inspired by a NY Times visualisation, showing each death as a small black point. The data source is the Australian Mortality data from the ABS. To provide contrast to the Date axis, a random spread is introduced on the other axis.
