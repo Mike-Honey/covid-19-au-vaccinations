@@ -112,12 +112,6 @@ Data on Australian Mortality from COVID-19 for the **Death Toll** pages is from 
 
 Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
 
-The Risk Analysis page uses 2 user inputs to estimate the % prevalence of infectious cases in each Jurisdiction, shown as a time series.
- - Median Infectious Period (days) - how long a typical case is infectious. This could be asymptomatic, before or after testing positive.
- - Under-reporting Factor - what factor should reported cases be multiplied by to arrive at true cases.
- 
-These are both subjective inputs, so I use default values of 10 for both, but any user is free to change these to their own estimates.
-
 The Death Toll charts were inspired by a NY Times visualisation, showing each death as a small black point. The data source is the Australian Mortality data from the ABS. To provide contrast to the Date axis, a random spread is introduced on the other axis.
 
 Infographic was inspired by the visualisation design of [Marta Fioni](https://twitter.com/martafioni), as featured on the [UK government "equivalent" dashboard](https://coronavirus.data.gov.uk/).
@@ -156,7 +150,26 @@ The infographic seeks to boil down the many figures on vaccinations into an easi
 
 The "waffle chart" visual chosen by Marta presents the vaccination data, standardised by the population of various Geographies.  Geographies of wildly differing populations (e.g. New South Wales vs Tasmania) can be easily compared.
 
+### Risk Analysis 
+
+The Risk Analysis page estimates the % of the Australian population Currently Infectious, based on Aged Care Staff Cases. The (somewhat heroic) assumption is that this data series has been consistent across the time period, with data shared for all states and territories, with the same data collection and testing methods used in every jurisdiction and over time, and with the same relative relationship to population cases.
+
+Starting from that assumption, the total of Aged Care Staff Cases were translated into population level infections using this method:
+
+Starting from the Kirby seroprevalence surveys:
+- Between Round 3 and 4, seroprevalence increased by 19%
+- Add 20% for the limits of seroprevalence testing (maxes out at 80%) = 23% infected
+- 23% of the Australian population of ~26M = 6M
+- Between the end date for Round 3 (2 Sep 2022) and Round 4 (13 Dec 2022), around 7,600 Australian Aged Care Staff cases were reported
+- Therefore, each Aged Care Staff Case represents ~800 infections in the broader population (6M / 7,600 = 789)
+
+The last 6 months are shown.  A median Infectious Period of 10 days is used to get from daily cases to the percentage Currently Infected. 
+
+The estimated total number of people infected across that period is calculated, both as a % of the Australian population and as the number of people. This ignores re-infections during the period, which are less likely over a 6-month window.
+
 The data is presented in an interactive data visualisation tool: [Power BI](https://powerbi.microsoft.com). This allows interactive filtering of the data (e.g. by Geography or Date), and includes supporting charts and data tables.  
+
+### Death Toll
 
 The Death Toll charts use the [Deneb Custom visual](https://deneb-viz.github.io/), which wraps the [Vega-Lite grammar for interactive graphics](https://vega.github.io/vega-lite/) in a convenient container for Power BI authors.
 
@@ -164,9 +177,9 @@ The Deneb Templates for the two styles of charts used for the Death Toll are ava
 - [Density Cloud Timeline - 1x1](https://github.com/Mike-Honey/covid-19-au-vaccinations/blob/main/Density%20Cloud%20Timeline%20-%201x1.json)
 - [Density Cloud Timeline - vertical scroll](https://github.com/Mike-Honey/covid-19-au-vaccinations/blob/main/Density%20Cloud%20Timeline%20-%20vertical%20scroll.json)
 
-The dataviz is refreshed automatically, every Friday. 
+The dataviz is refreshed automatically, every day. The various data sources are updated somewhat unpredictably. 
 
-I have a similar projects running for other countries globally:
+I have a similar project running for other countries globally:
  - [World](https://github.com/Mike-Honey/covid-19-world-vaccinations#readme) (select country, countries, continents or global summary)
 
 
