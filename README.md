@@ -188,3 +188,9 @@ I have a similar project running for other countries globally:
 THIS REPORT IS NOT HEALTH ADVICE - REFER TO YOUR LOCAL HEALTH AUTHORITY.
 
 Note: Prior to 1 June 2021, the figure shown for % 1st dose (and the pale green boxes representing that figure) were overstated - I misunderstood the meaning of the total 1st dose count as excluding people who received a 2nd dose, when in fact they are included.
+
+## 🤝 Support
+
+Contributions, issues, feature requests and sponsorship are all welcome!
+
+Give a ⭐️ if you like this project!
