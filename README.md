@@ -103,14 +103,14 @@ Data on Australian COVID-19 statistics from [health.gov.au](https://www.health.g
 
 Data on Australian Vaccinations and other COVID-19 statistics from [covidlive.com.au](https://covidlive.com.au/report/vaccinations-people).  This is the source for Australian numbers presented in [Our World In Data](https://ourworldindata.org/). Unfortunately concise government sources are not available, so there is a significant citizen data science effort to collate these figures in a consistent way.
 
-For Victoria, a further citizen data effort is used to provide the daily key statistics from September 2022 onwards.
+For Victoria, a further citizen data effort is used to provide the daily key statistics from September 2022 until June 2024.
 https://github.com/dbRaevn/covid19
 
 Data on Australian Population from [abs.gov.au](https://www.abs.gov.au/statistics/people/population/national-state-and-territory-population/sep-2020). Summarised population is unsuitable as their bands of age ranges do not align with the "Adult = 16+" definition used by Health Departments. So the method used is to get the most detailed time series spreadsheets, e.g. "Population - Victoria". Each column represents a single year age, by Gender.  The columns for "Persons" Gender are selected. "Adult" is derived by summing the columns for ages 16+ (note: split across 2 sheets). The latest row available (dated June 2020) is selected.
 
 Data on Australian Mortality from COVID-19 for the **Death Toll** pages is from [the Australian Bureau of Statistics - Provisional Mortality Statistics](https://www.abs.gov.au/statistics/health/causes-death/provisional-mortality-statistics). The weekly data provided is spread randomly among days of the week.  It is updated monthly, but due to the death certification process it typically lags by 4 months or so.
 
-Data is scraped from the PDF reports presented on the page [COVID-19 outbreaks in Australian residential aged care facilities](https://www.health.gov.au/resources/collections/covid-19-outbreaks-in-australian-residential-aged-care-facilities), using the python notebook shown in the **health-aged-care** folder. The current targets are the stats on Molnupiravir and Paxlovid prescriptions. The results are collated into a file: **health-aged-care.xlsx**, stored in that sub-folder.
+Data is scraped from the PDF reports presented on the page [COVID-19 outbreaks in Australian residential aged care facilities](https://www.health.gov.au/resources/collections/covid-19-outbreaks-in-australian-residential-aged-care-facilities), using the python notebook shown in the **health-aged-care** folder. The current targets are the stats on Molnupiravir and Paxlovid prescriptions, and the data from all tables. Due to file format changes, these are currently extracted from 1 April 2024 onwards. The results are collated into a file: **health-aged-care.xlsx**, stored in that sub-folder.
 
 Reff is calculated following the parameters used by [Professor Adrian Esterman](https://twitter.com/profesterman/status/1479226466181484544?s=20&t=ZJ7rvC2JPQjvpBCeGn_KKA) - first smooth the daily cases using a 7-day average, then divide the latest day's cases (7-day avg) by the cases (7-day avg) from 4 days prior. It shows the momentum in the rise of fall of cases, with a Reff of 1.0 meaning cases are neither declining nor falling. 
 
