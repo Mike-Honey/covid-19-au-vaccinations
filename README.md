@@ -96,6 +96,24 @@ An analysis based on the last date that CMOs/CHOs etc in each jurisdiction last 
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-days-since.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=ReportSectionfb137d7e83e6a12106a0)
 
 
+## NNDSS by Geography
+
+Choose an NNDSS disease to compare cases by Geography, with various metrics available.
+
+[Link to interactive dataviz](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=10eab881eae3e31c3e33)
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-nndss-by-geography.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=10eab881eae3e31c3e33)
+
+
+## NNDSS Annual comparisons
+
+Choose an NNDSS disease and Geography to see monthly comparisons for the selected years. 
+
+[Link to interactive dataviz](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=f32595f7371ebfa7cf20)
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-nndss-annual.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=f32595f7371ebfa7cf20)
+
+
 
 ## Reference:
 
