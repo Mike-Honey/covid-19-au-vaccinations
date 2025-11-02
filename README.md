@@ -227,7 +227,7 @@ THIS REPORT IS NOT HEALTH ADVICE - REFER TO YOUR LOCAL HEALTH AUTHORITY.
 
 Note: Prior to 1 June 2021, the figure shown for % 1st dose (and the pale green boxes representing that figure) were overstated - I misunderstood the meaning of the total 1st dose count as excluding people who received a 2nd dose, when in fact they are included.
 
-[![Developed by a Human, not by AI. Click for more info](https://github.com/Mike-Honey/covid-au-vaccinations/raw/main/Developed-By-a-Human-Not-By-AI-Badge-white@2x.png)](https://notbyai.fyi)
+[![Developed by a Human, not by AI. Click for more info](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/Developed-By-a-Human-Not-By-AI-Badge-white@2x.png)](https://notbyai.fyi)
 
 ## 🤝 Support
 
