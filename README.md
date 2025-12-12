@@ -132,6 +132,12 @@ Choose NNDSS diseases and a Geography to see daily metrics for the selected peri
 [![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-nndss-by-disease.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=267ac764b747b022f384)
 
 
+## Aged Care Outbreaks
+
+Shows the Aged Care Facilities reporting active outbreaks of COVID-19. Bubbles are sized by Active Staff Cases. THe most recent week is shown by default, but any prior week can be selected. Locations are integrated from the AIHW GEN site's Aged Care Site List, which occasionally does not provide a match for particular sites. Any unmatched sites with outbreaks are listed in the bottom-right.
+
+
+
 
 ## Reference:
 
@@ -147,6 +153,8 @@ Data on Australian Population from [abs.gov.au](https://www.abs.gov.au/statistic
 Data on Australian Mortality from COVID-19 for the **Death Toll** pages is from [the Australian Bureau of Statistics - Provisional Mortality Statistics](https://www.abs.gov.au/statistics/health/causes-death/provisional-mortality-statistics). The weekly data provided is spread randomly among days of the week.  It is updated monthly, but due to the death certification process it typically lags by 4 months or so.
 
 Data is scraped from the PDF reports presented on the page [COVID-19 outbreaks in Australian residential aged care facilities](https://www.health.gov.au/resources/collections/covid-19-outbreaks-in-australian-residential-aged-care-facilities), using the python notebook shown in the **health-aged-care** folder. The current targets are the stats on Molnupiravir and Paxlovid prescriptions, and the data from all tables. Due to file format changes, these are currently extracted from 1 April 2024 onwards. The results are collated into a file: **health-aged-care.xlsx**, stored in that sub-folder.
+
+The Aged Care Service List provided by the [AIHW GEN site](https://www.gen-agedcaredata.gov.au/) is integrated with the health-aged-care data described above. This provides location data for aged care facilities, used to plot them on a map and aggregate them by SA3 geographical areas. 
 
 Case data for many diseases are gathered from the [NNDSS](https://www.health.gov.au/our-work/nndss) via this [GitHUb project](https://github.com/amacali/nindss-data), run by [Anthony Macali AM](https://x.com/migga). That project has been collecting daily snapshots since late 2023.  Prior to 2024, I use the annual totals from that dataset, apart from a selection of diseases where I blend in monthly totals: COVID-19, Influenza, Measles and RSV.
 
