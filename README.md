@@ -134,9 +134,20 @@ Choose NNDSS diseases and a Geography to see daily metrics for the selected peri
 
 ## Aged Care Outbreaks
 
-Shows the Aged Care Facilities reporting active outbreaks of COVID-19. Bubbles are sized by Active Staff Cases. THe most recent week is shown by default, but any prior week can be selected. Locations are integrated from the AIHW GEN site's Aged Care Site List, which occasionally does not provide a match for particular sites. Any unmatched sites with outbreaks are listed in the bottom-right.
+Shows the Aged Care Facilities reporting active outbreaks of COVID-19. Bubbles are sized by Active Staff Cases. The most recent week is shown by default, but any prior week can be selected. Locations are integrated from the AIHW GEN site's Aged Care Site List, which occasionally does not provide a match for particular sites. Any unmatched sites with outbreaks are listed in the bottom-right.
+
+[Link to interactive dataviz](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=51e1642dda472c07f92e)
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-aged-care-outbreaks.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=51e1642dda472c07f92e)
 
 
+## Aged Care Cases/1M
+
+Shows the Aged Care Facilities-level outbreak data, aggregated to ABS SA3 areas and translated into estimated community infections per area. Areas are shaded by relative estimated infection levels. THe most recent week is shown by default, but any prior week can be selected. Locations are integrated from the AIHW GEN site's Aged Care Site List, which occasionally does not provide a match for particular sites. Any unmatched sites with outbreaks are listed in the bottom-right.
+
+[Link to interactive dataviz](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=5d40d1acb4b9848c738f)
+
+[![Click to view and interact with the report](https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/covid-19-au-vaccinations-aged-care-outbreaks-1M.png)](https://app.powerbi.com/view?r=eyJrIjoiY2Q3NmQyOTUtNzU4Ni00YzA2LWI2NjMtYWRjMTA2ZjI1Y2Q3IiwidCI6ImRjMWYwNGY1LWMxZTUtNDQyOS1hODEyLTU3OTNiZTQ1YmY5ZCIsImMiOjEwfQ%3D%3D&pageName=5d40d1acb4b9848c738f)
 
 
 ## Reference:
