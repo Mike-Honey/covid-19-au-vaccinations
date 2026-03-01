@@ -1,0 +1,82 @@
+table Population
+	excludeFromModelRefresh
+	lineageTag: d5eb5337-408c-4b0c-a459-2b72b5050f96
+
+	measure '# Population' = ```
+			SUM ( 'Population'[Population] ) 
+			```
+		formatString: #,0
+		lineageTag: e55a8e98-1201-4047-bf99-e88436d10213
+
+	measure '# Population 1%' = ROUND ( [# Population] / 100 , -2 )
+		formatString: #,0
+		lineageTag: 8773f69a-c33d-4570-bea6-745dfdd53688
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column Age
+		dataType: string
+		lineageTag: 84ffce71-f6a3-4c46-aac5-d4baaf9210b2
+		summarizeBy: none
+		sourceColumn: Age
+		sortByColumn: 'Age - Sort'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Age - Sort'
+		dataType: int64
+		formatString: 0
+		lineageTag: bc3fee12-f8ab-4071-bb84-05b989cf284e
+		summarizeBy: sum
+		sourceColumn: Age - Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column Geography
+		dataType: string
+		lineageTag: a56c14f6-e5bc-41cd-909a-80479362e591
+		summarizeBy: none
+		sourceColumn: Geography
+
+		annotation SummarizationSetBy = Automatic
+
+	column Population
+		dataType: int64
+		formatString: 0
+		lineageTag: 19b6ca41-dc28-4a26-982a-777053628673
+		summarizeBy: sum
+		sourceColumn: Population
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gender
+		dataType: string
+		lineageTag: 03fd6a73-4e87-4ffc-b7c8-40960ddfceec
+		summarizeBy: none
+		sourceColumn: Gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Age Category'
+		dataType: string
+		lineageTag: 3c8d1c08-f6cd-4727-8d75-a52594931032
+		summarizeBy: none
+		sourceColumn: Age Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Population-6697c649-fc01-4711-817d-9119160f416a = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/ABS%20Population%20by%20State-Territory%20and%20Age.xlsx"), null, true),
+				    Population_Table = Source{[Item="ABS_Population",Kind="Table"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(Population_Table,{{"Age (years)", "Age"}, {"State", "Geography"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Age", type text}, {"Age - Sort", Int64.Type}, {"Geography", type text}, {"Population", Int64.Type}, {"Gender", type text}, {"Age Category", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

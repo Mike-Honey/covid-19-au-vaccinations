@@ -1,0 +1,85 @@
+table 'Report Dates'
+	lineageTag: f655e552-4a0c-47c2-91a7-59a682ece887
+
+	column NAME
+		dataType: string
+		lineageTag: fc861336-c714-458a-9862-116e9923cc0b
+		summarizeBy: none
+		sourceColumn: NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date Label'
+		dataType: string
+		lineageTag: 5e94cfb7-8aba-46e1-922c-fc89752deec5
+		summarizeBy: none
+		sourceColumn: Report Date Label
+		sortByColumn: 'Report Date - Sort'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'covid-live key'
+		dataType: string
+		lineageTag: 5af7c0af-744d-443e-8763-20c7cc1788a0
+		summarizeBy: none
+		sourceColumn: covid-live key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date - Sort'
+		dataType: double
+		lineageTag: 38e08256-1899-4895-b1bd-e1a2d3016617
+		summarizeBy: sum
+		sourceColumn: Report Date - Sort
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Report Date Label d m'
+		dataType: string
+		lineageTag: 0899a4f2-ce7d-4de3-9841-93f03a2954fa
+		summarizeBy: none
+		sourceColumn: Report Date Label d m
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 8b60fd6e-86eb-486b-8f57-11b2545a1602
+		summarizeBy: none
+		sourceColumn: Report Date
+
+		variation Variation
+			isDefault
+			relationship: e8e6262c-ce47-43d5-9249-be65373d5438
+			defaultHierarchy: LocalDateTable_374e3b67-6c00-413c-ba68-ccef31635b7b.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition 'Report Dates-78af3363-f014-4bee-adb7-a1cbd448357b' = m
+		mode: import
+		source =
+				let
+				    Source = #"Report Dates - base",
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"Vaccines changed"}),
+				    #"Inserted Day" = Table.AddColumn(#"Removed Columns", "Day", each Date.Day([Report Date]), Int64.Type),
+				    #"Inserted Month Name" = Table.AddColumn(#"Inserted Day", "Month Name", each Date.MonthName([Report Date]), type text),
+				    #"Inserted Year" = Table.AddColumn(#"Inserted Month Name", "Year", each Date.Year([Report Date]), Int64.Type),
+				    #"Added Report Date Label d m" = Table.AddColumn(#"Inserted Year", "Report Date Label d m", each Text.Combine({Text.From([Day], "en-AU"), [Month Name]}), type text),
+				    #"Inserted Report Date Label" = Table.AddColumn(#"Added Report Date Label d m", "Report Date Label", each Text.Combine({Text.From([Day], "en-AU"), [Month Name], Text.From([Year], "en-AU")}, " "), type text),
+				    #"Appended Report Dates - latest" = Table.Combine({#"Inserted Report Date Label", #"Report Dates - latest"}),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Appended Report Dates - latest", "Report Date", "Report Date - Copy"),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Duplicated Column",{{"Report Date - Copy", Int64.Type}}),
+				    #"Inserted Report Date - Sort" = Table.AddColumn(#"Changed Type", "Report Date - Sort", each if [Report Date Label] = "Latest" then 999999 else [#"Report Date - Copy"], type number),
+				    #"Sorted Rows" = Table.Sort(#"Inserted Report Date - Sort",{{"Report Date - Sort", Order.Descending}}),
+				    #"Added covid-live key" = Table.AddColumn(#"Sorted Rows", "covid-live key", each Text.Combine({[NAME], Text.From([Report Date], "en-AU")}, "|"), type text),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Added covid-live key",{"Report Date", "NAME", "Report Date Label d m", "Report Date Label", "Report Date - Sort", "covid-live key"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_ResultType = Table
+

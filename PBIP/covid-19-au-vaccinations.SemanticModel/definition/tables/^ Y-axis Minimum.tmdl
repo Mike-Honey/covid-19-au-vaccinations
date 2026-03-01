@@ -1,0 +1,26 @@
+table '^ Y-axis Minimum'
+	lineageTag: 82531bf3-06c5-44c5-95b7-9e89ecb7c60c
+
+	measure '^ Y-axis Minimum Value' = SELECTEDVALUE('^ Y-axis Minimum'[^ Y-axis Minimum])
+		formatString: 0
+		lineageTag: 6e927c5b-8385-478d-b8c1-7d8a4fa72d7e
+
+	column '^ Y-axis Minimum'
+		formatString: 0
+		lineageTag: f58a4e9c-eaf5-428c-9ca0-bddf9ad1f6e2
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+	partition '^ Y-axis Minimum-d80ed9c5-441d-48b3-926f-31e5078d540b' = calculated
+		mode: import
+		source = GENERATESERIES(0, 1, 1)
+
+	annotation PBI_Id = b88429b3f7224a4bb9f7185bcd0b3626
+

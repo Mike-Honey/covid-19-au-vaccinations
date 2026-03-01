@@ -1,0 +1,79 @@
+table 'ABS Doctor certified deaths'
+	excludeFromModelRefresh
+	lineageTag: e94e2cd0-32b8-4700-90f9-7bfb472cdbc7
+
+	column 'Underlying cause of death'
+		dataType: string
+		lineageTag: adf56592-928f-43ed-afef-92a73d3e2b67
+		summarizeBy: none
+		sourceColumn: Underlying cause of death
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: string
+		lineageTag: 7868aabc-9e56-447b-994d-ea255b09a139
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: abfff45f-16f2-4e51-a58b-57222cd73d66
+		summarizeBy: sum
+		sourceColumn: Week Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Deaths
+		dataType: int64
+		formatString: 0
+		lineageTag: 964e992f-5850-48d5-824f-17dec14d6565
+		summarizeBy: sum
+		sourceColumn: Deaths
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 57c70e92-b683-49cb-8ba3-6ba6c97dae92
+		summarizeBy: none
+		sourceColumn: Report Date
+
+		variation Variation
+			isDefault
+			relationship: 35e77ea7-1d34-4a5c-9764-d00306eff1d5
+			defaultHierarchy: LocalDateTable_709ac70b-9d5b-438f-b0e5-d226acec770e.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Source File Name'
+		dataType: string
+		lineageTag: c60fd312-2ad1-46f5-ac44-aa4344c46b31
+		summarizeBy: none
+		sourceColumn: Source File Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'ABS Doctor certified deaths' = m
+		mode: import
+		source =
+				let
+				    Source = #"ABS Doctor certified deaths weekly 2022-2023",
+				    #"Appended ABS Doctor certified deaths weekly 2015-2019" = Table.Combine({Source, #"ABS Doctor certified deaths weekly 2015-2021"}),
+				    #"Appended ABS Doctor certified deaths weekly 2024" = Table.Combine({#"Appended ABS Doctor certified deaths weekly 2015-2019", #"ABS Doctor certified deaths weekly 2024"}),
+				    #"Appended ABS Doctor certified deaths weekly 2025" = Table.Combine({#"Appended ABS Doctor certified deaths weekly 2024", #"ABS Doctor certified deaths weekly 2025"}),
+				    #"Filtered Rows" = Table.SelectRows(#"Appended ABS Doctor certified deaths weekly 2025", each [Deaths] <> 0),
+				    #"Filtered Rows1" = Table.SelectRows(#"Filtered Rows", each [Deaths] <> null and [Deaths] <> "")
+				in
+				    #"Filtered Rows1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

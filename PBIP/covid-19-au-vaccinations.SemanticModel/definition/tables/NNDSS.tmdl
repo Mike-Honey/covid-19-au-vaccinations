@@ -1,0 +1,182 @@
+table NNDSS
+	lineageTag: 7626d95f-6871-4fb2-ad2d-b4bfb2a13ad6
+
+	measure '# Cases (NNDSS)' = ```
+			SUM ( 'NNDSS'[CASES] ) 
+			```
+		formatString: #,0
+		lineageTag: 3506685d-b349-452d-a1a8-cf73d6f1edb2
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# New Cases (NNDSS)' = ```
+			
+			VAR V_Year = VALUE( MAX ( 'NNDSS'[YEAR] ) )
+			VAR v_Previous =
+			IF ( V_Year >= 2024,
+			    CALCULATE( [# Cases (NNDSS)] , 
+			        OFFSET ( -1, 
+			            FILTER( 
+			                ALL ( 'Dates' ),
+			                [# Cases (NNDSS)] > 0
+			            ),
+			            ORDERBY ( [Date],ASC ), ,
+			            PARTITIONBY ( [Year] )
+			        )
+			    )
+			)
+			RETURN
+			IF ( V_Year < 2024,
+			    [# Cases (NNDSS)],
+			    SWITCH ( TRUE() ,
+			        v_Previous = 0 , [# Cases (NNDSS)] ,
+			        v_Previous > 0 && [# Cases (NNDSS)] > 0 , [# Cases (NNDSS)] - v_Previous 
+			    )
+			)
+			```
+		lineageTag: cd05a4a2-ebab-4678-8175-c0fe4d788088
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '@ Title (Disease (NNDSS) + Metric)' = ```
+			SELECTEDVALUE( NNDSS[DISEASE] ) & " - " & SELECTEDVALUE( Metrics[Metric] ) 
+			```
+		lineageTag: 6f03c3b4-eeea-454a-9d4c-cbecc2b83ac1
+
+	measure '@ Title (Disease (NNDSS) + Metric + State)' = ```
+			[@ Title (Disease (NNDSS) + Metric)] & " - " & SELECTEDVALUE( Geography[CODE] ) 
+			```
+		lineageTag: d8f99c08-a1b5-45ae-9986-d4e047b7b1f5
+
+	measure '# New Cases (NNDSS) TEST' = ```
+			
+			VAR V_Year = VALUE ( MAX ( 'NNDSS'[YEAR] ) )
+			VAR v_Previous =
+			IF ( V_Year < 2024,
+			    CALCULATE( [# Cases (NNDSS)] , 
+			        OFFSET ( -1, 
+			            ALL ( 'Dates' ) ,
+			            ORDERBY ( 'Dates'[Date],ASC ), ,
+			            PARTITIONBY ( Dates[Year] )
+			        )
+			    )
+			)
+			RETURN v_Previous 
+			/*
+			IF ( V_Year < "2024",
+			    [# Cases (NNDSS)],
+			    IF ( v_Previous > 0 && [# Cases (NNDSS)], [# Cases (NNDSS)] - v_Previous )
+			)
+			*/
+			```
+		lineageTag: d10a4ffd-3127-40d1-84b9-d97e89663f9a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column REPORT_DATE
+		dataType: string
+		lineageTag: 03d51cb2-03a2-46e7-92bb-fd3fbc69ed15
+		summarizeBy: none
+		sourceColumn: REPORT_DATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column DISEASE
+		dataType: string
+		lineageTag: dd929376-bb76-426d-9065-cd421870ed0b
+		summarizeBy: none
+		sourceColumn: DISEASE
+
+		annotation SummarizationSetBy = Automatic
+
+	column YEAR
+		dataType: string
+		lineageTag: 61ecfa5d-7b80-4ec4-bb44-2a0d61942838
+		summarizeBy: none
+		sourceColumn: YEAR
+
+		annotation SummarizationSetBy = Automatic
+
+	column CODE
+		dataType: string
+		lineageTag: eb482af6-ee9e-4469-bc81-d717683f6f41
+		summarizeBy: none
+		sourceColumn: CODE
+
+		annotation SummarizationSetBy = Automatic
+
+	column CASES
+		dataType: double
+		lineageTag: cbc44796-51db-497f-8737-d428b1d8504b
+		summarizeBy: sum
+		sourceColumn: CASES
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'File URL'
+		dataType: string
+		lineageTag: 10c2b140-e730-488f-a54f-3da6eeca61c4
+		summarizeBy: none
+		sourceColumn: File URL
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: ba483d27-638c-4e3d-9851-333f7a6e7b73
+		summarizeBy: none
+		sourceColumn: Report Date
+
+		variation Variation
+			isDefault
+			relationship: cf7a126f-592f-4534-b2bd-bf5a35db8358
+			defaultHierarchy: LocalDateTable_6e1a9156-e92c-4c20-9468-8779a7ba2429.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Year of Report Date' = IF ( [YEAR] = FORMAT( [Report Date] , "yyyy" ) , "Year of Report Date" )
+		lineageTag: 2a627e6d-1c00-46b2-8c7e-b35cb96f1ce0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Case Date' = ```
+			
+			VAR v_Report_Date_Latest = 
+			CALCULATE( MAX ( NNDSS[Report Date] ), ALLEXCEPT( NNDSS, NNDSS[DISEASE] , NNDSS[YEAR], NNDSS[CODE] ) )
+			RETURN
+			SWITCH( TRUE(),
+			    [Year of Report Date] > "", [Report Date], 
+			    INT ( [YEAR] ) >= 2024, BLANK(),
+			    [Report Date] = v_Report_Date_Latest, DATE ( [YEAR], 12, 31 ) 
+			)
+			```
+		formatString: Short Date
+		lineageTag: 32f2294f-21b3-482c-8b93-100c4330bb57
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition NNDSS = m
+		mode: import
+		source =
+				let
+				    // The List.Dates function that returns a list of dates
+				    Source = #"NNDSS - base",
+				    #"Appended NNDSS - AUS" = Table.Combine({Source, #"NNDSS - AUS"}),
+				    #"Replaced Value Mpox1" = Table.ReplaceValue(#"Appended NNDSS - AUS","Monkeypox (MPXV) virus infection","Mpox",Replacer.ReplaceText,{"DISEASE"}),
+				    #"Replaced Value Mpox2" = Table.ReplaceValue(#"Replaced Value Mpox1","Monkeypox virus infection","Mpox",Replacer.ReplaceText,{"DISEASE"}),
+				    #"Replaced Value Mpox3" = Table.ReplaceValue(#"Replaced Value Mpox2","Monkeypox virus (MPXV) infection","Mpox",Replacer.ReplaceText,{"DISEASE"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Replaced Value Mpox3",{{"REPORT_DATE", type text}, {"DISEASE", type text}, {"YEAR", type text}, {"CODE", type text}, {"CASES", type number}, {"Report Date", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

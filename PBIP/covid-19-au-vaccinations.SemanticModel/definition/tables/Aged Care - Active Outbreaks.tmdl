@@ -1,0 +1,224 @@
+table 'Aged Care - Active Outbreaks'
+	lineageTag: d28931c0-7519-4ad6-8b64-728ee8a55dd3
+
+	measure '# Staff Cases (Aged Care - Active Outbreaks) or Service List' = ```
+			
+			IF ( [# Staff Cases (Aged Care - Active Outbreaks)] > 0 , [# Staff Cases (Aged Care - Active Outbreaks)] ) + 
+			IF ( [# Aged Care Service List] > 0 && [^ Y-axis Minimum Value] < 1, 0 )
+			```
+		formatString: #,0
+		lineageTag: 3ba06aae-788e-400e-934d-2065380edc0a
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '@ Latest Report Date (Aged Care - Active Outbreaks)' = "Report Date: " & FORMAT ( MAX ( 'Aged Care - Active Outbreaks'[Report Date] ) , "Long Date" )
+		lineageTag: 297dfae6-c513-49ef-beb6-75e1bab1c98f
+
+	measure '@ Service Names' = ```
+			
+			IF ( SELECTEDVALUE( 'Aged Care Service List'[2016 SA3 Code] ) > "" ,
+			    CONCATENATEX( 
+			        SUMMARIZE(
+			            FILTER( 'Aged Care - Active Outbreaks',
+			                [# Staff Cases (Aged Care - Active Outbreaks)] > 0
+			            ),
+			            'Aged Care - Active Outbreaks'[Service Name] 
+			        ), 
+			        [Service Name], " ; " & UNICHAR(10), [Service Name] 
+			    )
+			)
+			```
+		lineageTag: 2bcd5886-e0f4-4d44-bf6b-d8f885d21465
+
+	measure '# Staff Cases (Aged Care - Active Outbreaks)' = SUM ( 'Aged Care - Active Outbreaks'[Staff Cases] )
+		formatString: #,0
+		lineageTag: ce955a74-af0a-4fa2-883a-8f881990bd43
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column Index
+		dataType: string
+		lineageTag: 6537f634-a5d4-4cd1-96b9-81ace11a6013
+		summarizeBy: none
+		sourceColumn: Index
+
+		annotation SummarizationSetBy = Automatic
+
+	column row_index_per_file
+		dataType: string
+		lineageTag: 75039091-c8e5-46bf-8625-bb8499fd9b87
+		summarizeBy: none
+		sourceColumn: row_index_per_file
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Service Name'
+		dataType: string
+		lineageTag: ab1cc1ba-104c-41f7-91c7-308a1e5f5060
+		summarizeBy: none
+		sourceColumn: Service Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 1068cdb5-fba8-46a0-906e-eb3b6f526b63
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Resident Deaths'
+		dataType: double
+		lineageTag: 81a78c8b-50c6-43db-ab7c-33660c41b116
+		summarizeBy: sum
+		sourceColumn: Resident Deaths
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Resident Cases'
+		dataType: double
+		lineageTag: 4da9f862-3791-4a78-9388-c6c7ab513470
+		summarizeBy: sum
+		sourceColumn: Resident Cases
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Staff Cases'
+		dataType: double
+		formatString: #,0
+		lineageTag: 7079fbca-8443-43db-8591-d0f8863e49b3
+		summarizeBy: sum
+		sourceColumn: Staff Cases
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column 'Total Cases'
+		dataType: double
+		lineageTag: 660201d7-b62b-44b4-b3cc-942405c6b399
+		summarizeBy: sum
+		sourceColumn: Total Cases
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column source_file_name
+		dataType: string
+		lineageTag: c7edcd0d-f25f-43fd-8e22-3a2131638d38
+		summarizeBy: none
+		sourceColumn: source_file_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 9bb2548d-faa6-48e6-8b56-ca3d7c8dd76e
+		summarizeBy: none
+		sourceColumn: Report Date
+
+		variation Variation
+			isDefault
+			relationship: 4a047e78-57b9-4417-b0eb-796a9b3f6820
+			defaultHierarchy: LocalDateTable_04d1087c-7143-4cb7-a294-93816ceb9e42.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Source File Name'
+		dataType: string
+		lineageTag: d8e85225-440f-4b80-929c-68b1772846e3
+		summarizeBy: none
+		sourceColumn: Source File Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Source Sheet'
+		dataType: string
+		lineageTag: a6f1c7f6-46ca-4a8c-9ce3-47141b095721
+		summarizeBy: none
+		sourceColumn: Source Sheet
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Service Key'
+		dataType: string
+		lineageTag: 85db8d5a-b917-4a27-9a9c-ea041aae5a6e
+		summarizeBy: none
+		sourceColumn: Service Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Service Name Uppercase'
+		dataType: string
+		lineageTag: 77e477bf-69ba-4688-9210-9e365f46a37d
+		summarizeBy: none
+		sourceColumn: Service Name Uppercase
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Aged Care Service Name Fuzzy Matches.Service Key'
+		dataType: string
+		lineageTag: ac500be2-8158-4d16-9ddc-f162f329359a
+		summarizeBy: none
+		sourceColumn: Aged Care Service Name Fuzzy Matches.Service Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date Filter' = ```
+			
+			IF ( 
+			    [Report Date] = 
+			    --CALCULATE( 
+			        MAX ( 'Aged Care - Active Outbreaks'[Report Date] ),
+			    --), 
+			    "Latest Report Date",
+			    FORMAT ( [Report Date], "Short Date" )
+			)
+			```
+		lineageTag: d49f47a1-0db4-42d7-bcf7-bea423beaac5
+		summarizeBy: none
+		sortByColumn: 'Report Date'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Aged Care - Active Outbreaks' = m
+		mode: import
+		source =
+				let
+				    Source = #"health-aged-care xlsx file",
+				    #"Sheet Data" = Source{[Item="Active Outbreaks",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Sheet Data", [PromoteAllScalars=true]),
+				    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"source_file_date", "Report Date"}, {"Column1", "Index"}, {"0", "Service Name"}, {"1", "State"}, {"2", "Resident Deaths"}, {"3", "Resident Cases"}, {"4", "Staff  Cases"}, {"5", "Total Cases"}}),
+				    #"Removed Top Rows" = Table.Skip(#"Renamed Columns",1),
+				    #"Filtered Service Name" = Table.SelectRows(#"Removed Top Rows", each ([Service Name] <> "Service Name")),
+				    #"Replaced Value" = Table.ReplaceValue(#"Filtered Service Name","<6","3",Replacer.ReplaceText,{"Resident Deaths", "Resident Cases", "Staff  Cases", "Total Cases"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Replaced Value",{{"Report Date", type date}, {"Service Name", type text}, {"Resident Deaths", type number}, {"Resident Cases", type number}, {"Staff  Cases", type number}, {"Total Cases", type number}}),
+				    #"Replaced Errors" = Table.ReplaceErrorValues(#"Changed Type", {{"Resident Deaths", null}, {"Resident Cases", null}, {"Staff  Cases", null}, {"Total Cases", null}}),
+				    #"Filtered Report Date" = Table.SelectRows(#"Replaced Errors", each [Report Date] >= #date(2024, 7, 20)),
+				    #"Added Source File Name" = Table.AddColumn(#"Filtered Report Date", "Source File Name", each "health-aged-care.xlsx"),
+				    #"Added Source Sheet" = Table.AddColumn(#"Added Source File Name", "Source Sheet", each "Active Outbreaks"),
+				    #"Cleaned Text" = Table.TransformColumns(#"Added Source Sheet",{{"Service Name", Text.Clean, type text}}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Cleaned Text",{{"Service Name", Text.Trim, type text}}),
+				    #"Inserted Uppercased Text" = Table.AddColumn(#"Trimmed Text", "Service Name Uppercase", each Text.Upper([Service Name]), type text),
+				    #"Merged Queries" = Table.NestedJoin(#"Inserted Uppercased Text", {"Service Name Uppercase"}, #"Aged Care Service Name Fuzzy Matches", {"Service Name Upper Case"}, "Aged Care Service Name Fuzzy Matches", JoinKind.LeftOuter),
+				    #"Expanded Aged Care Service Name Fuzzy Matches" = Table.ExpandTableColumn(#"Merged Queries", "Aged Care Service Name Fuzzy Matches", {"Service Key"}, {"Aged Care Service Name Fuzzy Matches.Service Key"}),
+				    #"Added Service Key" = Table.AddColumn(#"Expanded Aged Care Service Name Fuzzy Matches", "Service Key", each if [Aged Care Service Name Fuzzy Matches.Service Key] <> null then [Aged Care Service Name Fuzzy Matches.Service Key] else [Service Name Uppercase]),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Added Service Key",{{"Staff  Cases", "Staff Cases"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

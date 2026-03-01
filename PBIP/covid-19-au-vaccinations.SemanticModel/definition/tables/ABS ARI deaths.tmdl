@@ -1,0 +1,140 @@
+table 'ABS ARI deaths'
+	lineageTag: c006479c-1e69-4ee5-b96f-8631fe22fdd0
+
+	measure '# Monthly Deaths (ABS ARI)' = SUM ( 'ABS ARI deaths'[Monthly Deaths] )
+		formatString: 0
+		lineageTag: 1fa7564b-3e56-466e-9e14-f296c19f0cfe
+
+	measure '# Registered deaths - COVID-19' =
+			
+			CALCULATE( [# Monthly Deaths (ABS ARI)],
+			    'ABS ARI deaths'[Disease] = "COVID-19"
+			)
+		formatString: 0
+		lineageTag: 57c41b41-cf56-4d27-9232-da4c00a21dda
+
+	measure '# Registered deaths - COVID-19 (Cumulative)' =
+			
+			CALCULATE(
+				SUMX ( 'Dates' , [# Registered deaths - COVID-19] ),
+				FILTER(
+					ALLSELECTED('Dates'[Date]),
+					ISONORAFTER('Dates'[Date], MAX('Dates'[Date]), DESC)
+				)
+			)
+		formatString: #,0
+		lineageTag: 67dd4a69-aec4-43b1-8d9f-86be7d4efd46
+
+	measure '# Registered deaths - Influenza' =
+			
+			CALCULATE( [# Monthly Deaths (ABS ARI)],
+			    'ABS ARI deaths'[Disease] = "Influenza"
+			)
+		formatString: #,0
+		lineageTag: 7bbf9c4f-6bc5-4c2d-b1d5-3e8f2c8375db
+
+	measure '# Registered deaths - RSV' =
+			
+			CALCULATE( [# Monthly Deaths (ABS ARI)],
+			    'ABS ARI deaths'[Disease] = "RSV"
+			)
+		formatString: #,0
+		lineageTag: 105fbd61-cc23-4ba1-8da0-36523cb5384a
+
+	measure '# Registered deaths - Influenza (Cumulative)' =
+			
+			CALCULATE(
+				SUMX ( 'Dates' , [# Registered deaths - Influenza] ),
+				FILTER(
+					ALLSELECTED('Dates'[Date]),
+					ISONORAFTER('Dates'[Date], MAX('Dates'[Date]), DESC)
+				)
+			)
+		formatString: #,0
+		lineageTag: 64e2efea-fa7c-49ca-9fca-b3b75c783e50
+
+	measure '# Registered deaths - RSV (Cumulative)' =
+			
+			CALCULATE(
+				SUMX ( 'Dates' , [# Registered deaths - RSV] ),
+				FILTER(
+					ALLSELECTED('Dates'[Date]),
+					ISONORAFTER('Dates'[Date], MAX('Dates'[Date]), DESC)
+				)
+			)
+		formatString: 0
+		lineageTag: 55cb16c4-be19-4dd4-a6cf-bdcc55c8eae1
+
+	column Disease
+		dataType: string
+		lineageTag: a47485ec-fcd3-4361-9de5-14dad1f50030
+		summarizeBy: none
+		sourceColumn: Disease
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 84fd0874-e30e-42b3-a35e-9b228b222ce3
+		summarizeBy: none
+		sourceColumn: Report Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Monthly Deaths'
+		dataType: int64
+		formatString: 0
+		lineageTag: 832c0bfc-51df-4349-8ff8-dca22a7dcd8c
+		summarizeBy: sum
+		sourceColumn: Monthly Deaths
+
+		annotation SummarizationSetBy = Automatic
+
+	column Metric
+		dataType: string
+		lineageTag: f38aff13-d268-4d97-8b64-3fc9f9976ad6
+		summarizeBy: none
+		sourceColumn: Metric
+
+		annotation SummarizationSetBy = Automatic
+
+	column Code
+		dataType: string
+		lineageTag: dcbd2002-8117-4d26-86b6-21eead38308d
+		summarizeBy: none
+		sourceColumn: Code
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'ABS ARI deaths' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/refs/heads/main/Acute%20respiratory%20infection%20associated%20deaths,%202023-2025%20(a)(b)(c)(d)(e).xlsx"), null, false),
+				    Sheet1_sheet = Source{[Item="Sheet1",Kind="Sheet"]}[Data],
+				    FilterNullAndWhitespace = each List.Select(_, each _ <> null and (not (_ is text) or Text.Trim(_) <> "")),
+				    #"Removed Bottom Rows" = Table.RemoveLastN(Sheet1_sheet, each try List.IsEmpty(List.Skip(FilterNullAndWhitespace(Record.FieldValues(_)), 1)) otherwise false),
+				    #"Removed Top Rows" = Table.Skip(#"Removed Bottom Rows", each try List.IsEmpty(List.Skip(FilterNullAndWhitespace(Record.FieldValues(_)), 1)) otherwise false),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Top Rows", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"", type text}, {"Jan", type any}, {"Feb", Int64.Type}, {"Mar", Int64.Type}, {"Apr", Int64.Type}, {"May", Int64.Type}, {"Jun", Int64.Type}, {"Jul", Int64.Type}, {"Aug", Int64.Type}, {"Sep", type any}, {"Oct", type any}, {"Nov", type any}, {"Dec", type any}, {"All", Int64.Type}}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Changed Type", {""}, "Attribute", "Value"),
+				    #"Filtered Attribute not All" = Table.SelectRows(#"Unpivoted Other Columns", each [Attribute] <> "All"),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Filtered Attribute not All", "", Splitter.SplitTextByEachDelimiter({"-"}, QuoteStyle.Csv, false), {".1", ".2"}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Split Column by Delimiter",{{".1", Text.Trim, type text}, {".2", Text.Trim, type text}}),
+				    #"Merged Columns" = Table.CombineColumns(#"Trimmed Text",{".1", "Attribute"},Combiner.CombineTextByDelimiter("-", QuoteStyle.None),"Report Date"),
+				    #"Renamed Columns" = Table.RenameColumns(#"Merged Columns",{{".2", "Disease"}, {"Value", "Monthly Deaths"}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"Report Date", type date}, {"Monthly Deaths", Int64.Type}}),
+				    #"Replaced Errors1" = Table.ReplaceErrorValues(#"Changed Type1", {{"Monthly Deaths", null}}),
+				    #"Added Code" = Table.AddColumn(#"Replaced Errors1", "Code", each "AUS"),
+				    #"Inserted Prefix" = Table.AddColumn(#"Added Code", "Prefix", each "ARI associated deaths - " & [Disease], type text),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Inserted Prefix",{{"Prefix", "Metric"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,1955 @@
+table covid-live
+	lineageTag: e20facc6-506f-478c-be66-0b865480ff4a
+
+	measure '1st doses' = ```
+			SUM ( 'covid-live'[VACC_FIRST_DOSE_CNT] ) 
+			```
+		formatString: #,0
+		lineageTag: b0f21370-c3ac-4bdb-aa15-08ab84c40442
+
+	measure '2nd doses' = ```
+			SUM ( 'covid-live'[VACC_PEOPLE_CNT] ) 
+			```
+		formatString: #,0
+		lineageTag: 2af5cdcc-ded8-4735-b362-d88567f9f811
+
+	measure '% 1st dose only' = ROUND ( DIVIDE ( [1st doses] - [2nd doses] , [# Population] ) , 3 )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 154ba0da-a5cd-452a-8abf-f27b31ed31e3
+
+	measure '% 2nd dose only' = ROUND ( DIVIDE ( [2nd doses] - [3rd+ doses]  , [# Population] ) , 3 )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 36ecff65-ddb6-460f-90e3-61124a65dad2
+
+	measure '2nd Doses - Label' = IF ( ISBLANK( [2nd doses] ) , "2nd dose data not available", FORMAT( [2nd doses] , "#,##0" ) )
+		lineageTag: 37909853-002e-4c31-a974-ed7fcccb67f5
+
+	measure '1st Doses - Daily' = ```
+			[1st doses] - SUM ( 'covid-live'[PREV_VACC_FIRST_DOSE_CNT] )  
+			```
+		formatString: #,0
+		lineageTag: 7acff576-4e74-47c1-b2cd-fd430a4524b1
+
+	measure '2nd Doses - Daily' = ```
+			[2nd doses] - SUM ( 'covid-live'[PREV_VACC_PEOPLE_CNT] ) 
+			```
+		formatString: #,0
+		lineageTag: 13f73ada-e704-4341-a0e4-1f48fa597887
+
+	measure '# New Cases' = ```
+			
+			SWITCH ( [@ Data Source Label] ,
+			    "covidlive.com.au", 
+			        SUMX ( 'covid-live', 'covid-live'[CASE_CNT] - 'covid-live'[PREV_CASE_CNT] ),
+			    "health.gov.au", 
+			        CALCULATE( [# Value ADHAC], 
+			            ADHAC[Metric] = "Daily Cases", 
+			            FILTER ( DISTINCT(Dates[Date] ), NOT Dates[Date] IN { DATE ( 2024, 1, 17 ), DATE ( 2024, 2, 2 ) } )
+			        ),
+			    "NNDSS", 
+			        [# New Cases (NNDSS)]
+			)
+			
+			```
+		lineageTag: e19c5225-0409-40c0-b99d-99d2ecaef878
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# New Deaths' = ```
+			
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    SUMX (
+			        'covid-live',
+			        IF (
+			            [DEATH_CNT] - [PREV_DEATH_CNT] > 0,
+			            [DEATH_CNT] - [PREV_DEATH_CNT],
+			            0
+			        ) 
+			    ),
+			    CALCULATE( [# Value ADHAC], ADHAC[Metric] = "Daily Deaths" ) 
+			)
+			```
+		formatString: #,0
+		lineageTag: 6455b1e4-ad3c-44d2-9aec-f32eeeb5682c
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# New Deaths per 1M' = ```
+			DIVIDE ( [# New Deaths] , [# Population] / 1000000 ) 
+			```
+		formatString: #,#.#;#,#.#;0
+		lineageTag: b6e6ffca-42c5-4980-9be3-0449cf7ea504
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure '# New Deaths per 1M -ve' = ```
+			0 - [# New Deaths per 1M] 
+			```
+		formatString: #,#.#;#,#.#;0
+		lineageTag: 59e9cf79-b087-43b0-a2a2-8c20e1afc906
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure '# New Cases per 100k' = ```
+			DIVIDE ( [# New Cases] , [# Population] / 100000 ) 
+			```
+		formatString: #,#.#;#,#.#;0
+		lineageTag: f72eeb47-8747-473d-aa33-94e10d443c64
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure '% 1st dose only + 0' = ROUND ( DIVIDE ( SUMX ( Geography , LASTNONBLANKVALUE( Dates[Date] , [1st doses] - [2nd doses] ) ), [# Population] ) , 3 ) + 0
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 1b432a13-d504-49e3-8744-d6d49f22e379
+
+		changedProperty = FormatString
+
+	measure '% 2nd dose + 0' = ```
+			
+			ROUND (
+			    DIVIDE (
+			        SUMX ( Geography, LASTNONBLANKVALUE ( Dates[Date], [2nd doses] - [3rd+ doses] ) ),
+			        [# Population]
+			    ),
+			    3
+			) + 0
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 9bbd564b-66e9-42ef-bf72-9c934d012591
+
+		changedProperty = FormatString
+
+	measure '# New Tests' = SUM ( 'covid-live'[TEST_CNT] ) -  SUM ( 'covid-live'[PREV_TEST_CNT] )
+		formatString: #,0
+		lineageTag: 3a48d9fe-7efa-490b-907d-7cf56afd335a
+
+		changedProperty = FormatString
+
+	measure '% unvaccinated' = 1 - [% 1st dose only + 0] - [% 2nd dose + 0] - [% 3rd dose + 0]
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 516f3cc7-f44f-400e-aea6-8ff5f5951762
+
+		changedProperty = FormatString
+
+	measure '3rd+ doses' = SUM ('covid-live'[Total Boosters - Filled] )
+		formatString: #,0
+		lineageTag: 72c26a10-987f-496b-8647-2102769eba36
+
+		changedProperty = FormatString
+
+	measure '% 3rd dose' = ```
+			
+			ROUND (
+			    DIVIDE (
+			        SUMX ( Geography, LASTNONBLANKVALUE ( Dates[Date], [3rd+ doses] ) ),
+			        [# Population]
+			    ),
+			    3
+			) 
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 70672b10-57c6-441b-a207-0cb2d7af174e
+
+		changedProperty = FormatString
+
+	measure '% 3rd dose + 0' = ROUND ( DIVIDE ( SUMX ( Geography , LASTNONBLANKVALUE( Dates[Date] , [3rd+ doses] ) ) , [# Population] ) , 3 ) + 0
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: f15ba18e-358e-43d7-afe3-c87e201e7d27
+
+		changedProperty = FormatString
+
+	measure 'Daily - New Doses' = ```
+			
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    SUM ('covid-live'[VACC_DOSE_CNT] ) - SUM ('covid-live'[PREV_VACC_DOSE_CNT] ),
+			    VAR v_Report_Date_Max = CALCULATE( MAX ( ADHAC[Report Date] ), ADHAC[Category] = "Boosters" )
+			    RETURN CALCULATE( [# Value ADHAC], ADHAC[Category] = "Boosters" , ADHAC[Metric] <> "Booster Doses Rolling 7 Day Average" , ADHAC[Report Date] = v_Report_Date_Max )
+			)
+			```
+		formatString: #,0
+		lineageTag: a1468df0-b407-4358-842a-bdc883264ceb
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '% Waning (6 months)' =
+			
+			VAR v_Return = CALCULATE( [% 2nd dose + 0] , DATEADD( Dates[Date] , -182, DAY ) )
+			RETURN IF ( v_Return > 0 , v_Return )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: c1a1373e-696c-4ad6-ad7a-0f9e463ece3b
+
+		changedProperty = FormatString
+
+	measure '# Cases (N-day rolling average)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'covid-live'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - ( [^ Rolling Average Days Value] - 1 )
+			RETURN
+			IF ( [# New Cases] > 0 ,
+			    CALCULATE (
+			        SUMX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# New Cases] 
+			        ) / [^ Rolling Average Days Value] ,
+			        ALL( 'Dates' ),
+			        ALL( 'covid-live'[Report Date] ),
+			        ALL( 'NNDSS'[Report Date] )
+			    )
+			)
+			
+			```
+		formatString: #,#.#;#,#.#;0
+		lineageTag: 345979a6-ca86-4040-880c-a2eaa27217d8
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure '# Cases per 1M (N-day rolling average)' = DIVIDE( [# Cases (N-day rolling average)] , DIVIDE( [# Population] , 1000000 ) )
+		formatString: #,#.#;#,#.#;0
+		lineageTag: ed41904b-3422-40d1-b684-59156c42493b
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure '# Deaths (N-day rolling average)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'covid-live'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - ( [^ Rolling Average Days Value] - 1 )
+			RETURN
+			IF ( [# New Deaths (smoothed)] > 0 ,
+			    CALCULATE (
+			        SUMX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# New Deaths (smoothed)] 
+			        ) / [^ Rolling Average Days Value] ,
+			        ALL( 'Dates' ),
+			        ALL( 'covid-live'[Report Date] )
+			    )
+			)
+			```
+		formatString: #,0.0
+		lineageTag: 49f013a2-0a06-4ebc-a459-d4f00d850a28
+
+		changedProperty = FormatString
+
+	measure '# Deaths per 1M (N-day rolling average)' = DIVIDE( [# Deaths (N-day rolling average)] , DIVIDE( [# Population] , 1000000 ) )
+		formatString: #,0.0
+		lineageTag: 057c5105-7dca-40e2-af6b-c43a9e19a1e5
+
+		changedProperty = FormatString
+
+	measure '% Positive' = DIVIDE( SUMX ('covid-live' , IF ( [# New Tests] <> 0 , [# New Cases] - [# New Cases (RAT)] ) ) , [# New Tests]  )
+		formatString: 0%;-0%;0%
+		lineageTag: f5e154d2-776d-4298-888d-b7c6605f1aa2
+
+		changedProperty = FormatString
+
+	measure '# Deaths per 1M (N-day rolling average) -ve' = [# Deaths per 1M (N-day rolling average)] * -1
+		formatString: #,#.#;#,#.#;0
+		lineageTag: cac613dd-d124-42a1-a0fa-1176c4d9db21
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure '% Cases (of population)' = DIVIDE( [# Cases (N-day rolling average)] , [# Population] )
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: c9941662-e924-4a2e-87fe-e6d6c549d4fa
+
+		changedProperty = FormatString
+
+	measure '% Case Fatality Rate' = DIVIDE( [# New Deaths] , [# New Cases] )
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 065bab42-c6de-4237-a50d-126d6ca6e293
+
+		changedProperty = FormatString
+
+	measure '# New Cases (RAT)' = ```
+			SUM ( 'covid-live'[NEW_PROB_CASE_CNT] ) 
+			```
+		formatString: 0
+		lineageTag: ec602bb8-97a4-4fea-8b15-8e595fd9f2bd
+
+	measure '# Hospitalised' = ```
+			
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    SUMX (
+			        'covid-live',
+			        IF ( [MED_HOSP_CNT] > 0 , [MED_HOSP_CNT] )
+			        ),
+			    CALCULATE( [# Value ADHAC], ADHAC[Metric] = "Hospital Admissions" )
+			)
+			
+			```
+		formatString: 0
+		lineageTag: ce00a957-f369-4cde-9f33-db14ed41446b
+
+	measure '# Hospitalised (N-day rolling average)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'covid-live'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - ( [^ Rolling Average Days Value] - 1 )
+			RETURN
+			    CALCULATE (
+			        AVERAGEX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# Hospitalised] + 0
+			        ),
+			        ALL( 'Dates' ),
+			        ALL( 'covid-live'[Report Date] )   
+			    )
+			```
+		lineageTag: 4cf81983-de4f-4144-ad9e-4b1fb1b6327c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# ICU' = ```
+			
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    SUMX (
+			        'covid-live',
+			        IF ( [MED_ICU_CNT] > 0 , [MED_ICU_CNT] )
+			        ),
+			    CALCULATE( [# Value ADHAC], ADHAC[Metric] = "ICU" )
+			)
+			```
+		formatString: 0
+		lineageTag: 985de43c-ff62-4416-8806-38a83ad8a15b
+
+	measure '# ICU (N-day rolling average)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'covid-live'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - ( [^ Rolling Average Days Value] - 1 )
+			RETURN
+			    CALCULATE (
+			        AVERAGEX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# ICU] + 0
+			        ),
+			        ALL( 'Dates' ),
+			        ALL( 'covid-live'[Report Date] )   
+			    )
+			```
+		lineageTag: 6cdbd265-c5fa-4d84-ac9a-13d569c4bb31
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Hospitalised per 1M' = ```
+			DIVIDE ( [# Hospitalised] , [# Population] / 1000000 ) 
+			```
+		formatString: #,0.0
+		lineageTag: 6deedc58-48ad-4f58-a85d-4d93cb5ad959
+
+		changedProperty = FormatString
+
+	measure '# Latest Cases per 100K vs CDC Medium-High Level' = LASTNONBLANKVALUE( Dates[End of Week], [# New Cases per 100k] ) / 200
+		formatString: #.#" X"
+		lineageTag: 5c721134-c909-4b33-9b50-060c5aa7c4a4
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure '# Latest Hospitalised per 100K vs CDC Medium Level' = LASTNONBLANKVALUE( Dates[End of Week], [# Hospitalised per 1M] ) / 10
+		formatString: #.#" X"
+		lineageTag: b896fdd7-4e83-4f2f-9d25-b23c4d9acf98
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure '% Fully Vaccinated (boosted within 120 days)' = ```
+			
+			VAR v_Last_Date = LASTDATE( Dates[Date] )
+			VAR v_3rd_doses_old = CALCULATE( [3rd+ doses], ALL( Dates ) , Dates[Date] = v_Last_Date - 120 )
+			VAR v_3rd_doses_latest = CALCULATE( [3rd+ doses], ALL( Dates ) , Dates[Date] = v_Last_Date )
+			VAR v_Return = 
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    v_3rd_doses_latest - v_3rd_doses_old,
+			    SUMX ( FILTER( ALL ( 'Dates' ) , 'Dates'[Date] >= v_Last_Date - 120 && 'Dates'[Date] <= v_Last_Date ), [# New Vaccination Doses] )
+			)
+			RETURN 
+			IF ( v_Return > 0 && [# Vaccination Doses] > 0, DIVIDE ( v_Return , [# Population] ) ) + 0
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: def7ec11-8edb-4018-9ce4-45a8148bac46
+
+		changedProperty = FormatString
+
+	measure '- Fully Vaccinated (boosted within 120 days)' =
+			
+			VAR v_Last_Date = LASTDATE( Dates[Date] ) - 120
+			VAR v_3rd_doses_old = CALCULATE( [3rd+ doses] , Dates[Date] = v_Last_Date - 120, ALL( Dates ) )
+			VAR v_3rd_doses_latest = CALCULATE( [3rd+ doses] , Dates[Date] = v_Last_Date, ALL( Dates ) )
+			VAR v_Return = v_3rd_doses_latest - v_3rd_doses_old
+			--RETURN IF ( v_Return > 0 , DIVIDE ( v_Return , [# Population] ) )
+			RETURN v_Last_Date
+		formatString: General Date
+		lineageTag: f739a19e-2f80-4765-9d6b-6700887dc4a3
+
+	measure '/ Reff' = ```
+			
+			VAR v_End_Date = 
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    CALCULATE ( LASTDATE( 'covid-live'[Report Date] ) , 'covid-live'[CASE_CNT] - 'covid-live'[PREV_CASE_CNT] > 0 ),
+			    CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , ADHAC[Metric] = "Daily Cases" , 'ADHAC'[Value] > 0 )
+			)
+			VAR v_Start_Date_1 = v_End_Date - 13 
+			VAR v_End_Date_1 = v_End_Date - 7 
+			VAR v_Start_Date = 
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    CALCULATE ( LASTDATE( 'covid-live'[Report Date] ) , ALL ( 'covid-live'[Report Date] ), ALL ( 'Dates' ) , 'covid-live'[Report Date] >= v_Start_Date_1, 'covid-live'[Report Date] <= v_End_Date_1, 'covid-live'[Cases changed] = "true" ),
+			    CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , 'ADHAC'[Report Date] < v_End_Date )
+			)
+			RETURN 
+			    DIVIDE( [# Cases (N-day rolling average)] , 
+			        CALCULATE( [# Cases (N-day rolling average)] , 
+			            ALL ( Dates ) ,  
+			            ALL ( 'covid-live'[Report Date] ) , 
+			            ALL ( 'ADHAC'[Report Date] ) , 
+			            ALL ( 'NNDSS'[Report Date] ) , 
+			            'Dates'[Date] = v_Start_Date 
+			        )
+			    )
+			```
+		formatString: #,0.00
+		lineageTag: 8481a2e4-b79a-4f72-bd93-d595e4504bd7
+
+		changedProperty = FormatString
+
+	measure '# New Cases - Latest' = CALCULATE( [# New Cases] ,'covid-live'[Latest Date for Geography (Cases)] = "Latest" )
+		formatString: #,0
+		lineageTag: 43aaff7a-0207-43da-84cd-169ae6cc05bb
+
+		changedProperty = FormatString
+
+	measure '# New Deaths - Latest' = CALCULATE( [# New Deaths] ,'covid-live'[Latest Date for Geography (Cases)] = "Latest" )
+		formatString: #,0
+		lineageTag: 3f9e48a2-549e-4099-82b8-a5d6a1cd8024
+
+		changedProperty = FormatString
+
+	measure '- Report Date - Latest' = CALCULATE( LASTDATE ( 'covid-live'[Report Date] ) ,'covid-live'[Latest Date for Geography (Cases)] = "Latest" )
+		formatString: dd-mmm-yy
+		lineageTag: 688dbf68-ab95-45ba-ab32-184d797eeaf5
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	measure '% Case Fatality Rate (14-day lag)' = DIVIDE( [# Deaths (N-day rolling average)] , CALCULATE( [# Cases (N-day rolling average)] ,  DATEADD( Dates[Date] , -14, DAY ) ) )
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 42b0e23d-e9f2-4491-a012-e768b91776db
+
+		changedProperty = FormatString
+
+	measure '# ICU per 1M' = ```
+			DIVIDE ( [# ICU] , [# Population] / 1000000 ) 
+			```
+		formatString: #,0.000
+		lineageTag: 379ea15d-cfc1-45ce-b951-40177ce32a08
+
+		changedProperty = FormatString
+
+	measure '# Tests per 1M (N-day rolling average)' = ```
+			DIVIDE ( [# Tests (N-day rolling average)] , [# Population] / 1000000 ) 
+			```
+		formatString: #,0.00
+		lineageTag: a623fb65-b83e-4290-bf0a-73b4cd681689
+
+		changedProperty = FormatString
+
+	measure '# Tests (N-day rolling average)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'covid-live'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - ( [^ Rolling Average Days Value] - 1 )
+			RETURN
+			    CALCULATE (
+			        AVERAGEX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# New Tests] + 0
+			        ),
+			        ALL( 'Dates' ),
+			        ALL( 'covid-live'[Report Date] )   
+			    )
+			```
+		formatString: #,0
+		lineageTag: 68e2b0a5-50df-4221-af57-29af23f93449
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Tests per Case (N-day rolling average)' = DIVIDE( [# Tests (N-day rolling average)] , [# Cases PCR (N-day rolling average)] )
+		formatString: #,0.0
+		lineageTag: cbfd9658-547d-4876-b20f-a21f1025de94
+
+		changedProperty = FormatString
+
+	measure '# Deaths (Cumulative)' =
+			
+			CALCULATE(
+				SUMX ( 'Dates' , [# New Deaths] ),
+				FILTER(
+					ALLSELECTED('Dates'[Date]),
+					ISONORAFTER('Dates'[Date], MAX('Dates'[Date]), DESC)
+				)
+			)
+		formatString: #,0
+		lineageTag: 2f486dc5-13c7-4426-95fa-655bdb15c8dc
+
+		extendedProperty MeasureTemplate =
+				{
+				  "daxTemplateName": "RunningTotal",
+				  "version": 0
+				}
+
+		changedProperty = FormatString
+
+	measure '# Deaths per 1M (Cumulative)' = DIVIDE( [# Deaths (Cumulative)] , DIVIDE( [# Population] , 1000000 ) )
+		formatString: #,0.0
+		lineageTag: 6b043f51-b0f3-4947-972a-7a18364866de
+
+		changedProperty = FormatString
+
+	measure '# Deaths (28-day rolling average)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'covid-live'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - ( 28 - 1 )
+			RETURN
+			    CALCULATE (
+			        AVERAGEX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# New Deaths] + 0
+			        ),
+			        ALL( 'Dates' ),
+			        ALL( 'covid-live'[Report Date] )   
+			    )
+			```
+		formatString: #,0.0
+		lineageTag: fc10fe00-c717-431c-8938-1fa73e56aa13
+
+		changedProperty = FormatString
+
+	measure '# Deaths per 1M (28-day rolling average)' = DIVIDE( [# Deaths (28-day rolling average)] , DIVIDE( [# Population] , 1000000 ) )
+		formatString: #,0.0
+		lineageTag: 038158da-c26c-491d-a848-155dc591b349
+
+		changedProperty = FormatString
+
+	measure '% Cases Weekly Change' = ```
+			
+			VAR v_End_Date = 
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    CALCULATE ( LASTDATE( 'covid-live'[Report Date] ) , 'covid-live'[NEW_CASE_CNT] > 0 ),
+			    CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , ADHAC[Metric] = "Daily Cases" , ADHAC[Value] > 0 )
+			)
+			VAR v_Earliest_Date = 
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    CALCULATE ( FIRSTDATE( 'covid-live'[Report Date] ) , ALL ( 'covid-live'[Report Date] ) , 'covid-live'[Report Date] < v_End_Date ),
+			    CALCULATE ( FIRSTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , 'ADHAC'[Report Date] < v_End_Date )
+			)
+			RETURN
+			    IF ( v_End_Date - v_Earliest_Date >= 13, 
+			        DIVIDE( 
+			            CALCULATE( [# Cases (N-day rolling average)] , 
+			                ALL ( 'covid-live'[Report Date] ) , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 6 &&
+			                     'Dates'[Date] <= v_End_Date
+			                )
+			            ),
+			            CALCULATE( [# Cases (N-day rolling average)] , 
+			                ALL ( 'covid-live'[Report Date] ) , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 13 &&
+			                     'Dates'[Date] <= v_End_Date - 7
+			                )
+			            )
+			        ) - 1
+			    )
+			```
+		lineageTag: 27a11ec9-0923-4e40-a548-162ee0b50076
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# New Cases (smoothed)' = ```
+			
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    SUM ( 'covid-live'[New Cases (smoothed)] ) , 
+			    CALCULATE( [# Value ADHAC], 
+			        ADHAC[Metric] = "Daily Cases", 
+			        FILTER ( DISTINCT(Dates[Date] ), NOT Dates[Date] IN { DATE ( 2024, 1, 17 ), DATE ( 2024, 2, 2 ) } )
+			    )
+			)
+			```
+		formatString: #,0
+		lineageTag: d00bff3a-8343-4b4d-920f-8554268152d6
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Prev New Cases' = SUM ( 'covid-live'[PREV_NEW_CASE_CNT] )
+		formatString: 0
+		lineageTag: c1e2447a-ba4e-49fa-9f1a-6eadba9664e3
+
+	measure '# New Deaths (smoothed)' = ```
+			
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    SUM ( 'covid-live'[New Deaths (smoothed)] ),
+			    CALCULATE( [# Value ADHAC], ADHAC[Metric] = "7-day Avg Daily Deaths" ) +
+			    CALCULATE( [# Value ADHAC], ADHAC[Metric] = "7-day Avg Daily Deaths Provisional" ) 
+			)
+			```
+		lineageTag: e26ee4e9-a7a1-4871-92c1-f581eff5e6ce
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Fully Vaccinated (boosted within 120 days) v2' = ```
+			
+			VAR v_Last_Date = LASTDATE( Dates[Date] ) 
+			VAR v_3rd_doses_old = CALCULATE( SUM ( 'covid-live'[Total Vaccinations - Filled] ) - ( 2 * SUM( 'covid-live'[People Fully Vaccinated - Filled] ) ) , ALL( Dates ), Dates[Date] = v_Last_Date - 120 )
+			VAR v_3rd_doses_latest = CALCULATE( SUM ( 'covid-live'[Total Vaccinations - Filled] ) - ( 2 * SUM( 'covid-live'[People Fully Vaccinated - Filled] ) ) , ALL( Dates ), Dates[Date] = v_Last_Date )
+			VAR v_Return = v_3rd_doses_latest - v_3rd_doses_old
+			RETURN IF ( v_Return > 0 && [# Vaccination Doses] > 0, DIVIDE ( v_Return , [# Population] ) )
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 8c95466a-aa8c-41f8-97e2-cb624a74ee86
+
+		changedProperty = FormatString
+
+	measure '# Vaccination Boosters' = ```
+			
+			VAR v_Last_Date = LASTDATE( Dates[Date] ) 
+			VAR v_Prior_Date = CALCULATE( LASTNONBLANKVALUE( Dates[Date], [3rd+ doses] ), ALL( Dates ), Dates[Date] < v_Last_Date ) 
+			RETURN
+			CALCULATE([3rd+ doses], ALL( Dates ), Dates[Date] = v_Last_Date ) -
+			CALCULATE([3rd+ doses], ALL( Dates ), Dates[Date] = v_Prior_Date ) 
+			--CALCULATE( SUM ( 'covid-live'[Total Vaccinations - Filled] ) - ( 2 * SUM( 'covid-live'[People Fully Vaccinated - Filled] ) ) , ALL( Dates ), Dates[Date] = v_Last_Date )
+			```
+		formatString: #,0
+		lineageTag: 5934e2a7-2497-4642-9550-fa3ded58abaf
+
+		changedProperty = FormatString
+
+	measure '# Fully Vaccinated (boosted within 120 days)' = ```
+			
+			VAR v_Last_Date = LASTDATE( Dates[Date] ) 
+			VAR v_3rd_doses_old = CALCULATE( [3rd+ doses], ALL( Dates ) , Dates[Date] = v_Last_Date - 120 )
+			VAR v_3rd_doses_latest = CALCULATE( [3rd+ doses], ALL( Dates ) , Dates[Date] = v_Last_Date )
+			VAR v_Return = 
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    v_3rd_doses_latest - v_3rd_doses_old,
+			    SUMX ( FILTER( ALL ( 'Dates' ) , 'Dates'[Date] >= v_Last_Date - 120 && 'Dates'[Date] <= v_Last_Date ), [# New Vaccination Doses] )
+			)
+			RETURN IF ( v_Return > 0 , v_Return )
+			```
+		formatString: #,0
+		lineageTag: 30714fea-d640-4705-a9e8-b68cce7b4a42
+
+		changedProperty = FormatString
+
+	measure '# Vaccination Doses' = ```
+			
+			VAR v_Last_Date = LASTDATE( Dates[Date] ) 
+			RETURN
+			CALCULATE( SUM ( 'covid-live'[Total Vaccinations - Filled] ) , ALL( Dates ), Dates[Date] = v_Last_Date )
+			```
+		formatString: #,0
+		lineageTag: 7add5a44-4870-4547-a0f5-6417009c4f5a
+
+		changedProperty = FormatString
+
+	measure '# Vaccinated People' = ```
+			
+			VAR v_Last_Date = LASTDATE( Dates[Date] ) 
+			RETURN CALCULATE( SUM( 'covid-live'[People Fully Vaccinated - Filled] ) , ALL( Dates ), Dates[Date] = v_Last_Date )
+			```
+		formatString: #,0
+		lineageTag: 25265594-1c9c-4f82-a0f9-a537b1ad7dbe
+
+		changedProperty = FormatString
+
+	measure ': 1 death every N minutes' = DIVIDE( 24*60, [# Deaths (N-day rolling average)] )
+		formatString: #,0
+		lineageTag: a17c91b9-c8b7-4a7a-af23-8c14ad856966
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# New Cases (PCR)' = SUMX ( 'covid-live' , IF ( [# New Cases] > 0 , [# New Cases]  - [# New Cases (RAT)] ) )
+		formatString: #,0
+		lineageTag: 30309e04-de8b-4240-b991-727dc332f584
+
+		changedProperty = FormatString
+
+	measure '# New Cases PCR (smoothed)' = SUM ( 'covid-live'[New Cases PCR (smoothed)] )
+		formatString: #,0.0
+		lineageTag: f92fb95b-c570-497a-8149-134334f766d8
+
+		changedProperty = FormatString
+
+	measure '# Cases PCR (N-day rolling average)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'covid-live'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - ( [^ Rolling Average Days Value] - 1 )
+			RETURN
+			IF ( [# New Cases PCR (smoothed)] > 0 ,
+			    CALCULATE (
+			        SUMX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# New Cases PCR (smoothed)] 
+			        ) / [^ Rolling Average Days Value] ,
+			        ALL( 'Dates' ),
+			        ALL( 'covid-live'[Report Date] )
+			    )
+			)
+			
+			```
+		formatString: #,0.0
+		lineageTag: 98dbb58d-b298-4086-b90b-9cc82eee11c7
+
+		changedProperty = FormatString
+
+	measure '# Cases PCR per 1M (N-day rolling average)' = DIVIDE( [# Cases PCR (N-day rolling average)] , DIVIDE( [# Population] , 1000000 ) )
+		formatString: #,0.0
+		lineageTag: 7a488f7e-d4a9-4d1f-b723-02eaaf936cd9
+
+		changedProperty = FormatString
+
+	measure '/ Reff PCR' = ```
+			
+			VAR v_End_Date = CALCULATE ( LASTDATE( 'covid-live'[Report Date] ) , 'covid-live'[New Cases PCR (smoothed)] > 0 )
+			VAR v_Start_Date_1 = v_End_Date - 4 -- ( [^ Rolling Average Days Value] - 1 )
+			VAR v_Start_Date = CALCULATE ( FIRSTDATE( 'covid-live'[Report Date] ) , ALL ( 'covid-live'[Report Date] ) , 'covid-live'[Report Date] < v_End_Date )
+			RETURN
+			    IF ( v_End_Date - v_Start_Date >= 4, -- [^ Rolling Average Days Value] - 1,
+			        DIVIDE( [# Cases PCR (N-day rolling average)] , 
+			            CALCULATE( [# Cases PCR (N-day rolling average)] , 
+			                ALL ( Dates ) ,  
+			                ALL ( 'covid-live'[Report Date] ) , 
+			                'Dates'[Date] = v_Start_Date_1 
+			                )
+			            )
+			        ) 
+			```
+		formatString: #,0.00
+		lineageTag: 65498f39-6e0d-4aa2-beb6-f52250ef46e5
+
+		changedProperty = FormatString
+
+	measure '% Vaccination Boosters (Cumulative)' = DIVIDE ( [# Vaccination Boosters (Cumulative)], [# Population] )
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: a6f0ad73-7d46-431c-9145-3588bab922f6
+
+		changedProperty = FormatString
+
+	measure '# Vaccination Boosters (Cumulative)' = ```
+			
+			VAR v_Last_Date = LASTDATE( Dates[Date] ) 
+			RETURN
+			CALCULATE([3rd+ doses], ALL( Dates ), Dates[Date] = v_Last_Date )
+			
+			```
+		formatString: #,0
+		lineageTag: c5794a41-5ada-491c-950d-c967d8008a0b
+
+		changedProperty = FormatString
+
+	measure '% Currently Infectious (estimated)' = ( [# Staff Cases (Weekly) per 1M -  Residential Aged Care] / 7 ) * [Median Infectious Period (Days) Value] * [Under-reporting Factor Value] / 1000000
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 7a3b2d8c-b349-4ee5-9b32-d8938c92b660
+
+		changedProperty = FormatString
+
+	measure '@ Infectious Inputs' =
+			"Assumptions: Median Infectious Period (days) = " & [Median Infectious Period (Days) Value] &
+			"  |  Multiplier per Aged Care Staff Case = " & [Under-reporting Factor Value] & "X"
+		lineageTag: d939b2ed-2ab2-4f3d-893b-b1fd6c684680
+
+	measure '% Hospitalised Weekly Change' = ```
+			
+			VAR v_End_Date = 
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    CALCULATE ( LASTDATE( 'covid-live'[Report Date] ) , 'covid-live'[MED_HOSP_CNT] > 0 ),
+			    CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , ADHAC[Metric] = "7-Day Avg Hospitalised" , 'ADHAC'[Value] > 0 )
+			)
+			VAR v_Earliest_Date = 
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    CALCULATE ( FIRSTDATE( 'covid-live'[Report Date] ) , ALL ( 'covid-live'[Report Date] ) , 'covid-live'[Report Date] < v_End_Date ),
+			    CALCULATE ( FIRSTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , 'ADHAC'[Report Date] < v_End_Date )
+			)
+			RETURN
+			    IF ( v_End_Date - v_Earliest_Date >= 13, 
+			        DIVIDE( 
+			            CALCULATE( LASTNONBLANKVALUE( 'Dates'[Date], [# Hospitalised] ) , 
+			                ALL ( 'covid-live'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 6 &&
+			                     'Dates'[Date] <= v_End_Date
+			                )
+			            ),
+			            CALCULATE( LASTNONBLANKVALUE( 'Dates'[Date], [# Hospitalised] ) , 
+			                ALL ( 'covid-live'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 13 &&
+			                     'Dates'[Date] <= v_End_Date - 7
+			                )
+			            )
+			        ) - 1
+			    )
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: 6c6ea528-5887-40a8-9e8c-0199b1406f09
+
+		changedProperty = FormatString
+
+	measure '% ICU Weekly Change' = ```
+			
+			VAR v_End_Date = 
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    CALCULATE ( LASTDATE( 'covid-live'[Report Date] ) , 'covid-live'[MED_ICU_CNT] > 0 ),
+			    CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , ADHAC[Metric] = "7-Day Avg ICU" , 'ADHAC'[Value] > 0 )
+			)
+			VAR v_Earliest_Date = 
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    CALCULATE ( FIRSTDATE( 'covid-live'[Report Date] ) , ALL ( 'covid-live'[Report Date] ) , 'covid-live'[Report Date] < v_End_Date ),
+			    CALCULATE ( FIRSTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , 'ADHAC'[Report Date] < v_End_Date )
+			)
+			RETURN
+			    IF ( v_End_Date - v_Earliest_Date >= 13, 
+			        DIVIDE( 
+			            CALCULATE(  LASTNONBLANKVALUE( 'Dates'[Date], [# ICU] ) , 
+			                ALL ( 'covid-live'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 6 &&
+			                     'Dates'[Date] <= v_End_Date
+			                )
+			            ),
+			            CALCULATE(  LASTNONBLANKVALUE( 'Dates'[Date], [# ICU] ) , 
+			                ALL ( 'covid-live'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 13 &&
+			                     'Dates'[Date] <= v_End_Date - 7
+			                )
+			            )
+			        ) - 1
+			    )
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: b9362fa7-8fcf-4070-a55a-b1e159d9905e
+
+		changedProperty = FormatString
+
+	measure '% Hospitalised Rate (vs prior week cases)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'covid-live'[Report Date] ) - 7
+			VAR v_Start_Date = v_End_Date - 6
+			RETURN
+			DIVIDE( [# Hospitalised] , 
+			    CALCULATE (
+			        SUMX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# New Cases (smoothed)] 
+			        ) ,
+			        ALL( 'Dates' ),
+			        ALL( 'covid-live'[Report Date] )
+			    )
+			) 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: e6cf2b0c-fb02-46bc-a586-547e9e3e0efa
+
+		changedProperty = FormatString
+
+	measure '% ICU Rate (1-week lag)' = ```
+			DIVIDE( [# ICU] , CALCULATE( [# Cases (N-day rolling average)], DATEADD( Dates[Date] , -7, DAY ) ) ) 
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 1adbc1b8-76ec-470f-855b-eaf102bc2eaf
+
+		changedProperty = FormatString
+
+	measure '# People Infected (estimated)' = SUMX ( 'Dates' , [# Staff Cases (Weekly) - Residential Aged Care] * [Under-reporting Factor Value] )
+		formatString: #,0
+		lineageTag: c1109a73-49b6-4968-9328-5156364386fc
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '% People Infected (estimated)' = SUMX ( 'Dates' , [# Staff Cases (Weekly) - Residential Aged Care] * [Under-reporting Factor Value] ) / [# Population]
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 4a0b5e46-abfb-45ac-aadf-38b69dff24bb
+
+	measure '# Cases (Cumulative)' =
+			
+			VAR v_Year = MAX ( 'Dates'[Year] )
+			RETURN
+			CALCULATE(
+				SUMX ( 'Dates' , [# New Cases] ),
+				FILTER(
+					ALLSELECTED('Dates'[Date]),
+					ISONORAFTER('Dates'[Date], MAX('Dates'[Date]), DESC) &&
+			        ( NOT ( ISINSCOPE( 'Dates'[Year] ) ) || YEAR ( [Date] ) = v_Year )
+				)
+			)
+		lineageTag: f60ab0f3-8e41-4d56-a822-51c81f118d5c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# New Vaccination Doses' = ```
+			
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    SUMX ( Dates , [Daily - New Doses] ), 
+			    CALCULATE( [# Value ADHAC], ADHAC[Category] = "Boosters", ADHAC[Metric] <> "Booster Doses Rolling 7 Day Average" )
+			)
+			```
+		formatString: #,0
+		lineageTag: 3c3fa90e-ab20-4a1f-aa63-3ff13a22b00d
+
+	measure '% New Vaccination Doses' = DIVIDE( [# New Vaccination Doses] , [# Population] )
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 29a92b8f-3076-4acd-a877-0f43b7ce57c5
+
+	measure '% No New Vaccination Doses' = 1 - [% New Vaccination Doses]
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 5478d150-abc2-4197-ae50-9fb73bb1682e
+
+	measure '# New Vaccination Doses (N-day rolling average)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'covid-live'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - ( [^ Rolling Average Days Value] - 1 )
+			VAR v_End_Date_ADHAC = LASTDATE( 'ADHAC'[Report Date] ) 
+			VAR v_Start_Date_ADHAC = v_End_Date_ADHAC - ( [^ Rolling Average Days Value] - 1 )
+			RETURN
+			IF ( [@ Data Source Label] = "covidlive.com.au", 
+			    IF ( [# New Vaccination Doses] > 0 ,
+			        CALCULATE (
+			            SUMX( 
+			                FILTER (
+			                    Dates ,
+			                    'Dates'[Date] >= v_Start_Date
+			                        && 'Dates'[Date]  <= v_End_Date
+			                ),
+			                [# New Vaccination Doses] 
+			            ) / [^ Rolling Average Days Value] ,
+			            ALL( 'Dates' ),
+			            ALL( 'covid-live'[Report Date] )
+			        )
+			    ),
+			    IF ( [# New Vaccination Doses] > 0 ,
+			        CALCULATE (
+			            SUMX( 
+			                FILTER (
+			                    Dates ,
+			                    'Dates'[Date] >= v_Start_Date_ADHAC
+			                        && 'Dates'[Date]  <= v_End_Date_ADHAC
+			                ),
+			                [# New Vaccination Doses] 
+			            ) / [^ Rolling Average Days Value] ,
+			            ALL( 'Dates' ),
+			            ALL( 'ADHAC'[Report Date] )
+			        )
+			    )
+			)
+			```
+		lineageTag: 2363b164-1945-43cc-af9b-ea762111d087
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '@ Currently Infectious (estimated)' = "or 1-in-" & FORMAT( DIVIDE( 1 , [% Currently Infectious (estimated)] ), "0" )
+		lineageTag: 37bf192a-573d-426e-8784-957ff4f1dd9f
+
+	measure '# New Cases per 1M - Latest' = CALCULATE( [# New Cases per 100k] * 10 ,'covid-live'[Latest Date for Geography (Cases)] = "Latest" )
+		lineageTag: ee854544-c34f-4b2a-9ed2-ef7179c56651
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Cases per 1M (Cumulative)' = DIVIDE( [# Cases (Cumulative)] , DIVIDE( [# Population] , 1000000 ) )
+		lineageTag: fc291f56-a0e2-4bf0-96fd-023917dce61f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Cases (1-year rolling average)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'covid-live'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - 364
+			VAR v_Day_Range = v_End_Date - v_Start_Date
+			RETURN
+			IF ( [# New Cases] > 0 ,
+			    CALCULATE (
+			        SUMX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# New Cases] 
+			        ) / v_Day_Range ,
+			        ALL( 'Dates' ),
+			        ALL( 'covid-live'[Report Date] ),
+			        ALL( 'NNDSS'[Report Date] )
+			    )
+			)
+			
+			```
+		formatString: #,#.#;#,#.#;0
+		lineageTag: f1435aa5-4f21-4e7f-b4a4-beeb87857250
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column LAST_UPDATED_DATE
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fcd1a2b4-0083-4b6f-ab2a-cef0a29c1761
+		summarizeBy: none
+		sourceColumn: LAST_UPDATED_DATE
+
+		variation Variation
+			isDefault
+			relationship: b699cd9b-92f5-4b70-b30e-314b532aa637
+			defaultHierarchy: LocalDateTable_f99ad411-63d6-4e31-9906-93896836c8d8.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column CODE
+		dataType: string
+		lineageTag: a3a51da2-c2b8-4904-85df-0ab8bd82fd3f
+		summarizeBy: none
+		sourceColumn: CODE
+
+		annotation SummarizationSetBy = Automatic
+
+	column NAME
+		dataType: string
+		lineageTag: 8d24cd19-2a3d-4e0b-8197-54a01dd54f3c
+		summarizeBy: none
+		sourceColumn: NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column CASE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: a60e9f97-8c76-4749-aa57-93db0dbca0c8
+		summarizeBy: sum
+		sourceColumn: CASE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column TEST_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 8739c03b-2b55-4e77-b215-717af547bb28
+		summarizeBy: sum
+		sourceColumn: TEST_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column DEATH_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 55b185ae-5ecd-451e-a419-700fc42b9302
+		summarizeBy: sum
+		sourceColumn: DEATH_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column RECOV_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 43511fbc-046b-4232-b5c0-fa7f3be12abf
+		summarizeBy: sum
+		sourceColumn: RECOV_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column MED_ICU_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d175cac-be10-46fc-ba45-906be576e00d
+		summarizeBy: sum
+		sourceColumn: MED_ICU_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column MED_VENT_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 179f8958-00ae-40ad-be4a-23282792950c
+		summarizeBy: sum
+		sourceColumn: MED_VENT_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column MED_HOSP_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 161d7769-0ec6-43cc-a41a-19f7ba2358b9
+		summarizeBy: sum
+		sourceColumn: MED_HOSP_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column SRC_OVERSEAS_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 0f7a239c-a01a-4413-b995-27d28a2d1657
+		summarizeBy: sum
+		sourceColumn: SRC_OVERSEAS_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column SRC_INTERSTATE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: c1017faa-f35e-4b92-bf8b-7b76023576b5
+		summarizeBy: sum
+		sourceColumn: SRC_INTERSTATE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column SRC_CONTACT_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: bb817fc6-0359-492d-a521-c19793ca78d6
+		summarizeBy: sum
+		sourceColumn: SRC_CONTACT_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column SRC_UNKNOWN_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: cef876be-0df2-41d3-ab86-57c875616d2e
+		summarizeBy: sum
+		sourceColumn: SRC_UNKNOWN_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column SRC_INVES_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: d6a0a5de-fb68-4efa-9b98-d86bb31606f2
+		summarizeBy: sum
+		sourceColumn: SRC_INVES_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_CASE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: ad4c780b-7f16-49a8-b551-92ac7841d325
+		summarizeBy: sum
+		sourceColumn: PREV_CASE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_TEST_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 7440d71a-04df-48de-b0dd-c0cb327b10cd
+		summarizeBy: sum
+		sourceColumn: PREV_TEST_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_DEATH_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 08bc7e5d-58b9-4bff-9866-40f67da9d862
+		summarizeBy: sum
+		sourceColumn: PREV_DEATH_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_RECOV_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: c1e80d57-9d3b-4273-b316-0bd44f76ae88
+		summarizeBy: sum
+		sourceColumn: PREV_RECOV_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_MED_ICU_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 40dda1b8-9cf1-4f73-8170-8892455199e9
+		summarizeBy: sum
+		sourceColumn: PREV_MED_ICU_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_MED_VENT_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 3ef339f6-cafd-4134-a410-8ade34395dfd
+		summarizeBy: sum
+		sourceColumn: PREV_MED_VENT_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_MED_HOSP_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: aa946611-b710-4bcf-8c86-bf8ee8234848
+		summarizeBy: sum
+		sourceColumn: PREV_MED_HOSP_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_SRC_OVERSEAS_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 8c2833f7-5cea-4175-900f-5ebacdfb79d6
+		summarizeBy: sum
+		sourceColumn: PREV_SRC_OVERSEAS_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_SRC_INTERSTATE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 32cfa330-3e0a-4125-87dc-97c0b93bd9c8
+		summarizeBy: sum
+		sourceColumn: PREV_SRC_INTERSTATE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_SRC_CONTACT_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: db47fdda-9ad1-4ed2-abbf-ce0be103cd6f
+		summarizeBy: sum
+		sourceColumn: PREV_SRC_CONTACT_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_SRC_UNKNOWN_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: fb1f258f-8086-4b93-baca-d3304eceb2df
+		summarizeBy: sum
+		sourceColumn: PREV_SRC_UNKNOWN_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_SRC_INVES_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 52da5c4c-7eb5-4ae6-aede-671162c174d8
+		summarizeBy: sum
+		sourceColumn: PREV_SRC_INVES_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PROB_CASE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 77a9dede-6e29-4ab5-bbde-abdafb400086
+		summarizeBy: sum
+		sourceColumn: PROB_CASE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_PROB_CASE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 97cd747c-6cf2-4f15-9e0a-67ba7478dfcb
+		summarizeBy: sum
+		sourceColumn: PREV_PROB_CASE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column ACTIVE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 5cb8aabd-4a6d-47a9-aa51-6be732e7f6a9
+		summarizeBy: sum
+		sourceColumn: ACTIVE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_ACTIVE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 226d7964-047e-4395-a5c4-9ea4079e2090
+		summarizeBy: sum
+		sourceColumn: PREV_ACTIVE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column NEW_CASE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 1b2ac4ff-cf6d-4b7d-88e9-5f2b771ef674
+		summarizeBy: sum
+		sourceColumn: NEW_CASE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_NEW_CASE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 51179a39-1ec3-46c4-a953-6fd5f63a3230
+		summarizeBy: sum
+		sourceColumn: PREV_NEW_CASE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_DIST_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: a498a432-7fdb-4d10-8b2f-d567c15fdc58
+		summarizeBy: sum
+		sourceColumn: VACC_DIST_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_DIST_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 1ec52b0c-f929-4710-ac26-fa930641fc35
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_DIST_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_DOSE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 1b3c7553-f1a9-4d1a-8f51-ab4776827247
+		summarizeBy: sum
+		sourceColumn: VACC_DOSE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_DOSE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: ea5b1a46-eb4d-4bf3-8b48-e00098cb75bd
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_DOSE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_PEOPLE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 930b0ead-f517-457a-82a3-9430be967cca
+		summarizeBy: sum
+		sourceColumn: VACC_PEOPLE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_PEOPLE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d869beb-c80e-44f2-b717-f6711879e65d
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_PEOPLE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_AGED_CARE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 2bb5b17a-3f0f-4808-8279-574684f66521
+		summarizeBy: sum
+		sourceColumn: VACC_AGED_CARE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_AGED_CARE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 239f2de5-a5c6-4332-9dfe-7661689a4b92
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_AGED_CARE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_GP_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 9bff980d-56b4-41af-bfff-9081968caa4c
+		summarizeBy: sum
+		sourceColumn: VACC_GP_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_GP_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 910e3369-0651-442e-839e-969ce6c251a2
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_GP_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Latest Date for Geography (Vaccines)' =
+			
+			VAR v_NAME = [NAME]
+			VAR v_REPORT_DATE_Latest =  CALCULATE( LASTDATE( 'covid-live'[Report Date] ), ALL ( 'covid-live' ), 'covid-live'[NAME] = v_NAME, 'covid-live'[Vaccines changed] = "true" )
+			RETURN IF ( [Report Date] = v_REPORT_DATE_Latest , "Latest" )
+		lineageTag: 72bf6183-9138-4af3-94c4-9d72e1af439f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Vaccines changed'
+		dataType: string
+		lineageTag: 8d5c817d-54ac-4114-9840-142126b7fff0
+		summarizeBy: none
+		sourceColumn: Vaccines changed
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'covid-live key'
+		dataType: string
+		lineageTag: ab086d41-313e-4bd3-9fa1-02779e68d312
+		summarizeBy: none
+		sourceColumn: covid-live key
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_FIRST_DOSE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: ae2c9429-4263-45f6-843c-8c1426aa281d
+		summarizeBy: sum
+		sourceColumn: VACC_FIRST_DOSE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_FIRST_DOSE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 402d4ad0-3e52-40a6-a611-3cb0f528c258
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_FIRST_DOSE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_FIRST_DOSE_CNT_12_15
+		dataType: int64
+		formatString: 0
+		lineageTag: c906dc9e-d3fd-449a-a79e-93c976c4e7eb
+		summarizeBy: sum
+		sourceColumn: VACC_FIRST_DOSE_CNT_12_15
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_FIRST_DOSE_CNT_12_15
+		dataType: int64
+		formatString: 0
+		lineageTag: 0f7fd1bb-a93b-4b93-a6a5-3b318f2abe38
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_FIRST_DOSE_CNT_12_15
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_PEOPLE_CNT_12_15
+		dataType: int64
+		formatString: 0
+		lineageTag: 357a782b-8702-47da-92d2-8eb66fa82c88
+		summarizeBy: sum
+		sourceColumn: VACC_PEOPLE_CNT_12_15
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_PEOPLE_CNT_12_15
+		dataType: int64
+		formatString: 0
+		lineageTag: 6fbb0aa8-1072-45d5-8e41-3a6e34092fc7
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_PEOPLE_CNT_12_15
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_BOOSTER_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: c9e3d35f-c93d-4b41-b132-0efd0e215fb1
+		summarizeBy: sum
+		sourceColumn: VACC_BOOSTER_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_BOOSTER_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 774136ba-1591-4901-a773-78fadeb32ae9
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_BOOSTER_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_FIRST_DOSE_CNT_5_11
+		dataType: int64
+		formatString: 0
+		lineageTag: 93dbb8c7-99e3-46a5-855c-e992d9c2d286
+		summarizeBy: sum
+		sourceColumn: VACC_FIRST_DOSE_CNT_5_11
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_FIRST_DOSE_CNT_5_11
+		dataType: int64
+		formatString: 0
+		lineageTag: b19672e6-491c-46f1-8fd1-fb8bef86eed3
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_FIRST_DOSE_CNT_5_11
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_PEOPLE_CNT_5_11
+		dataType: int64
+		formatString: 0
+		lineageTag: 0297d105-2e2d-4d07-a983-bbc6e40541f5
+		summarizeBy: sum
+		sourceColumn: VACC_PEOPLE_CNT_5_11
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_PEOPLE_CNT_5_11
+		dataType: int64
+		formatString: 0
+		lineageTag: 5648e3bc-01f9-4e13-a619-ae6c24a80441
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_PEOPLE_CNT_5_11
+
+		annotation SummarizationSetBy = Automatic
+
+	column NEW_PROB_CASE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 47e90d37-61ea-4318-8104-acf5f775fff7
+		summarizeBy: sum
+		sourceColumn: NEW_PROB_CASE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_NEW_PROB_CASE_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 6d1ec1d9-9bde-4b2e-8f4d-9225b6b7ae4a
+		summarizeBy: sum
+		sourceColumn: PREV_NEW_PROB_CASE_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Boosters - Filled' = ```
+			
+			VAR v_Location = [CODE]
+			VAR v_Date = [Report Date]
+			RETURN
+			    CALCULATE (
+			        LASTNONBLANKVALUE (
+			            'covid-live'[Report Date],
+			            MAX ( 'covid-live'[VACC_BOOSTER_CNT] )
+			        ),
+			        ALL ( 'covid-live' ),
+			        'covid-live'[CODE] = v_Location,
+			        'covid-live'[Report Date] <= v_Date
+			    ) +
+			    CALCULATE (
+			        LASTNONBLANKVALUE (
+			            'covid-live'[Report Date],
+			            MAX ( 'covid-live'[VACC_WINTER_CNT] )
+			        ),
+			        ALL ( 'covid-live' ),
+			        'covid-live'[CODE] = v_Location,
+			        'covid-live'[Report Date] <= v_Date
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: 4db8cc4a-3448-48d3-beaf-6afa403a4b51
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Latest Date for Geography (Cases)' =
+			
+			VAR v_NAME = [NAME]
+			VAR v_REPORT_DATE_Latest =  CALCULATE( LASTDATE( 'covid-live'[Report Date] ), ALL ( 'covid-live' ), 'covid-live'[NAME] = v_NAME, FILTER ( 'covid-live', [# New Cases] > 0 ) )
+			RETURN IF ( [Report Date] = v_REPORT_DATE_Latest , "Latest" )
+		lineageTag: 5854ffc1-f8b6-40f9-85b1-803d8aa7571c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column VACC_WINTER_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: c7a8ab7f-c04a-4681-8974-a29024fc7697
+		summarizeBy: sum
+		sourceColumn: VACC_WINTER_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREV_VACC_WINTER_CNT
+		dataType: int64
+		formatString: 0
+		lineageTag: 34f636bf-d2aa-420b-aed4-4f4b67058a42
+		summarizeBy: sum
+		sourceColumn: PREV_VACC_WINTER_CNT
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'New Cases (smoothed)' = ```
+			
+			VAR v_End_Date = 'covid-live'[Report Date] 
+			VAR v_Start_Date = v_End_Date - ( 6 )
+			VAR v_CODE = [CODE]
+			VAR v_End_Date_fwd = 
+			    CALCULATE (
+			        MINX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_End_Date 
+			                    && [# New Cases]  > 0 
+			--                    && ( ( v_CODE <> "AUS" && [# New Cases]  > 0 ) ||
+			--                        ( v_CODE = "AUS" && 'Dates'[Complete Day all States] = TRUE() ) )
+			            ),
+			            'Dates'[Date] 
+			        ) ,
+			        ALL( 'covid-live' ), 
+			        'covid-live'[CODE] = v_CODE 
+			    )
+			RETURN
+			IF ( v_CODE <> "AUS" || NOT ( ISBLANK( v_End_Date_fwd ) ) ,
+			    IF ( ( 'covid-live'[NEW_CASE_CNT] > 0 && 'covid-live'[PREV_NEW_CASE_CNT] > 0 )  ,
+			        'covid-live'[NEW_CASE_CNT],
+			        IF ( v_End_Date > DATE ( 2022, 9 , 9 ) ,
+			            CALCULATE (
+			                DIVIDE (
+			                    SUMX( 
+			                        FILTER (
+			                            Dates ,
+			                            'Dates'[Date] >= v_End_Date
+			                                && 'Dates'[Date]  <= v_End_Date_fwd
+			                        ),
+			                        [# New Cases] 
+			                    ),
+			                    v_End_Date_fwd - v_End_Date + 1 
+			                ),
+			                ALL( 'Dates' ),
+			            ALLEXCEPT(  'covid-live', 'covid-live'[CODE], 'covid-live'[NAME] )
+			            ),
+			            CALCULATE (
+			                DIVIDE(
+			                    SUMX( 
+			                        FILTER (
+			                            Dates ,
+			                            'Dates'[Date] >= v_Start_Date
+			                                && 'Dates'[Date]  <= v_End_Date
+			                        ),
+			                        [# New Cases] 
+			                    ) ,
+			                    v_Start_Date - v_End_Date + 1 
+			                ) ,
+			                ALL( 'Dates' ),
+			            ALLEXCEPT(  'covid-live', 'covid-live'[CODE], 'covid-live'[NAME] )
+			            )
+			        )
+			    )
+			)
+			```
+		lineageTag: 41c4f654-a736-4810-ab6f-ce43ecb786f6
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column v_End_Date_fwd = ```
+			
+			VAR v_End_Date = 'covid-live'[Report Date] 
+			VAR v_Start_Date = v_End_Date - ( 6 )
+			VAR v_CODE = [CODE]
+			RETURN
+			    CALCULATE (
+			        MINX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_End_Date 
+			                    && ( ( v_CODE <> "AUS" && [# New Cases]  > 0 ) ||
+			                        ( v_CODE = "AUS" && 'Dates'[Complete Day all States] = TRUE() ) )
+			            ),
+			            'Dates'[Date] 
+			        ) ,
+			        ALL( 'covid-live' ), 
+			        'covid-live'[CODE] = v_CODE 
+			    )
+			```
+		formatString: General Date
+		lineageTag: ad2303f4-ce2f-4c5c-854c-c0d35d3dbd45
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 01eb5a99-4a4d-499f-bddb-d4429255945f
+			defaultHierarchy: LocalDateTable_3fe8df68-0c7e-4569-9a1d-7ac473d41a86.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'New Deaths (smoothed)' = ```
+			
+			VAR v_End_Date = 'covid-live'[Report Date] 
+			VAR v_Start_Date = v_End_Date - ( 6 )
+			VAR v_CODE = [CODE]
+			VAR v_End_Date_fwd = 
+			    CALCULATE (
+			        MINX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_End_Date 
+			                    && [# New Deaths]  > 0 
+			--                    && ( ( v_CODE <> "AUS" && [# New Cases]  > 0 ) ||
+			--                        ( v_CODE = "AUS" && 'Dates'[Complete Day all States] = TRUE() ) )
+			            ),
+			            'Dates'[Date] 
+			        ) ,
+			        ALL( 'covid-live' ), 
+			        'covid-live'[CODE] = v_CODE 
+			    )
+			RETURN
+			--IF ( v_CODE <> "AUS" || NOT ( ISBLANK( v_End_Date_fwd ) ) ,
+			    IF ( ( 'covid-live'[DEATH_CNT] > 0 && 'covid-live'[PREV_DEATH_CNT] > 0 ),
+			        [# New Deaths],
+			        IF ( v_End_Date > DATE ( 2022, 9 , 9 ) ,
+			            CALCULATE (
+			                SUMX( 
+			                    FILTER (
+			                        Dates ,
+			                        'Dates'[Date] >= v_End_Date
+			                            && 'Dates'[Date]  <= v_End_Date_fwd
+			                    ),
+			                    [# New Deaths] 
+			                ) / 7 ,
+			                ALL( 'Dates' ),
+			            ALLEXCEPT(  'covid-live', 'covid-live'[CODE], 'covid-live'[NAME] )
+			            ),
+			            CALCULATE (
+			                SUMX( 
+			                    FILTER (
+			                        Dates ,
+			                        'Dates'[Date] >= v_Start_Date
+			                            && 'Dates'[Date]  <= v_End_Date
+			                    ),
+			                    [# New Deaths] 
+			                ) / 7 ,
+			                ALL( 'Dates' ),
+			            ALLEXCEPT(  'covid-live', 'covid-live'[CODE], 'covid-live'[NAME] )
+			            )
+			        )
+			    )
+			--)
+			```
+		lineageTag: c66a85b2-5910-4c48-99de-b1c147e55316
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'People Fully Vaccinated - Filled' = ```
+			
+			VAR v_CODE = [CODE]
+			VAR v_Date = [Report Date]
+			RETURN
+			    IF (
+			        [VACC_PEOPLE_CNT],
+			        [VACC_PEOPLE_CNT],
+			        CALCULATE (
+			            LASTNONBLANKVALUE (
+			                'covid-live'[Report Date],
+			                MAX ( 'covid-live'[VACC_PEOPLE_CNT] )
+			            ),
+			            ALL ( 'covid-live' ),
+			            'covid-live'[CODE] = v_CODE,
+			            'covid-live'[Report Date] <= v_Date
+			        )
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: 6a039003-05a4-40f7-b794-f1ac0d2f2335
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Vaccinations - Filled' = ```
+			
+			VAR v_CODE = [CODE]
+			VAR v_Date = [Report Date]
+			RETURN
+			    IF (
+			        [VACC_DOSE_CNT],
+			        [VACC_DOSE_CNT],
+			        CALCULATE (
+			            LASTNONBLANKVALUE (
+			                'covid-live'[Report Date],
+			                MAX ( 'covid-live'[VACC_DOSE_CNT] )
+			            ),
+			            ALL ( 'covid-live' ),
+			            'covid-live'[CODE] = v_CODE,
+			            'covid-live'[Report Date] <= v_Date
+			        )
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: 890e0eae-d7c1-4372-a6cb-4cbe922b2390
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'New Cases PCR (smoothed)' = ```
+			
+			VAR v_End_Date = 'covid-live'[Report Date] 
+			VAR v_Start_Date = v_End_Date - ( 6 )
+			VAR v_CODE = [CODE]
+			VAR v_End_Date_fwd = 
+			    CALCULATE (
+			        MINX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_End_Date 
+			                    && ( ( v_CODE <> "AUS" && [# New Cases]  > 0 ) ||
+			                        ( v_CODE = "AUS" && 'Dates'[Complete Day all States] = TRUE() ) )
+			            ),
+			            'Dates'[Date] 
+			        ) ,
+			        ALL( 'covid-live' ), 
+			        'covid-live'[CODE] = v_CODE 
+			    )
+			RETURN
+			IF ( v_CODE <> "AUS" || NOT ( ISBLANK( v_End_Date_fwd ) ) ,
+			    IF ( 'covid-live'[NEW_CASE_CNT] > 0 && 'covid-live'[PREV_NEW_CASE_CNT] > 0 ,
+			        'covid-live'[NEW_CASE_CNT] - 'covid-live'[NEW_PROB_CASE_CNT],
+			        IF ( v_End_Date > DATE ( 2022, 9 , 9 ),
+			            CALCULATE (
+			                SUMX( 
+			                    FILTER (
+			                        Dates ,
+			                        'Dates'[Date] >= v_End_Date
+			                            && 'Dates'[Date]  <= v_End_Date_fwd
+			                    ),
+			                    [# New Cases (PCR)] 
+			                ) / 7 ,
+			                ALL( 'Dates' ),
+			            ALLEXCEPT(  'covid-live', 'covid-live'[CODE], 'covid-live'[NAME] )
+			            ),
+			            CALCULATE (
+			                SUMX( 
+			                    FILTER (
+			                        Dates ,
+			                        'Dates'[Date] >= v_Start_Date
+			                            && 'Dates'[Date]  <= v_End_Date
+			                    ),
+			                    [# New Cases (PCR)] 
+			                ) / 7 ,
+			                ALL( 'Dates' ),
+			            ALLEXCEPT(  'covid-live', 'covid-live'[CODE], 'covid-live'[NAME] )
+			            )
+			        )
+			    )
+			)
+			```
+		formatString: #,0.0
+		lineageTag: cafe856e-bf32-4a70-bc78-2c94ae64c920
+		summarizeBy: sum
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f67bc579-6052-41c9-876b-5f04a01f472e
+		summarizeBy: none
+		sourceColumn: Report Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Cases changed'
+		dataType: string
+		lineageTag: 4c216d93-547e-4660-9151-dd4922ecc228
+		summarizeBy: none
+		sourceColumn: Cases changed
+
+		annotation SummarizationSetBy = Automatic
+
+	partition covid-live-73109cc4-bfe3-4161-ac83-3791ba4aef2c = m
+		mode: import
+		source =
+				let
+				    Source = #"covid-live - base",
+				    #"Inserted covid-live key" = Table.AddColumn(Source, "covid-live key", each Text.Combine({[NAME], Text.From([Report Date], "en-AU")}, "|"), type text)
+				in
+				    #"Inserted covid-live key"
+
+	annotation PBI_ResultType = Table
+

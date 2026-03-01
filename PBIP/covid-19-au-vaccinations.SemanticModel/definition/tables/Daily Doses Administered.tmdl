@@ -1,0 +1,113 @@
+table 'Daily Doses Administered'
+	lineageTag: 91a6a051-3f6a-449b-a214-406e77e74399
+
+	measure '# Doses - Daily' = SUM ( 'Daily Doses Administered'[NET] )
+		formatString: #,0
+		lineageTag: 8fce72b0-27d5-4fb7-9328-4eab459be7cd
+
+	measure '# Doses - Daily (7-day rolling average)' =
+			
+			// IF(
+			// 	ISFILTERED('Report Dates'[Report Date]),
+			// 	ERROR("Time intelligence quick measures can only be grouped or filtered by the Power BI-provided date hierarchy or primary date column."),
+				VAR __LAST_DATE = LASTDATE('Dates'[Date])
+				RETURN
+					AVERAGEX(
+			            DATESBETWEEN(
+			                'Dates'[Date],
+			                    DATEADD(__LAST_DATE, -6, DAY),
+			                    __LAST_DATE
+			                ),
+			                CALCULATE([# Doses - Daily])
+			            )
+			// )
+		formatString: #,0
+		lineageTag: 73c88bcd-6a32-491b-9681-2a70468de517
+
+		extendedProperty MeasureTemplate =
+				{
+				  "daxTemplateName": "RollingAverage",
+				  "version": 0
+				}
+
+	measure '@ Title - Daily Doses' = "Daily Doses - " & FIRSTNONBLANK( Geography[Geography] , 1 )
+		lineageTag: c1368682-7f00-4dba-be1d-36d24c18f830
+
+	column CODE
+		dataType: string
+		lineageTag: 0410a189-a915-4596-8a8b-22f46d07014b
+		summarizeBy: none
+		sourceColumn: CODE
+
+		annotation SummarizationSetBy = Automatic
+
+	column DATE
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 793d9abc-daf3-42e2-bb82-b2a1762ec680
+		summarizeBy: none
+		sourceColumn: DATE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DOSES
+		dataType: int64
+		formatString: 0
+		lineageTag: a7bd2d58-5e09-42ff-8da1-f4526ca973ae
+		summarizeBy: sum
+		sourceColumn: DOSES
+
+		annotation SummarizationSetBy = Automatic
+
+	column VAR
+		dataType: int64
+		formatString: 0
+		lineageTag: 4dee1b10-3554-4f7f-af25-a9e874de04a1
+		summarizeBy: sum
+		sourceColumn: VAR
+
+		annotation SummarizationSetBy = Automatic
+
+	column NET
+		dataType: int64
+		formatString: 0
+		lineageTag: ced3710e-f7b3-4137-bf0c-0760ceb52e1b
+		summarizeBy: sum
+		sourceColumn: NET
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'covid-live key'
+		dataType: string
+		lineageTag: b5ef6a67-12b8-4ded-973f-084c8a591f68
+		summarizeBy: none
+		sourceColumn: covid-live key
+
+		annotation SummarizationSetBy = Automatic
+
+	column STATE
+		dataType: string
+		lineageTag: cf3812f9-1fff-4259-afb4-bd0a21e626eb
+		summarizeBy: none
+		sourceColumn: STATE
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Daily Doses Administered-903e291b-e721-4dfa-b0e6-1381e24683ab' = m
+		mode: import
+		source =
+				let
+				    Source = #"Daily Doses Administered - aus",
+				    #"Appended Query" = Table.Combine({Source, #"Daily Doses Administered - nsw", #"Daily Doses Administered - vic", #"Daily Doses Administered - qld", #"Daily Doses Administered - sa", #"Daily Doses Administered - wa", #"Daily Doses Administered - tas", #"Daily Doses Administered - nt", #"Daily Doses Administered - act"}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Appended Query","-",null,Replacer.ReplaceValue,{"DOSES", "VAR", "NET"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Replaced Value",{{"DATE", type date}, {"DOSES", Int64.Type}, {"VAR", Int64.Type}, {"NET", Int64.Type}, {"CODE", type text}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Changed Type", {"CODE"}, Geography, {"CODE"}, "Geography", JoinKind.LeftOuter),
+				    #"Expanded Geography" = Table.ExpandTableColumn(#"Merged Queries", "Geography", {"STATE"}, {"STATE"}),
+				    #"Added covid-live key" = Table.AddColumn(#"Expanded Geography", "covid-live key", each Text.Combine({[STATE], Text.From([DATE], "en-AU")}, "|"), type text)
+				in
+				    #"Added covid-live key"
+
+	annotation PBI_ResultType = Table
+

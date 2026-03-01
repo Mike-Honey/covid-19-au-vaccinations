@@ -1,0 +1,26 @@
+table '^ Rolling Average Days'
+	lineageTag: 0b80d276-ac8f-4d65-9491-396a427d93a2
+
+	measure '^ Rolling Average Days Value' = SELECTEDVALUE('^ Rolling Average Days'[^ Rolling Average Days], 7)
+		formatString: 0
+		lineageTag: 2450d4db-73fb-4e0b-8ad6-c80436befbd5
+
+	column '^ Rolling Average Days'
+		formatString: 0
+		lineageTag: ebd0eb1e-9c21-43c0-8990-a689cbe2d80e
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+	partition '^ Rolling Average Days-705b784a-231a-4e7e-bbf6-f7ea95eff2a0' = calculated
+		mode: import
+		source = GENERATESERIES(1, 100, 1)
+
+	annotation PBI_Id = 1dd647561d624eb483ff26cdc7c3f6f5
+

@@ -1,0 +1,53 @@
+table Rows
+	excludeFromModelRefresh
+	lineageTag: c22b61a2-a8d4-4dfb-9afb-bb3201d2977d
+
+	measure Cell = ( ( SELECTEDVALUE( 'Rows'[Row] ) - 1 ) * 10 ) + SELECTEDVALUE( 'Columns'[Column] )
+		formatString: 0
+		lineageTag: e9e2fb49-801d-4927-a042-30ffd8f01081
+
+	measure Spaces = "  "
+		lineageTag: 6be6fbd0-b3fc-48e7-b1ae-b26fafb03b2d
+
+	measure 'Cell Color' =
+			SWITCH ( TRUE () ,
+			[Cell] / 100 <= ROUNDDOWN( [% 3rd dose] , 2 ) , "#007167",
+			[Cell] / 100 <= ROUNDDOWN( [% 2nd dose only] + [% 3rd dose] , 2 ), "#329287",
+			[Cell] / 100 <= ROUNDDOWN( [% 1st dose only] + [% 2nd dose only] + [% 3rd dose] , 2 ), "#54b4a9",
+			"#d8d8d8" )
+		lineageTag: f5790ecb-1ef4-4e01-bf16-1f7a2e982c49
+
+	measure 'Cell Color 2024' =
+			SWITCH ( TRUE () ,
+			[Cell] / 100 <= ROUNDDOWN( [% New Vaccination Doses] , 2 ), "#007167",
+			"#d8d8d8" )
+		lineageTag: a038d4f1-7ce4-42f8-a2ed-dba236dbb381
+
+	column Row
+		dataType: int64
+		formatString: 0
+		lineageTag: f513200f-0625-49a0-a11f-7cfbf7e2b112
+		summarizeBy: sum
+		sourceColumn: Row
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Refresh Date' = ```
+			FORMAT( TODAY() , "dd MMM yyyy" ) 
+			```
+		lineageTag: 25994235-28ca-4e0e-b03e-1806ff5d20d2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Rows-398d9b56-69cd-49af-9089-2ba17fcbf802 = m
+		mode: import
+		source =
+				let
+				    Source = #"Row - Column base",
+				    #"Renamed Columns" = Table.RenameColumns(Source,{{"Column1", "Row"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+

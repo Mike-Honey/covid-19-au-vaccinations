@@ -1,0 +1,141 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "ReportSection6ad011d3450097120932",
+  "displayName": "Infographic",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "Filter6757e5f57b078712930d",
+        "ordinal": 0,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Population"
+              }
+            },
+            "Property": "Gender"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "p",
+              "Entity": "Population",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "p"
+                          }
+                        },
+                        "Property": "Gender"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Persons'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      },
+      {
+        "name": "Filter6ca932e0409ea9bc0593",
+        "ordinal": 1,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dates"
+              }
+            },
+            "Property": "Date"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      }
+    ],
+    "filterSortOrder": "Custom"
+  },
+  "visualInteractions": [
+    {
+      "source": "0f2aa1ed81e492840926",
+      "target": "24dbe173b70cc097bd35",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0f2aa1ed81e492840926",
+      "target": "8b3609b47c314e9084ca",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0f2aa1ed81e492840926",
+      "target": "866fae9fd3c624974768",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0f2aa1ed81e492840926",
+      "target": "94cc81884e2102765569",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0f2aa1ed81e492840926",
+      "target": "50e68dcd40d86de95010",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0f2aa1ed81e492840926",
+      "target": "04fc0a23b060eeca0bba",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0f2aa1ed81e492840926",
+      "target": "6d395b1136347a4cd4b0",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0f2aa1ed81e492840926",
+      "target": "606329e901ceb0686ad9",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0f2aa1ed81e492840926",
+      "target": "f4391cb30c483cad1779",
+      "type": "NoFilter"
+    },
+    {
+      "source": "0f2aa1ed81e492840926",
+      "target": "2db5140499c60ab9d39d",
+      "type": "NoFilter"
+    },
+    {
+      "source": "866fae9fd3c624974768",
+      "target": "24dbe173b70cc097bd35",
+      "type": "NoFilter"
+    }
+  ]
+}

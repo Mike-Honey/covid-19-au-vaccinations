@@ -1,0 +1,898 @@
+expression 'Row - Column base' =
+		let
+		    Source = {1..10},
+		    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Converted to Table",{{"Column1", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: adca0288-cd70-45f0-813b-36a60ab1ba9b
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Geography - ABS Sort' =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/ABS%20Population%20by%20State-Territory%20Gender%20and%20Age.xlsx"), null, true),
+		    Geography_ABS_Sort_Table = Source{[Item="Geography_ABS_Sort",Kind="Table"]}[Data],
+		    #"Changed Type" = Table.TransformColumnTypes(Geography_ABS_Sort_Table,{{"Geography - Sort", Int64.Type}, {"Geography", type text}})
+		in
+		    #"Changed Type"
+	lineageTag: 6f3593be-5369-4526-b643-5ade13df096c
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Report Dates - base' =
+		let
+		    Source = #"covid-live",
+		    #"Removed Other Columns" = Table.SelectColumns(Source,{"Report Date", "NAME", "Vaccines changed"}),
+		    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each ([Vaccines changed] = "true"))
+		in
+		    #"Filtered Rows"
+	lineageTag: 2400542c-8434-4646-ae2b-93c244c7584e
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Report Dates - latest' =
+		let
+		    Source = #"Report Dates - base",
+		    #"Filtered Rows" = Table.SelectRows(Source, each ([Vaccines changed] = "true")),
+		    #"Grouped Rows" = Table.Group(#"Filtered Rows", {"NAME"}, {{"Report Date", each List.Max([Report Date]), type nullable date}}),
+		    #"Added Custom" = Table.AddColumn(#"Grouped Rows", "Report Date Label", each "Latest")
+		in
+		    #"Added Custom"
+	lineageTag: 584c8699-88ef-44ff-95f3-eaf4772ce172
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Daily Doses Administered - nsw' =
+		let
+		    Source = Web.Contents("https://covidlive.com.au/report/daily-vaccinations/nsw"),
+		    #"Extracted Table From Html" = Html.Table(Source, {{"Column1", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(1)"}, {"Column2", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(2)"}, {"Column3", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(3)"}, {"Column4", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(4)"}}, [RowSelector="TABLE.DAILY-VACCINATIONS > * > TR"]),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Extracted Table From Html", [PromoteAllScalars=true]),
+		    #"Added CODE" = Table.AddColumn(#"Promoted Headers", "CODE", each "NSW")
+		in
+		    #"Added CODE"
+	lineageTag: 4db97dc7-a2f5-4210-8a4e-9c9fdfabd028
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Daily Doses Administered - aus' =
+		let
+		    Source = Web.Contents("https://covidlive.com.au/report/daily-vaccinations/aus"),
+		    #"Extracted Table From Html" = Html.Table(Source, {{"Column1", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(1)"}, {"Column2", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(2)"}, {"Column3", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(3)"}, {"Column4", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(4)"}}, [RowSelector="TABLE.DAILY-VACCINATIONS > * > TR"]),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Extracted Table From Html", [PromoteAllScalars=true]),
+		    #"Added CODE" = Table.AddColumn(#"Promoted Headers", "CODE", each "AUS")
+		in
+		    #"Added CODE"
+	lineageTag: 353c4520-7f56-462e-a178-abdc3d4a4c71
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Daily Doses Administered - vic' =
+		let
+		    Source = Web.Contents("https://covidlive.com.au/report/daily-vaccinations/vic"),
+		    #"Extracted Table From Html" = Html.Table(Source, {{"Column1", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(1)"}, {"Column2", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(2)"}, {"Column3", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(3)"}, {"Column4", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(4)"}}, [RowSelector="TABLE.DAILY-VACCINATIONS > * > TR"]),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Extracted Table From Html", [PromoteAllScalars=true]),
+		    #"Added CODE" = Table.AddColumn(#"Promoted Headers", "CODE", each "VIC")
+		in
+		    #"Added CODE"
+	lineageTag: dacd7057-64da-4923-9bad-b467ac7a9380
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Daily Doses Administered - qld' =
+		let
+		    Source = Web.Contents("https://covidlive.com.au/report/daily-vaccinations/qld"),
+		    #"Extracted Table From Html" = Html.Table(Source, {{"Column1", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(1)"}, {"Column2", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(2)"}, {"Column3", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(3)"}, {"Column4", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(4)"}}, [RowSelector="TABLE.DAILY-VACCINATIONS > * > TR"]),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Extracted Table From Html", [PromoteAllScalars=true]),
+		    #"Added CODE" = Table.AddColumn(#"Promoted Headers", "CODE", each "QLD")
+		in
+		    #"Added CODE"
+	lineageTag: 75fe71c8-38fe-4187-aa86-e5e91dfa1f49
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Daily Doses Administered - sa' =
+		let
+		    Source = Web.Contents("https://covidlive.com.au/report/daily-vaccinations/sa"),
+		    #"Extracted Table From Html" = Html.Table(Source, {{"Column1", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(1)"}, {"Column2", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(2)"}, {"Column3", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(3)"}, {"Column4", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(4)"}}, [RowSelector="TABLE.DAILY-VACCINATIONS > * > TR"]),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Extracted Table From Html", [PromoteAllScalars=true]),
+		    #"Added CODE" = Table.AddColumn(#"Promoted Headers", "CODE", each "SA")
+		in
+		    #"Added CODE"
+	lineageTag: cfcea688-de5a-4eed-8b33-65bc8be2b78f
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Daily Doses Administered - wa' =
+		let
+		    Source = Web.Contents("https://covidlive.com.au/report/daily-vaccinations/wa"),
+		    #"Extracted Table From Html" = Html.Table(Source, {{"Column1", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(1)"}, {"Column2", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(2)"}, {"Column3", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(3)"}, {"Column4", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(4)"}}, [RowSelector="TABLE.DAILY-VACCINATIONS > * > TR"]),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Extracted Table From Html", [PromoteAllScalars=true]),
+		    #"Added CODE" = Table.AddColumn(#"Promoted Headers", "CODE", each "WA")
+		in
+		    #"Added CODE"
+	lineageTag: 42581d56-2c3d-41ae-a336-8f05b4e8ccb2
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Daily Doses Administered - tas' =
+		let
+		    Source = Web.Contents("https://covidlive.com.au/report/daily-vaccinations/tas"),
+		    #"Extracted Table From Html" = Html.Table(Source, {{"Column1", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(1)"}, {"Column2", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(2)"}, {"Column3", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(3)"}, {"Column4", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(4)"}}, [RowSelector="TABLE.DAILY-VACCINATIONS > * > TR"]),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Extracted Table From Html", [PromoteAllScalars=true]),
+		    #"Added CODE" = Table.AddColumn(#"Promoted Headers", "CODE", each "TAS")
+		in
+		    #"Added CODE"
+	lineageTag: ea2d206c-cb0d-4dd6-ad8a-8423011233bf
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Daily Doses Administered - nt' =
+		let
+		    Source = Web.Contents("https://covidlive.com.au/report/daily-vaccinations/nt"),
+		    #"Extracted Table From Html" = Html.Table(Source, {{"Column1", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(1)"}, {"Column2", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(2)"}, {"Column3", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(3)"}, {"Column4", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(4)"}}, [RowSelector="TABLE.DAILY-VACCINATIONS > * > TR"]),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Extracted Table From Html", [PromoteAllScalars=true]),
+		    #"Added CODE" = Table.AddColumn(#"Promoted Headers", "CODE", each "NT")
+		in
+		    #"Added CODE"
+	lineageTag: 811d5073-7180-4adb-a405-b9a22f6cb3b2
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Daily Doses Administered - act' =
+		let
+		    Source = Web.Contents("https://covidlive.com.au/report/daily-vaccinations/act"),
+		    #"Extracted Table From Html" = Html.Table(Source, {{"Column1", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(1)"}, {"Column2", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(2)"}, {"Column3", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(3)"}, {"Column4", "TABLE.DAILY-VACCINATIONS > * > TR > :nth-child(4)"}}, [RowSelector="TABLE.DAILY-VACCINATIONS > * > TR"]),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Extracted Table From Html", [PromoteAllScalars=true]),
+		    #"Added CODE" = Table.AddColumn(#"Promoted Headers", "CODE", each "ACT")
+		in
+		    #"Added CODE"
+	lineageTag: 12456947-8092-41af-a28c-2434041318b2
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'covid-live - base' =
+		let
+		    Source = Csv.Document(Web.Contents("https://covidlive.com.au/covid-live.csv"),[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.None]),
+		    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"REPORT_DATE", type date}, {"LAST_UPDATED_DATE", type datetime}, {"CODE", type text}, {"NAME", type text}, {"CASE_CNT", Int64.Type}, {"TEST_CNT", Int64.Type}, {"DEATH_CNT", Int64.Type}, {"RECOV_CNT", Int64.Type}, {"MED_ICU_CNT", Int64.Type}, {"MED_VENT_CNT", Int64.Type}, {"MED_HOSP_CNT", Int64.Type}, {"SRC_OVERSEAS_CNT", Int64.Type}, {"SRC_INTERSTATE_CNT", Int64.Type}, {"SRC_CONTACT_CNT", Int64.Type}, {"SRC_UNKNOWN_CNT", Int64.Type}, {"SRC_INVES_CNT", Int64.Type}, {"PREV_CASE_CNT", Int64.Type}, {"PREV_TEST_CNT", Int64.Type}, {"PREV_DEATH_CNT", Int64.Type}, {"PREV_RECOV_CNT", Int64.Type}, {"PREV_MED_ICU_CNT", Int64.Type}, {"PREV_MED_VENT_CNT", Int64.Type}, {"PREV_MED_HOSP_CNT", Int64.Type}, {"PREV_SRC_OVERSEAS_CNT", Int64.Type}, {"PREV_SRC_INTERSTATE_CNT", Int64.Type}, {"PREV_SRC_CONTACT_CNT", Int64.Type}, {"PREV_SRC_UNKNOWN_CNT", Int64.Type}, {"PREV_SRC_INVES_CNT", Int64.Type}, {"PROB_CASE_CNT", Int64.Type}, {"PREV_PROB_CASE_CNT", Int64.Type}, {"ACTIVE_CNT", Int64.Type}, {"PREV_ACTIVE_CNT", Int64.Type}, {"NEW_CASE_CNT", Int64.Type}, {"PREV_NEW_CASE_CNT", Int64.Type}, {"VACC_DIST_CNT", Int64.Type}, {"PREV_VACC_DIST_CNT", Int64.Type}, {"VACC_DOSE_CNT", Int64.Type}, {"PREV_VACC_DOSE_CNT", Int64.Type}, {"VACC_PEOPLE_CNT", Int64.Type}, {"PREV_VACC_PEOPLE_CNT", Int64.Type}, {"VACC_AGED_CARE_CNT", Int64.Type}, {"PREV_VACC_AGED_CARE_CNT", Int64.Type}, {"VACC_GP_CNT", Int64.Type}, {"PREV_VACC_GP_CNT", Int64.Type}, {"VACC_FIRST_DOSE_CNT", Int64.Type}, {"PREV_VACC_FIRST_DOSE_CNT", Int64.Type}, {"VACC_FIRST_DOSE_CNT_12_15", Int64.Type}, {"PREV_VACC_FIRST_DOSE_CNT_12_15", Int64.Type}, {"VACC_PEOPLE_CNT_12_15", Int64.Type}, {"PREV_VACC_PEOPLE_CNT_12_15", Int64.Type}, {"VACC_BOOSTER_CNT", Int64.Type}, {"PREV_VACC_BOOSTER_CNT", Int64.Type}, {"VACC_FIRST_DOSE_CNT_5_11", Int64.Type}, {"PREV_VACC_FIRST_DOSE_CNT_5_11", Int64.Type}, {"VACC_PEOPLE_CNT_5_11", Int64.Type}, {"PREV_VACC_PEOPLE_CNT_5_11", Int64.Type}, {"NEW_PROB_CASE_CNT", Int64.Type}, {"PREV_NEW_PROB_CASE_CNT", Int64.Type}, {"VACC_WINTER_CNT", Int64.Type}, {"PREV_VACC_WINTER_CNT", Int64.Type}}),
+		    #"Added Vaccines changed" = Table.AddColumn(#"Changed Type", "Vaccines changed", each [VACC_DOSE_CNT] <> null and [VACC_PEOPLE_CNT] <> null and( [VACC_DOSE_CNT] <> [PREV_VACC_DOSE_CNT] or [VACC_PEOPLE_CNT] <> [PREV_VACC_PEOPLE_CNT] )),
+		    #"Added Cases changed" = Table.AddColumn(#"Added Vaccines changed", "Cases changed", each [CASE_CNT] <> null and [CASE_CNT] <> [PREV_CASE_CNT] ),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Added Cases changed",{{"Vaccines changed", type text}, {"Cases changed", type text}}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Changed Type1",{{"REPORT_DATE", "Report Date"}})
+		in
+		    #"Renamed Columns"
+	lineageTag: f3e6b7ed-538e-498b-a077-fb71bcd28666
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'COP files' =
+		let
+		    Source = Json.Document(Web.Contents("https://api.github.com/repos/Mike-Honey/covid-19-au-vaccinations/contents")),
+		    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+		    #"Expanded Column1" = Table.ExpandRecordColumn(#"Converted to Table", "Column1", {"name", "path", "sha", "size", "url", "html_url", "git_url", "download_url", "type", "_links"}, {"name", "path", "sha", "size", "url", "html_url", "git_url", "download_url", "type", "_links"}),
+		    #"Expanded _links" = Table.ExpandRecordColumn(#"Expanded Column1", "_links", {"self", "git", "html"}, {"_links.self", "_links.git", "_links.html"}),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Expanded _links",{{"name", type text}, {"path", type text}, {"sha", type text}, {"size", Int64.Type}, {"url", type text}, {"html_url", type text}, {"git_url", type text}, {"download_url", type text}, {"type", type text}, {"_links.self", type text}, {"_links.git", type text}, {"_links.html", type text}}),
+		    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each [name] = "VIC_COVID19_DAILY_DATA.xlsx"),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Filtered Rows",{"name", "download_url"}),
+		    #"Added Contents" = Table.AddColumn(#"Removed Other Columns", "Contents", each Web.Contents([download_url]))
+		in
+		    #"Added Contents"
+	lineageTag: 6fba147d-91d1-4932-94c7-fa00a9470186
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'ABS Doctor certified deaths weekly 2022-2023' =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/Provisional%20Mortality%20Statistics,%20Weekly%20Dashboard,%20Jan%20-%20Dec%202023.xlsx"), null, false),
+		    #"Table 1.2_sheet" = Source{[Item="Table 1.2",Kind="Sheet"]}[Data],
+		    #"Removed Top Rows" = Table.Skip(#"Table 1.2_sheet", 5),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Top Rows", [PromoteAllScalars=true]),
+		    #"Removed Other Columns1" = Table.SelectColumns(#"Promoted Headers",{"Column1", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53"}),
+		    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns1", each Text.StartsWith([Column1], "COVID-19") or Text.EndsWith([Column1], "2022") or Text.EndsWith([Column1], "2023")),
+		    #"Split Column by Delimiter" = Table.SplitColumn(#"Filtered Rows", "Column1", Splitter.SplitTextByEachDelimiter({" - "}, QuoteStyle.Csv, true), {"Column1.1", "Column1.2"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Split Column by Delimiter",{{"Column1.2", "Year"}, {"Column1.1", "Underlying cause of death"}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Year", "Underlying cause of death"}, "Attribute", "Value"),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Unpivoted Other Columns",{{"Attribute", "Week Number"}, {"Value", "Deaths"}}),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns1",{{"Week Number", Int64.Type}, {"Deaths", Int64.Type}}),
+		    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Changed Type1", {"Deaths"}),
+		    #"Added offsetToISO" = Table.AddColumn(#"Removed Errors", "offsetToISO", each Date.DayOfWeek ( Date.From ( [Year] & "-01-04" ), Day.Monday ) + 1 + 3 ),
+		    #"Added dayOfWeek" = Table.AddColumn(#"Added offsetToISO", "dayOfWeek", each 1 ),
+		    #"Added offset" = Table.AddColumn(#"Added dayOfWeek", "offset", each ([Week Number] * 7) + [dayOfWeek] - [offsetToISO] ),
+		    #"Added isoWeekDate" = Table.AddColumn(#"Added offset", "isoWeekDate", each Date.AddDays(Date.From ( [Year] & "-01-01" ), [offset] - 1 )),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Added isoWeekDate",{{"isoWeekDate", type date}}),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Changed Type",{"Underlying cause of death", "Year", "Week Number", "Deaths", "isoWeekDate"}),
+		    #"Renamed Columns2" = Table.RenameColumns(#"Removed Other Columns",{{"isoWeekDate", "Report Date"}}),
+		    #"Added Source File Name" = Table.AddColumn(#"Renamed Columns2", "Source File Name", each "Provisional Mortality Statistics, Weekly Dashboard, Jan - Dec 2023.xlsx")
+		in
+		    #"Added Source File Name"
+	lineageTag: 390df825-34d8-48a4-a0f7-10554fd1c82f
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Report Dates - base cases' =
+		let
+		    Source = #"covid-live",
+		    #"Removed Other Columns" = Table.SelectColumns(Source,{"Report Date", "NAME", "Cases changed"}),
+		    #"Filtered Rows" = Table.SelectRows(#"Removed Other Columns", each ([Cases changed] = "true"))
+		in
+		    #"Filtered Rows"
+	lineageTag: 8de0c0e1-ef54-4408-a0b4-4e79a79cfdc2
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Report Dates - latest cases' =
+		let
+		    Source = #"Report Dates - base cases",
+		    #"Filtered Rows" = Table.SelectRows(Source, each ([Cases changed] = "true")),
+		    #"Grouped Rows" = Table.Group(#"Filtered Rows", {"NAME"}, {{"Report Date", each List.Max([Report Date]), type nullable date}}),
+		    #"Added Custom" = Table.AddColumn(#"Grouped Rows", "Report Date Label", each "Latest")
+		in
+		    #"Added Custom"
+	lineageTag: 37ea9770-b328-42e6-81d1-c4d29524495c
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'AUS_COVID19Data_Monthly xlsx file' =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/dbRaevn/AUS_COVID19Data_Monthly.xlsx"), null, true)
+		in
+		    Source
+	lineageTag: 321f5b81-6627-483e-8024-61f441a5dac2
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'COVID-19 associated deaths' =
+		let
+		    Source = #"AUS_COVID19Data_Monthly xlsx file",
+		    #"Filtered Item" = Table.SelectRows(Source, each [Item] = "COVID-19 associated deaths"),
+		    #"Sheet Data" = #"Filtered Item"{0}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sheet Data", [PromoteAllScalars=true]),
+		    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"DATE_OF_DEATH", "Report Date"}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Report Date"}, "Attribute", "Value"),
+		    #"Added Category" = Table.AddColumn(#"Unpivoted Other Columns", "Category", each "Deaths"),
+		    #"Added Source File Name" = Table.AddColumn(#"Added Category", "Source File Name", each "AUS_COVID19Data_Monthly.xlsx"),
+		    #"Added Source Sheet" = Table.AddColumn(#"Added Source File Name", "Source Sheet", each "COVID-19 associated deaths")
+		in
+		    #"Added Source Sheet"
+	lineageTag: d73b4217-9fdc-4afb-8750-13d79b1dabaa
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'COVID-19 Cases Daily' =
+		let
+		    Source = #"AUS_COVID19Cases xlsx file",
+		    #"Filtered Item" = Table.SelectRows(Source, each [Item] = "Daily"),
+		    #"Sheet Data" = #"Filtered Item"{0}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sheet Data", [PromoteAllScalars=true]),
+		    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"DATE", "Report Date"}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Report Date"}, "Attribute", "Value"),
+		    #"Added Category" = Table.AddColumn(#"Unpivoted Other Columns", "Category", each "Cases"),
+		    #"Added Source File Name" = Table.AddColumn(#"Added Category", "Source File Name", each "AUS_COVID19Cases.xlsx"),
+		    #"Added Source Sheet" = Table.AddColumn(#"Added Source File Name", "Source Sheet", each "Daily")
+		in
+		    #"Added Source Sheet"
+	lineageTag: fa02ead3-0a84-4373-98db-7e1d046a6ac9
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'COVID-19 impact on aged care' =
+		let
+		    Source = #"AUS_COVID19Data_Monthly xlsx file",
+		    #"Filtered Item" = Table.SelectRows(Source, each [Item] = "COVID-19 impact on aged care"),
+		    #"Sheet Data" = #"Filtered Item"{0}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sheet Data", [PromoteAllScalars=true]),
+		    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"DATE", "Report Date"}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Report Date"}, "Attribute", "Value"),
+		    #"Added Category" = Table.AddColumn(#"Unpivoted Other Columns", "Category", each "Aged Care"),
+		    #"Added Source File Name" = Table.AddColumn(#"Added Category", "Source File Name", each "AUS_COVID19Data_Monthly.xlsx"),
+		    #"Added Source Sheet" = Table.AddColumn(#"Added Source File Name", "Source Sheet", each "COVID-19 impact on aged care")
+		in
+		    #"Added Source Sheet"
+	lineageTag: a211b9da-cc1e-4834-831f-f64004882d7a
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'COVID-19 impact on hospitals' =
+		let
+		    Source = #"AUS_COVID19Data_Monthly xlsx file",
+		    #"Filtered Item" = Table.SelectRows(Source, each [Item] = "COVID-19 impact on hospitals"),
+		    #"Sheet Data" = #"Filtered Item"{0}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sheet Data", [PromoteAllScalars=true]),
+		    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"DATE", "Report Date"}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Report Date"}, "Attribute", "Value"),
+		    #"Added Category" = Table.AddColumn(#"Unpivoted Other Columns", "Category", each "Hospitals"),
+		    #"Added Source File Name" = Table.AddColumn(#"Added Category", "Source File Name", each "AUS_COVID19Data_Monthly.xlsx"),
+		    #"Added Source Sheet" = Table.AddColumn(#"Added Source File Name", "Source Sheet", each "COVID-19 impact on hospitals")
+		in
+		    #"Added Source Sheet"
+	lineageTag: 1f1d905c-e0a0-47c1-931f-d3bf04da95cc
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'COVID-19 treatments' =
+		let
+		    Source = #"AUS_COVID19Data_Monthly xlsx file",
+		    #"Filtered Item" = Table.SelectRows(Source, each [Item] = "COVID-19 treatments"),
+		    #"Sheet Data" = #"Filtered Item"{0}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sheet Data", [PromoteAllScalars=true]),
+		    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"DATE", "Report Date"}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Report Date"}, "Attribute", "Value"),
+		    #"Added Attribute Suffix" = Table.AddColumn(#"Unpivoted Other Columns", "Attribute Suffix", each if Text.Contains([Attribute], "AGES") then "_AUS" else null),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Added Attribute Suffix",{{"Attribute", "Attribute.1"}}),
+		    #"Merged Columns" = Table.CombineColumns(#"Renamed Columns1",{"Attribute.1", "Attribute Suffix"},Combiner.CombineTextByDelimiter("", QuoteStyle.None),"Attribute"),
+		    #"Added Category" = Table.AddColumn(#"Merged Columns", "Category", each "Treatments"),
+		    #"Added Source File Name" = Table.AddColumn(#"Added Category", "Source File Name", each "AUS_COVID19Data_Monthly.xlsx"),
+		    #"Added Source Sheet" = Table.AddColumn(#"Added Source File Name", "Source Sheet", each "COVID-19 treatments")
+		in
+		    #"Added Source Sheet"
+	lineageTag: f3b788aa-1ff8-4e79-af3e-d22fd1132389
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'COVID-19 vaccine booster doses' =
+		let
+		    Source = #"AUS_COVID19Data_Monthly xlsx file",
+		    #"Filtered Item" = Table.SelectRows(Source, each [Item] = "COVID-19 vaccine booster doses"),
+		    #"Sheet Data" = #"Filtered Item"{0}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sheet Data", [PromoteAllScalars=true]),
+		    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"DATE", "Report Date"}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Report Date"}, "Attribute", "Value"),
+		    #"Added Category" = Table.AddColumn(#"Unpivoted Other Columns", "Category", each "Boosters"),
+		    #"Added Source File Name" = Table.AddColumn(#"Added Category", "Source File Name", each "AUS_COVID19Data_Monthly.xlsx"),
+		    #"Added Source Sheet" = Table.AddColumn(#"Added Source File Name", "Source Sheet", each "COVID-19 vaccine booster doses"),
+		    #"Added Prefix" = Table.TransformColumns(#"Added Source Sheet", {{"Attribute", each "BOOSTER_DOSES_" & _, type text}}),
+		    #"Added Suffix" = Table.TransformColumns(#"Added Prefix", {{"Attribute", each _ & "_AUS", type text}})
+		in
+		    #"Added Suffix"
+	lineageTag: bce03c70-c7b4-4336-82a5-11f7bbbfa7b4
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+
+expression 'AUS_COVID19Cases xlsx file' =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/dbRaevn/AUS_COVID19Cases.xlsx"), null, true)
+		in
+		    Source
+	lineageTag: 35df427f-30f5-4dca-9b67-1dfcbd4d8c2d
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'COVID-19 impact on aged care AUS' =
+		let
+		    Source = #"COVID-19 impact on aged care",
+		    #"Filtered Rows" = Table.SelectRows(Source, each Text.Contains([Attribute], "CASES")),
+		    #"Split Column by Delimiter" = Table.SplitColumn(#"Filtered Rows", "Attribute", Splitter.SplitTextByEachDelimiter({"_"}, QuoteStyle.Csv, true), {"Attribute.1", "Attribute.2"}),
+		    #"Removed Columns" = Table.RemoveColumns(#"Split Column by Delimiter",{"Attribute.2"}),
+		    #"Added Suffix" = Table.TransformColumns(#"Removed Columns", {{"Attribute.1", each _ & "_AUS", type text}}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Added Suffix",{{"Attribute.1", "Attribute"}}),
+		    #"Grouped Rows" = Table.Group(#"Renamed Columns", {"Report Date", "Attribute", "Category", "Source File Name", "Source Sheet"}, {{"Value", each List.Sum([Value]), type number}}),
+		    #"Sorted Rows" = Table.Sort(#"Grouped Rows",{{"Report Date", Order.Descending}})
+		in
+		    #"Sorted Rows"
+	lineageTag: da5d3c90-a15e-49af-9012-7949ceb37a8b
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'COVID-19 treatments AUS' =
+		let
+		    Source = #"COVID-19 treatments",
+		    #"Filtered Attribute" = Table.SelectRows(Source, each not Text.Contains([Attribute], "_AGES_")),
+		    #"Split Column by Delimiter" = Table.SplitColumn(#"Filtered Attribute", "Attribute", Splitter.SplitTextByEachDelimiter({"_"}, QuoteStyle.Csv, true), {"Attribute.1", "Attribute.2"}),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Attribute.1", type text}, {"Attribute.2", type text}}),
+		    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Attribute.2"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Removed Columns",{{"Attribute.1", "Attribute"}}),
+		    #"Added Suffix" = Table.TransformColumns(#"Renamed Columns", {{"Attribute", each _ & "_AUS", type text}}),
+		    #"Grouped Rows" = Table.Group(#"Added Suffix", {"Report Date", "Attribute", "Category", "Source File Name", "Source Sheet"}, {{"Value", each List.Sum([Value]), type number}})
+		in
+		    #"Grouped Rows"
+	lineageTag: e1af0d06-4f7e-4805-9cd1-da33afebc2c6
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'AUS_AgedCare csv file' =
+		let
+		    Source = Csv.Document(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/dbRaevn/AUS_AgedCare.csv"),[Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.None])
+		in
+		    Source
+	lineageTag: 37df3fc7-43de-44be-8a75-d67ac5f589f7
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression AUS_AgedCare =
+		let
+		    Source = #"AUS_AgedCare csv file",
+		    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+		    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"DATE", "Report Date"}}),
+		    #"Sorted Rows" = Table.Sort(#"Renamed Columns",{{"Report Date", Order.Descending}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Sorted Rows", {"Report Date"}, "Attribute", "Value"),
+		    #"Added State" = Table.AddColumn(#"Unpivoted Other Columns", "State", each if Text.StartsWith([Attribute], "ACT_") then "ACT" else if Text.StartsWith([Attribute], "NSW_") then "NSW" else if Text.StartsWith([Attribute], "NT_") then "NT" else if Text.StartsWith([Attribute], "QLD_") then "QLD" else if Text.StartsWith([Attribute], "SA_") then "SA" else if Text.StartsWith([Attribute], "TAS_") then "TAS" else if Text.StartsWith([Attribute], "VIC_") then "VIC" else if Text.StartsWith([Attribute], "WA_") then "WA" else "AUS"),
+		    #"Added Metric" = Table.AddColumn(#"Added State", "Metric", each Text.Replace ( [Attribute], if Text.StartsWith([Attribute], "TOTAL_") then "TOTAL_" else [State] & "_" , "" )),
+		    #"Added Prefix" = Table.TransformColumns(#"Added Metric", {{"Metric", each "Aged Care " & _, type text}}),
+		    #"Added Category" = Table.AddColumn(#"Added Prefix", "Category", each "Aged Care"),
+		    #"Added Source File Name" = Table.AddColumn(#"Added Category", "Source File Name", each "AUS_AgedCare.csv")
+		in
+		    #"Added Source File Name"
+	lineageTag: 18118c9a-d5d3-4853-aeb0-888a4384cbeb
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'COVID-19 Cases Monthly' =
+		let
+		    Source = #"AUS_COVID19Cases xlsx file",
+		    #"Filtered Item" = Table.SelectRows(Source, each [Item] = "Monthly"),
+		    #"Sheet Data" = #"Filtered Item"{0}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sheet Data", [PromoteAllScalars=true]),
+		    #"Inserted End of Month" = Table.AddColumn(#"Promoted Headers", "End of Month", each Date.EndOfMonth([MONTH]), type date),
+		    #"Renamed Columns" = Table.RenameColumns(#"Inserted End of Month",{{"End of Month", "Report Date"}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Report Date", "MONTH"}, "Attribute", "Value"),
+		    #"Added Category" = Table.AddColumn(#"Unpivoted Other Columns", "Category", each "Cases"),
+		    #"Added Source File Name" = Table.AddColumn(#"Added Category", "Source File Name", each "AUS_COVID19Cases.xlsx"),
+		    #"Added Source Sheet" = Table.AddColumn(#"Added Source File Name", "Source Sheet", each "Monthly")
+		in
+		    #"Added Source Sheet"
+	lineageTag: 96f703cf-3234-4955-a694-61e905c2c1e2
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'health-aged-care xlsx file' =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/health-aged-care/health-aged-care.xlsx"), null, true)
+		in
+		    Source
+	lineageTag: a5e1ae64-276e-4288-9f8f-d52d8f49e5e2
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Health Aged Care - Treatments' =
+		let
+		    Source = #"health-aged-care xlsx file",
+		    #"Sheet Data" = Source{0}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sheet Data", [PromoteAllScalars=true]),
+		    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"source_file_date", "Report Date"}, {"lagevrio_courses", "Molnupiravir Courses"}, {"lagevrio_prescriptions", "Molnupiravir Prescriptions"}, {"paxlovid_prescriptions", "Paxlovid Prescriptions"}, {"end_date", "Report Date - text"}}),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Report Date", type date}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Changed Type", {"source_file_name", "Report Date - text", "Report Date"}, "Attribute", "Value"),
+		    #"Added Suffix" = Table.TransformColumns(#"Unpivoted Other Columns", {{"Attribute", each _ & "_AUS", type text}}),
+		    #"Added Category" = Table.AddColumn(#"Added Suffix", "Category", each "Treatments"),
+		    #"Added Source File Name" = Table.AddColumn(#"Added Category", "Source File Name", each "health-aged-care.xlsx"),
+		    #"Added Source Sheet" = Table.AddColumn(#"Added Source File Name", "Source Sheet", each "Treatments")
+		in
+		    #"Added Source Sheet"
+	lineageTag: e14b5a26-6a4a-4251-a345-f0fef32fc587
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'ABS Doctor certified deaths weekly 2024' =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/refs/heads/main/Provisional%20Mortality%20Statistics,%20Weekly%20Dashboard,%20Jan%20-%20Dec%202024.xlsx"), null, false),
+		    #"Table 1.2_sheet" = Source{[Item="Table 1.2",Kind="Sheet"]}[Data],
+		    #"Removed Top Rows" = Table.Skip(#"Table 1.2_sheet", 4),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Top Rows", [PromoteAllScalars=true]),
+		    #"Filtered Rows" = Table.SelectRows(#"Promoted Headers", each Text.EndsWith([Week number], ", 2024")),
+		    #"Split Column by Delimiter" = Table.SplitColumn(#"Filtered Rows", "Week number", Splitter.SplitTextByEachDelimiter({", "}, QuoteStyle.Csv, true), {"Column1.1", "Column1.2"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Split Column by Delimiter",{{"Column1.2", "Year"}, {"Column1.1", "Underlying cause of death"}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Underlying cause of death", "Year"}, "Attribute", "Value"),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Unpivoted Other Columns",{{"Attribute", "Week Number"}, {"Value", "Deaths"}}),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns1",{{"Week Number", Int64.Type}, {"Deaths", Int64.Type}}),
+		    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Changed Type1", {"Deaths"}),
+		    #"Added offsetToISO" = Table.AddColumn(#"Removed Errors", "offsetToISO", each Date.DayOfWeek ( Date.From ( [Year] & "-01-04" ), Day.Monday ) + 1 + 3 ),
+		    #"Added dayOfWeek" = Table.AddColumn(#"Added offsetToISO", "dayOfWeek", each 1 ),
+		    #"Added offset" = Table.AddColumn(#"Added dayOfWeek", "offset", each ([Week Number] * 7) + [dayOfWeek] - [offsetToISO] ),
+		    #"Added isoWeekDate" = Table.AddColumn(#"Added offset", "isoWeekDate", each Date.AddDays(Date.From ( [Year] & "-01-01" ), [offset] - 1 )),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Added isoWeekDate",{{"isoWeekDate", type date}}),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Changed Type",{"Underlying cause of death", "Year", "Week Number", "Deaths", "isoWeekDate"}),
+		    #"Renamed Columns2" = Table.RenameColumns(#"Removed Other Columns",{{"isoWeekDate", "Report Date"}}),
+		    #"Added Source File Name" = Table.AddColumn(#"Renamed Columns2", "Source File Name", each "Provisional Mortality Statistics, Weekly Dashboard, Jan - Dec 2024.xlsx")
+		in
+		    #"Added Source File Name"
+	lineageTag: ccb82e0f-b8e4-4190-b4db-56122629518c
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'ABS Doctor certified deaths - for ADHAC' =
+		let
+		    Source = #"ABS Doctor certified deaths",
+		    #"Added Metric" = Table.AddColumn(Source, "Metric", each if [Underlying cause of death] = "Total doctor certified deaths" then "Certified deaths - Total" else "Certified deaths - " & [Underlying cause of death]),
+		    #"Added Category" = Table.AddColumn(#"Added Metric", "Category", each "Deaths"),
+		    #"Added State" = Table.AddColumn(#"Added Category", "State", each "AUS"),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Added State",{"Deaths", "Report Date", "Source File Name", "Metric", "Category", "State"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Removed Other Columns",{{"Deaths", "Value"}})
+		in
+		    #"Renamed Columns"
+	lineageTag: 9d66cad2-caae-47ca-be0a-871edc3e1f43
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Health Aged Care - National Snapshot' =
+		let
+		    Source = #"health-aged-care xlsx file",
+		    #"Sheet Data" = Source{[Item="National Snapshot",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sheet Data", [PromoteAllScalars=true]),
+		    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"source_file_date", "Report Date"}, {"Column1", "Index"}, {"0", "Row Category"}, {"1", "Active"}, {"2", "Change in active (7 days)"}, {"3", "Cumulative Total"}, {"4", "Cumulative increase (7 days)"}}),
+		    #"Filtered Row Category" = Table.SelectRows(#"Renamed Columns", each [Row Category] <> "Category"),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Filtered Row Category",{{"Report Date", type date}}),
+		    #"Filtered Report Date" = Table.SelectRows(#"Changed Type", each [Report Date] >= #date(2024, 7, 20)),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Filtered Report Date",{"Row Category", "Active", "Change in active (7 days)", "Cumulative Total", "Cumulative increase (7 days)", "source_file_name", "Report Date"}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Removed Other Columns", {"source_file_name", "Report Date", "Row Category"}, "Attribute", "Value"),
+		    #"Replaced Value" = Table.ReplaceValue(#"Unpivoted Other Columns","N/A",null,Replacer.ReplaceValue,{"Value"}),
+		    #"Sorted Rows" = Table.Sort(#"Replaced Value",{{"Report Date", Order.Ascending}}),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Sorted Rows",{{"Attribute", "Attribute.1"}}),
+		    #"Merged Columns" = Table.CombineColumns(#"Renamed Columns1",{"Row Category", "Attribute.1"},Combiner.CombineTextByDelimiter(" - ", QuoteStyle.None),"Attribute"),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Merged Columns",{{"Value", type number}}),
+		    #"Added Suffix" = Table.TransformColumns(#"Changed Type1", {{"Attribute", each _ & "_AUS", type text}}),
+		    #"Added Category" = Table.AddColumn(#"Added Suffix", "Category", each "Aged Care"),
+		    #"Added Source File Name" = Table.AddColumn(#"Added Category", "Source File Name", each "health-aged-care.xlsx"),
+		    #"Added Source Sheet" = Table.AddColumn(#"Added Source File Name", "Source Sheet", each "National Snapshot")
+		in
+		    #"Added Source Sheet"
+	lineageTag: 03965b6d-34f8-4fdf-8b27-a130eb946169
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Health Aged Care - Active Outbreak Summary' =
+		let
+		    Source = #"health-aged-care xlsx file",
+		    #"Sheet Data" = Source{[Item="Active Outbreak Summary",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Sheet Data", [PromoteAllScalars=true]),
+		    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers",{{"source_file_date", "Report Date"}, {"Column1", "Index"}, {"0", "Row Category"}, {"1", "ACT"}, {"2", "NSW"}, {"3", "NT"}, {"4", "QLD"}, {"5", "SA"}, {"6", "TAS"}, {"7", "VIC"}, {"8", "WA"}, {"9", "AUS"}}),
+		    #"Filtered Row Category" = Table.SelectRows(#"Renamed Columns", each [Row Category] <> null and [Row Category] <> ""),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Filtered Row Category",{{"Report Date", type date}}),
+		    #"Filtered Report Date" = Table.SelectRows(#"Changed Type", each [Report Date] >= #date(2024, 7, 20)),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Filtered Report Date",{"Row Category", "ACT", "NSW", "NT", "QLD", "SA", "TAS", "VIC", "WA", "AUS", "source_file_name", "Report Date"}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Removed Other Columns", {"source_file_name", "Report Date", "Row Category"}, "Attribute", "Value"),
+		    #"Replaced Value" = Table.ReplaceValue(#"Unpivoted Other Columns","N/A",null,Replacer.ReplaceValue,{"Value"}),
+		    #"Sorted Rows" = Table.Sort(#"Replaced Value",{{"Report Date", Order.Ascending}}),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Sorted Rows",{{"Attribute", "Attribute.1"}}),
+		    #"Merged Columns" = Table.CombineColumns(#"Renamed Columns1",{"Row Category", "Attribute.1"},Combiner.CombineTextByDelimiter("_", QuoteStyle.None),"Attribute"),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Merged Columns",{{"Value", type number}}),
+		    #"Added Category" = Table.AddColumn(#"Changed Type1", "Category", each "Aged Care"),
+		    #"Added Source File Name" = Table.AddColumn(#"Added Category", "Source File Name", each "health-aged-care.xlsx"),
+		    #"Added Source Sheet" = Table.AddColumn(#"Added Source File Name", "Source Sheet", each "Active Outbreak Summary")
+		in
+		    #"Added Source Sheet"
+	lineageTag: 6efe9cc5-988e-45d5-a8a3-e11ad9bf9046
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'ABS Doctor certified deaths weekly 2025' =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/Provisional%20Mortality%20Statistics,%20Weekly%20Dashboard.xlsx"), null, false),
+		    #"Table 1.2_sheet" = Source{[Item="Table 1.2",Kind="Sheet"]}[Data],
+		    #"Removed Top Rows" = Table.Skip(#"Table 1.2_sheet", 4),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Top Rows", [PromoteAllScalars=true]),
+		    #"Filtered Rows" = Table.SelectRows(#"Promoted Headers", each Text.EndsWith([Week number], ", 2025")),
+		    #"Split Column by Delimiter" = Table.SplitColumn(#"Filtered Rows", "Week number", Splitter.SplitTextByEachDelimiter({", "}, QuoteStyle.Csv, true), {"Column1.1", "Column1.2"}),
+		    #"Renamed Columns" = Table.RenameColumns(#"Split Column by Delimiter",{{"Column1.2", "Year"}, {"Column1.1", "Underlying cause of death"}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Underlying cause of death", "Year"}, "Attribute", "Value"),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Unpivoted Other Columns",{{"Attribute", "Week Number"}, {"Value", "Deaths"}}),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns1",{{"Week Number", Int64.Type}, {"Deaths", Int64.Type}}),
+		    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Changed Type1", {"Deaths"}),
+		    #"Added offsetToISO" = Table.AddColumn(#"Removed Errors", "offsetToISO", each Date.DayOfWeek ( Date.From ( [Year] & "-01-04" ), Day.Monday ) + 1 + 3 ),
+		    #"Added dayOfWeek" = Table.AddColumn(#"Added offsetToISO", "dayOfWeek", each 1 ),
+		    #"Added offset" = Table.AddColumn(#"Added dayOfWeek", "offset", each ([Week Number] * 7) + [dayOfWeek] - [offsetToISO] ),
+		    #"Added isoWeekDate" = Table.AddColumn(#"Added offset", "isoWeekDate", each Date.AddDays(Date.From ( [Year] & "-01-01" ), [offset] - 1 )),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Added isoWeekDate",{{"isoWeekDate", type date}}),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Changed Type",{"Underlying cause of death", "Year", "Week Number", "Deaths", "isoWeekDate"}),
+		    #"Renamed Columns2" = Table.RenameColumns(#"Removed Other Columns",{{"isoWeekDate", "Report Date"}}),
+		    #"Added Source File Name" = Table.AddColumn(#"Renamed Columns2", "Source File Name", each "Provisional Mortality Statistics, Weekly Dashboard.xlsx")
+		in
+		    #"Added Source File Name"
+	lineageTag: 85acffa9-0e62-4ea4-90f0-9e22146257b0
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'ABS Doctor certified deaths weekly 2015-2021' =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/refs/heads/main/Deaths%20by%20week%20of%20occurrence,%202015-24.xlsx"), null, false),
+		    #"Table 1.2_sheet" = Source{[Item="Table 3.3",Kind="Sheet"]}[Data],
+		    #"Removed Top Rows" = Table.Skip(#"Table 1.2_sheet", 4),
+		    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Top Rows", [PromoteAllScalars=true]),
+		    #"Removed Other Columns1" = Table.SelectColumns(#"Promoted Headers",{"Week number", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53"}),
+		    #"Renamed Columns3" = Table.RenameColumns(#"Removed Other Columns1",{{"Week number", "Column1"}}),
+		    #"Changed Type2" = Table.TransformColumnTypes(#"Renamed Columns3",{{"Column1", type text}}),
+		    #"Added Underlying cause of death" = Table.AddColumn(#"Changed Type2", "Underlying cause of death", each if not Text.StartsWith([Column1], "2") then [Column1] else null),
+		    #"Replaced Value" = Table.ReplaceValue(#"Added Underlying cause of death","All doctor certified deaths","Total doctor certified deaths",Replacer.ReplaceText,{"Underlying cause of death"}),
+		    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","Cerebrovascular disease","Cerebrovascular diseases",Replacer.ReplaceText,{"Underlying cause of death"}),
+		    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1","Dementia","Dementia including Alzheimers",Replacer.ReplaceText,{"Underlying cause of death"}),
+		    #"Filled Down" = Table.FillDown(#"Replaced Value2",{"Underlying cause of death"}),
+		    #"Filtered Column1" = Table.SelectRows(#"Filled Down", each Text.StartsWith([Column1], "201") or [Column1] = "2020" or [Column1] = "2021"),
+		    #"Renamed Columns" = Table.RenameColumns(#"Filtered Column1",{{"Column1", "Year"}}),
+		    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Renamed Columns", {"Year", "Underlying cause of death"}, "Attribute", "Value"),
+		    #"Renamed Columns1" = Table.RenameColumns(#"Unpivoted Other Columns",{{"Attribute", "Week Number"}, {"Value", "Deaths"}}),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns1",{{"Week Number", Int64.Type}, {"Deaths", Int64.Type}}),
+		    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Changed Type1", {"Deaths"}),
+		    #"Added offsetToISO" = Table.AddColumn(#"Removed Errors", "offsetToISO", each Date.DayOfWeek ( Date.From ( [Year] & "-01-04" ), Day.Monday ) + 1 + 3 ),
+		    #"Added dayOfWeek" = Table.AddColumn(#"Added offsetToISO", "dayOfWeek", each 1 ),
+		    #"Added offset" = Table.AddColumn(#"Added dayOfWeek", "offset", each ([Week Number] * 7) + [dayOfWeek] - [offsetToISO] ),
+		    #"Added isoWeekDate" = Table.AddColumn(#"Added offset", "isoWeekDate", each Date.AddDays(Date.From ( [Year] & "-01-01" ), [offset] - 1 )),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Added isoWeekDate",{{"isoWeekDate", type date}}),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Changed Type",{"Underlying cause of death", "Year", "Week Number", "Deaths", "isoWeekDate"}),
+		    #"Renamed Columns2" = Table.RenameColumns(#"Removed Other Columns",{{"isoWeekDate", "Report Date"}}),
+		    #"Added Source File Name" = Table.AddColumn(#"Renamed Columns2", "Source File Name", each "Deaths by week of occurrence, 2015-24.xlsx")
+		in
+		    #"Added Source File Name"
+	lineageTag: 6f91e4ab-3bfd-4781-a937-fb64656bf79d
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+/// Enter the first year for your custom calendar. For example, if you want your calendar to start on 2014-07-11, the year value is: 2014.
+expression Year = 1991 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]
+	lineageTag: a53ed7d8-298d-4255-b946-da41438a22a4
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Number
+
+/// Enter the first month for your custom calendar. For example, if your calendar starts on 2014-07-11, the month value is: 7.
+expression Month = 1 meta [IsParameterQuery=true, Type="Number", IsParameterQueryRequired=true]
+	lineageTag: 92b65c97-422b-41a6-bd34-1460dc3dc2fb
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Number
+
+expression 'NNDSS - base' =
+		let
+		    // The List.Dates function that returns a list of dates
+		    Source = List.Dates,
+		    // Invoke List.Dates function. Here you need to specify the dates you want the list to invoke.
+		    // From Date: # Date (YYYY,MM,DD)
+		    // To adapt this to your own calender table change the values for (YYYY; MM; DD)
+		    // Count: It counts the number of days between the start of the first (Calendar) year (set by Year parameter) and the end of the current Reporting Year (set by Month parameter).
+		    // #duration (1,0,0,0) instructs List.Date to do one day increments in the list.
+		    #"Invoke dates" = Source(#date(#"Year" , 1 , 1 ), Duration.Days ( Date.AddMonths ( #date ( Date.Year ( DateTime.FixedLocalNow() ) + 1 , 1, 1 ) , #"Month" - 1 ) - #date ( #"Year" , 1 , 1 ) ) , #duration(1, 0, 0, 0)),
+		    // This step will convert the list to a table.
+		    // To set the correct dates, edit the query parameters
+		    #"List to table" = Table.FromList(#"Invoke dates", Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+		    #"Renamed Columns" = Table.RenameColumns(#"List to table",{{"Column1", "Report Date"}}),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Report Date", type date}}),
+		    #"Filtered Report Date" = Table.SelectRows(#"Changed Type", each [Report Date] <= Date.From ( DateTimeZone.SwitchZone ( DateTimeZone.FixedUtcNow () , 11 ) ) ),
+		    #"Filtered Report Date1" = Table.SelectRows(#"Filtered Report Date", each [Report Date] >= #date(2024, 1, 1)),
+		    #"Added File URL" = Table.AddColumn(#"Filtered Report Date1", "File URL", each "/" & Date.ToText ( [Report Date] , "yyyyMMdd" ) & "_cases.json" ),
+		    #"Added Each JSON" = Table.AddColumn(#"Added File URL", "Each JSON", each try Web.Contents ( "https://raw.githubusercontent.com/amacali/nindss-data/refs/heads/main/data?/20250101_cases.json", [RelativePath=[File URL]] ) otherwise null ),
+		    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Added Each JSON", {"Each JSON"}),
+		    #"Filtered Each JSON" = Table.SelectRows(#"Removed Errors", each [Each JSON] <> null ),
+		    #"Added Each JSON Document" = Table.AddColumn(#"Filtered Each JSON", "Each JSON Document", each try Json.Document([Each JSON]) otherwise null ),
+		    #"Filtered Each JSON Document" = Table.SelectRows(#"Added Each JSON Document", each [Each JSON Document] <> null ),
+		    #"Expanded Each JSON Document" = Table.ExpandListColumn(#"Filtered Each JSON Document", "Each JSON Document"),
+		    #"Expanded Each JSON Document1" = Table.ExpandRecordColumn(#"Expanded Each JSON Document", "Each JSON Document", {"REPORT_DATE", "DISEASE", "YEAR", "CODE", "CASES"}, {"REPORT_DATE", "DISEASE", "YEAR", "CODE", "CASES"}),
+		    #"Removed Other Columns1" = Table.SelectColumns(#"Expanded Each JSON Document1",{"Report Date", "File URL", "REPORT_DATE", "DISEASE", "YEAR", "CODE", "CASES"}),
+		    #"Filtered DISEASE" = Table.SelectRows(#"Removed Other Columns1", each [DISEASE] <> null and [DISEASE] <> ""),
+		    #"Added Diseases with monthly historical data" = Table.AddColumn(#"Filtered DISEASE", "Diseases with monthly historical data", each if Text.Contains ( "COVID-19|Influenza (laboratory confirmed)|Measles|Respiratory syncytial virus (RSV)|" , [DISEASE] & "" ) then "Disease has monthly historical data" else null),
+		    #"Filtered Rows1" = Table.SelectRows(#"Added Diseases with monthly historical data", each [Diseases with monthly historical data] = null or [YEAR] >= "2024"),
+		    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows1",{"Diseases with monthly historical data"}),
+		    #"Appended NNDSS-COVID-19" = Table.Combine({#"Removed Columns", #"NNDSS-COVID-19"}),
+		    #"Appended NNDSS-Influenza" = Table.Combine({#"Appended NNDSS-COVID-19", #"NNDSS-Influenza"}),
+		    #"Appended NNDSS-Measles" = Table.Combine({#"Appended NNDSS-Influenza", #"NNDSS-Measles"}),
+		    #"Appended NNDSS-RSV" = Table.Combine({#"Appended NNDSS-Measles", #"NNDSS-RSV"})
+		in
+		    #"Appended NNDSS-RSV"
+	lineageTag: e57cb2f6-05d1-41a1-aba3-236011ac5b38
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'NNDSS - AUS' =
+		let
+		    Source = #"NNDSS - base",
+		    #"Removed Other Columns" = Table.SelectColumns(Source,{"Report Date", "File URL", "REPORT_DATE", "DISEASE", "YEAR", "CASES"}),
+		    #"Added CODE" = Table.AddColumn(#"Removed Other Columns", "CODE", each "AUS")
+		in
+		    #"Added CODE"
+	lineageTag: ef98ff4e-f18a-4c79-8380-995add611880
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression NNDSS-COVID-19 =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/refs/heads/main/NNDSS/NNDSS-COVID-19.xlsx"), null, true),
+		    Table1_Table = Source{[Item="Table1",Kind="Table"]}[Data],
+		    #"Inserted Merged Column" = Table.AddColumn(Table1_Table, "Report Date", each Text.Combine({[#"Diagnosis Year Drill Down - Diagnosis Month Name"], Text.From([#"Diagnosis Year Drill Down - Diagnosis Year"], "en-AU")}, " "), type text),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Inserted Merged Column",{{"Report Date", type date}, {"Count_Notification_ForGraph", Int64.Type}}),
+		    #"Calculated End of Month" = Table.TransformColumns(#"Changed Type1",{{"Report Date", Date.EndOfMonth, type date}}),
+		    #"Filtered Report Date" = Table.SelectRows(#"Calculated End of Month", each [Report Date] < #date(2024, 1, 1)),
+		    #"Renamed Columns" = Table.RenameColumns(#"Filtered Report Date",{{"State", "CODE"}, {"Count_Notification_ForGraph", "CASES"}, {"Diagnosis Year Drill Down - Diagnosis Year", "YEAR"}}),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Renamed Columns",{"YEAR", "CODE", "CASES", "Report Date"}),
+		    #"Added DISEASE" = Table.AddColumn(#"Removed Other Columns", "DISEASE", each "COVID-19")
+		in
+		    #"Added DISEASE"
+	lineageTag: da4c5849-77b7-4525-9fda-9be06fb2970d
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression NNDSS-Influenza =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/refs/heads/main/NNDSS/NNDSS-Influenza.xlsx"), null, true),
+		    Table1_Table = Source{[Item="Table1",Kind="Table"]}[Data],
+		    #"Inserted Merged Column" = Table.AddColumn(Table1_Table, "Report Date", each Text.Combine({[#"Diagnosis Year Drill Down - Diagnosis Month Name"], Text.From([#"Diagnosis Year Drill Down - Diagnosis Year"], "en-AU")}, " "), type text),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Inserted Merged Column",{{"Report Date", type date}, {"Count_Notification_ForGraph", Int64.Type}}),
+		    #"Calculated End of Month" = Table.TransformColumns(#"Changed Type1",{{"Report Date", Date.EndOfMonth, type date}}),
+		    #"Filtered Report Date" = Table.SelectRows(#"Calculated End of Month", each [Report Date] < #date(2024, 1, 1)),
+		    #"Renamed Columns" = Table.RenameColumns(#"Filtered Report Date",{{"State", "CODE"}, {"Count_Notification_ForGraph", "CASES"}, {"Diagnosis Year Drill Down - Diagnosis Year", "YEAR"}}),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Renamed Columns",{"YEAR", "CODE", "CASES", "Report Date"}),
+		    #"Added DISEASE" = Table.AddColumn(#"Removed Other Columns", "DISEASE", each "Influenza (laboratory confirmed)")
+		in
+		    #"Added DISEASE"
+	lineageTag: 0795e562-773e-43ab-b638-fbed5101bab6
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression NNDSS-Measles =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/refs/heads/main/NNDSS/NNDSS-Measles.xlsx"), null, true),
+		    Table1_Table = Source{[Item="Table1",Kind="Table"]}[Data],
+		    #"Inserted Merged Column" = Table.AddColumn(Table1_Table, "Report Date", each Text.Combine({[#"Diagnosis Year Drill Down - Diagnosis Month Name"], Text.From([#"Diagnosis Year Drill Down - Diagnosis Year"], "en-AU")}, " "), type text),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Inserted Merged Column",{{"Report Date", type date}, {"Count_Notification_ForGraph", Int64.Type}}),
+		    #"Calculated End of Month" = Table.TransformColumns(#"Changed Type1",{{"Report Date", Date.EndOfMonth, type date}}),
+		    #"Filtered Report Date" = Table.SelectRows(#"Calculated End of Month", each [Report Date] < #date(2024, 1, 1)),
+		    #"Renamed Columns" = Table.RenameColumns(#"Filtered Report Date",{{"State", "CODE"}, {"Count_Notification_ForGraph", "CASES"}, {"Diagnosis Year Drill Down - Diagnosis Year", "YEAR"}}),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Renamed Columns",{"YEAR", "CODE", "CASES", "Report Date"}),
+		    #"Added DISEASE" = Table.AddColumn(#"Removed Other Columns", "DISEASE", each "Measles")
+		in
+		    #"Added DISEASE"
+	lineageTag: 4572d151-7145-4bbb-98d7-be3e84104b84
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression NNDSS-RSV =
+		let
+		    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/refs/heads/main/NNDSS/NNDSS-RSV.xlsx"), null, true),
+		    Table1_Table = Source{[Item="Table1",Kind="Table"]}[Data],
+		    #"Inserted Merged Column" = Table.AddColumn(Table1_Table, "Report Date", each Text.Combine({[#"Diagnosis Year Drill Down - Diagnosis Month Name"], Text.From([#"Diagnosis Year Drill Down - Diagnosis Year"], "en-AU")}, " "), type text),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Inserted Merged Column",{{"Report Date", type date}, {"Count_Notification_ForGraph", Int64.Type}}),
+		    #"Calculated End of Month" = Table.TransformColumns(#"Changed Type1",{{"Report Date", Date.EndOfMonth, type date}}),
+		    #"Filtered Report Date" = Table.SelectRows(#"Calculated End of Month", each [Report Date] < #date(2024, 1, 1)),
+		    #"Renamed Columns" = Table.RenameColumns(#"Filtered Report Date",{{"State", "CODE"}, {"Count_Notification_ForGraph", "CASES"}, {"Diagnosis Year Drill Down - Diagnosis Year", "YEAR"}}),
+		    #"Removed Other Columns" = Table.SelectColumns(#"Renamed Columns",{"YEAR", "CODE", "CASES", "Report Date"}),
+		    #"Added DISEASE" = Table.AddColumn(#"Removed Other Columns", "DISEASE", each "Respiratory syncytial virus (RSV)")
+		in
+		    #"Added DISEASE"
+	lineageTag: 7e7c9ee0-1169-4071-a812-0328fef6877d
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'NNDSS - daily dates' =
+		let
+		    // The List.Dates function that returns a list of dates
+		    Source = List.Dates,
+		    // Invoke List.Dates function. Here you need to specify the dates you want the list to invoke.
+		    // From Date: # Date (YYYY,MM,DD)
+		    // To adapt this to your own calender table change the values for (YYYY; MM; DD)
+		    // Count: It counts the number of days between the start of the first (Calendar) year (set by Year parameter) and the end of the current Reporting Year (set by Month parameter).
+		    // #duration (1,0,0,0) instructs List.Date to do one day increments in the list.
+		    #"Invoke dates" = Source(#date(#"Year" , 1 , 1 ), Duration.Days ( Date.AddMonths ( #date ( Date.Year ( DateTime.FixedLocalNow() ) + 1 , 1, 1 ) , #"Month" - 1 ) - #date ( #"Year" , 1 , 1 ) ) , #duration(1, 0, 0, 0)),
+		    // This step will convert the list to a table.
+		    // To set the correct dates, edit the query parameters
+		    #"List to table" = Table.FromList(#"Invoke dates", Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+		    #"Renamed Columns" = Table.RenameColumns(#"List to table",{{"Column1", "Report Date"}}),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Report Date", type date}}),
+		    #"Added Custom" = Table.AddColumn(#"Changed Type", "Custom", each DateTimeZone.SwitchZone ( DateTimeZone.FixedUtcNow () , 11 ) ),
+		    #"Filtered Report Date" = Table.SelectRows(#"Added Custom", each [Report Date] <= Date.From ( DateTimeZone.SwitchZone ( DateTimeZone.FixedUtcNow () , 11 ) ) ),
+		    #"Filtered Report Date1" = Table.SelectRows(#"Filtered Report Date", each [Report Date] >= #date(2024, 1, 1))
+		in
+		    #"Filtered Report Date1"
+	lineageTag: 8e2bd535-4a72-4a35-a2dd-79c77623980d
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Aged Care - Active Outbreaks - DV Service Name' =
+		let
+		    Source = #"Aged Care - Active Outbreaks",
+		    #"Merged Queries" = Table.NestedJoin(Source, {"Service Key"}, #"Aged Care Service List", {"Service Key"}, "Aged Care Service List", JoinKind.LeftOuter),
+		    #"Expanded Aged Care Service List" = Table.ExpandTableColumn(#"Merged Queries", "Aged Care Service List", {"Service Key"}, {"Aged Care Service List.Service Key"}),
+		    #"Filtered Rows" = Table.SelectRows(#"Expanded Aged Care Service List", each [Aged Care Service List.Service Key] = null),
+		    #"Merged Queries1" = Table.FuzzyNestedJoin(#"Filtered Rows", {"Service Key"}, #"Aged Care Service List", {"Service Key"}, "Aged Care Service List", JoinKind.LeftOuter, [IgnoreCase=true, IgnoreSpace=true, NumberOfMatches=1]),
+		    #"Expanded Aged Care Service List1" = Table.ExpandTableColumn(#"Merged Queries1", "Aged Care Service List", {"Service Key"}, {"Service Key.1"}),
+		    #"Filtered Rows1" = Table.SelectRows(#"Expanded Aged Care Service List1", each [Service Key.1] <> null and [Service Key.1] <> ""),
+		    #"Grouped Rows" = Table.Group(#"Filtered Rows1", {"Service Key", "Service Key.1"}, {{"Count", each Table.RowCount(_), Int64.Type}})
+		in
+		    #"Grouped Rows"
+	lineageTag: bca5216d-bed3-4d3a-8700-836720782dd9
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Aged Care Service Name Fuzzy Matches' =
+		let
+		    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("lVPRcqMwDPwVT556M8n0FyqwAkqE7ZHtpEym//8blUnIQQrl7g2jXa20km63nQW+AjO5bLrMiQ4hS/ARTUS5UI27fYH8Bvja33YdSG98Q3zpTes7NG/wR5mvv+9YL3CF94CC7uSFVnULcBNWMh6BhBEMNGhNDYImoIttlpg0zc/oxyRe+HVLbFHiXWJUaBE4tZN65rDFSioIiWIaVDrvXQ/GqQy55t7/fgExEFOL5tqStd6ZRnwO5mAciEClnR+M+Aolmd5n12iSEflEzOJr+c7I0U/Y9/caumF0R0K2+o0Qk4YCyHnC/4uYxocRaxnkLG0YOoctGjpq6S4gvno5C/6LjSeMkbSQ7NKSi9NwyeYacNAFnWGTBbTKROmUOR/KXN+eT3Nk/KSKcbJijx7KEfyWZZCJQbSpmJXW+hgoAW8YN2H8z01Wqzd59Xprlc4CNpRfgcv3mJlBykZw1okIuEEpKn/+4zGjJ35gM9jedHWd4xllHDV0aqJhupTxLyAeW2dzpYew1cQrcLEJrdNbPzq8mmsO+5np6xs=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Service Name Upper Case" = _t, #"Service Key" = _t]),
+		    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Service Name Upper Case", type text}, {"Service Key", type text}})
+		in
+		    #"Changed Type"
+	lineageTag: 2aeb0310-6e12-459c-aed1-61ca5f84d5b0
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

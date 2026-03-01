@@ -1,0 +1,81 @@
+table 'Population by SA3'
+	lineageTag: 449c23d7-f7d8-49ea-9bbb-a15715cc1c5c
+
+	measure '/ Staff Cases per 1M' = ```
+			
+			AVERAGEX( 'Population by SA3', 
+			    DIVIDE( [# Staff Cases (Aged Care - Active Outbreaks) or Service List], [# Population by SA3] / 1000000 )
+			)
+			```
+		formatString: #,0.00
+		lineageTag: 1bb29f64-41c3-4723-a2f2-4e204b6e4eb0
+
+	measure '# Population by SA3' = SUM ( 'Population by SA3'[Population] )
+		formatString: #,0
+		lineageTag: f4ee19b1-e09e-4152-b4a4-2d6e883ae5d5
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '/ Estimated Infections per 1M' = [/ Staff Cases per 1M] * 'Under-reporting Factor'[Under-reporting Factor Value]
+		formatString: #,0
+		lineageTag: 1a0e33d7-43ad-4de9-a4e1-ba28711040d2
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Estimated Infections' = [# Staff Cases (Aged Care - Active Outbreaks) or Service List] * 'Under-reporting Factor'[Under-reporting Factor Value]
+		formatString: #,0
+		lineageTag: 50d61f39-d903-4b65-9f9b-bcf46b9382ce
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '% Estimated Infections' = ```
+			[/ Estimated Infections per 1M] / 1000000 
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 9178504f-2317-4df0-83f4-d312890cd45b
+
+	column 'SA3 code'
+		dataType: string
+		lineageTag: 4aa1f4b4-54e3-49a6-9a16-b46a98514a8e
+		summarizeBy: none
+		sourceColumn: SA3 code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Population
+		dataType: double
+		lineageTag: 1d929a34-f385-4bae-9a3b-516ff5580014
+		summarizeBy: none
+		sourceColumn: Population
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'SA3 name'
+		dataType: string
+		lineageTag: 206a378a-9e15-44d7-89c2-56764d76bbf2
+		summarizeBy: none
+		sourceColumn: SA3 name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Population by SA3' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://www.abs.gov.au/statistics/people/population/regional-population/2023-24/32180DS0003_2001-24.xlsx"), null, true),
+				    #"Table 2_Sheet" = Source{[Item="Table 2",Kind="Sheet"]}[Data],
+				    #"Removed Top Rows" = Table.Skip(#"Table 2_Sheet",6),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Top Rows", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"SA3 code", type text}, {"no._23", Int64.Type}, {"SA3 name", type text}}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Changed Type1",{{"SA3 code", Text.Trim, type text}, {"SA3 name", Text.Trim, type text}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Trimmed Text", each [SA3 code] <> null and [SA3 code] <> ""),
+				    #"Grouped Rows" = Table.Group(#"Filtered Rows", {"SA3 code"}, {{"Population", each List.Sum([no._23]), type nullable number}, {"SA3 name", each List.Max([SA3 name]), type text}})
+				in
+				    #"Grouped Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

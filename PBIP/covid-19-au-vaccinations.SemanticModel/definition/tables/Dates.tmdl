@@ -1,0 +1,153 @@
+table Dates
+	lineageTag: fda6eb9c-ac8e-4164-b52f-e4389f1ccae8
+
+	measure '@ Date Range' = "From: " & FORMAT( FIRSTDATE( Dates[Date] ) , "d mmmm yyyy" ) & " to " & FORMAT( LASTDATE( Dates[Date] ) , "d mmmm yyyy" )
+		lineageTag: 3cc92daf-cb67-4818-b411-6784e5736038
+
+	measure '@ Date Range (Metric)' = CALCULATE( [@ Date Range], FILTER ( 'Dates', MAXX ( ADDCOLUMNS( 'Metrics', "## Metric", [# Metric] ), [## Metric] )  ))
+		lineageTag: e520ccd3-8224-4c68-8a9b-fbe8d49352f9
+
+	column Date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: c6df85df-f451-44d8-bff9-f3f5a9a0a587
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: bf2f4e53-25f2-4156-be26-f359e2701d08
+			defaultHierarchy: LocalDateTable_a84528da-88f3-4264-b941-bdad4cf4f853.'Date Hierarchy'
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'End of Week'
+		dataType: dateTime
+		formatString: d mmmm yyyy
+		lineageTag: 3c73c1dc-c4a0-4754-9b66-0155c9e67010
+		summarizeBy: none
+		sourceColumn: End of Week
+
+		variation Variation
+			isDefault
+			relationship: 83f9239c-d47d-4413-ac3e-0a2d66537634
+			defaultHierarchy: LocalDateTable_f7a8b0f0-675f-4281-8499-701d673ba300.'Date Hierarchy'
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'Complete Week' = IF ( CALCULATE( DISTINCTCOUNT( Dates[Date] ), ALL( Dates ), Dates[End of Week] = EARLIER( Dates[End of Week] ) ) = 7 , "Complete Week", "Incomplete Week" )
+		lineageTag: ead294db-96e2-411c-a78a-4a7419eecce1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Day Name'
+		dataType: string
+		lineageTag: fb60711a-2c84-448c-8a38-11ec8840661b
+		summarizeBy: none
+		sourceColumn: Day Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Complete Day all States' =
+			
+			VAR v_Date = [Date]
+			RETURN CALCULATE( COUNT( 'covid-live'[NEW_CASE_CNT] ), ALL( 'covid-live' ) , 'covid-live'[Report Date] = v_Date ) = 9
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8f654896-edfe-4680-891a-16d3d60ba08b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'End of Month'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: d7ba52e7-ef50-466a-b4c3-f2d1872a5757
+		summarizeBy: none
+		sourceColumn: End of Month
+
+		variation Variation
+			isDefault
+			relationship: 98fcc9df-3f4f-408d-9a23-e98994b58024
+			defaultHierarchy: LocalDateTable_60dce26c-dbf7-4dd4-8d8c-b79a312eccbd.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Month = FORMAT( [Date], "MMMM" )
+		lineageTag: 973a92d6-6a14-455f-957c-7d666ecb0f3b
+		summarizeBy: none
+		sortByColumn: 'Month No'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month No' = MONTH( [Date] )
+		formatString: 0
+		lineageTag: 286fa102-2be5-4c54-adf2-5cf59f35c6aa
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year = YEAR( [Date] )
+		formatString: 0
+		lineageTag: c3ee4357-2c3f-4425-b9bc-fc5a31f79ff6
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Date in 2000'
+		dataType: dateTime
+		formatString: dd-mmm
+		lineageTag: 636eab2d-9666-4e3f-9627-562ba212f11d
+		summarizeBy: none
+		sourceColumn: Date in 2000
+
+		variation Variation
+			isDefault
+			relationship: 496e122e-dcb7-450c-aa7f-c0ffb278da99
+			defaultHierarchy: LocalDateTable_2e52e5ab-5049-4c2c-ba1e-9d9cbf1bedc5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	partition Dates-e796886a-16f8-418a-8881-bf16d0161711 = m
+		mode: import
+		source =
+				let
+				    Source = #"covid-live",
+				    #"Appended ADHAC" = Table.Combine({Source, ADHAC}),
+				    #"Appended NNDSS - base" = Table.Combine({#"Appended ADHAC", #"NNDSS - daily dates"}),
+				    #"Appended NNDSS-Influenza" = Table.Combine({#"Appended NNDSS - base", #"NNDSS-Influenza"}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Appended NNDSS-Influenza",{"Report Date"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Other Columns",{{"Report Date", "Date"}}),
+				    #"Filtered Date" = Table.SelectRows(#"Renamed Columns", each [Date] <> null and [Date] <> ""),
+				    #"Removed Duplicates" = Table.Distinct(#"Filtered Date"),
+				    #"Inserted End of Week" = Table.AddColumn(#"Removed Duplicates", "End of Week", each Date.EndOfWeek([Date]), type date),
+				    #"Inserted End of Month" = Table.AddColumn(#"Inserted End of Week", "End of Month", each Date.EndOfMonth([Date]), type date),
+				    #"Inserted Day Name" = Table.AddColumn(#"Inserted End of Month", "Day Name", each Date.DayOfWeekName([Date]), type text),
+				    #"Added Date in 2000" = Table.AddColumn(#"Inserted Day Name", "Date in 2000", each "2000" & Text.End ( Text.From ( [Date] , "en-ca" ), 6 ) ),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added Date in 2000",{{"Date in 2000", type date}}),
+				    #"Sorted Rows" = Table.Sort(#"Changed Type",{{"Date", Order.Descending}})
+				in
+				    #"Sorted Rows"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

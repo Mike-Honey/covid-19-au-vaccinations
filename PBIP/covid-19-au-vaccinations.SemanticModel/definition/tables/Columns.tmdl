@@ -1,0 +1,24 @@
+table Columns
+	excludeFromModelRefresh
+	lineageTag: da6f5650-b2d7-4e05-9f0e-d0e8e6d267f1
+
+	column Column
+		dataType: int64
+		formatString: 0
+		lineageTag: 4f9a72f8-23c0-4d00-8dde-e2053dc0fb28
+		summarizeBy: sum
+		sourceColumn: Column
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Columns-1fd3dbaa-ed94-4c18-8c87-28ac5c0b1c98 = m
+		mode: import
+		source =
+				let
+				    Source = #"Row - Column base",
+				    #"Renamed Columns" = Table.RenameColumns(Source,{{"Column1", "Column"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+

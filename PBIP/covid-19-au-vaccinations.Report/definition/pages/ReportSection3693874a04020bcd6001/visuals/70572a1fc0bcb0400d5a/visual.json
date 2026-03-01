@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "70572a1fc0bcb0400d5a",
+  "position": {
+    "x": 653,
+    "y": 88,
+    "z": 2000,
+    "height": 264,
+    "width": 352,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Population"
+                    }
+                  },
+                  "Property": "Geography"
+                }
+              },
+              "queryRef": "Population.Geography",
+              "nativeQueryRef": "Geography"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Population"
+                    }
+                  },
+                  "Property": "Gender"
+                }
+              },
+              "queryRef": "Population.Gender",
+              "nativeQueryRef": "Gender"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Population"
+                    }
+                  },
+                  "Property": "# Population"
+                }
+              },
+              "queryRef": "Population.# Population",
+              "nativeQueryRef": "# Population"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

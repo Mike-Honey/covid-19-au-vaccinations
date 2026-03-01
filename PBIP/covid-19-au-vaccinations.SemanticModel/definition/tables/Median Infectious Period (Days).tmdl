@@ -1,0 +1,26 @@
+table 'Median Infectious Period (Days)'
+	lineageTag: cedf51d0-00fa-46bd-909a-3a499c25bd4a
+
+	measure 'Median Infectious Period (Days) Value' = SELECTEDVALUE('Median Infectious Period (Days)'[Median Infectious Period (Days)], 10)
+		formatString: 0
+		lineageTag: 204a048d-7a98-4e6e-94bf-08411d47fe01
+
+	column 'Median Infectious Period (Days)'
+		formatString: 0
+		lineageTag: 8332c55d-fc88-4dff-bac6-aeb6b1357f0b
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+	partition 'Median Infectious Period (Days)-5711b7a7-0bb5-442c-90c4-915348df0504' = calculated
+		mode: import
+		source = GENERATESERIES(1, 20, 1)
+
+	annotation PBI_Id = 4171816fc9b74d6fbbcfa4f44e314dd9
+

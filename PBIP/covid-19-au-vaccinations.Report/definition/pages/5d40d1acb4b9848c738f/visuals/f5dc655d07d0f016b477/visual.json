@@ -1,0 +1,101 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "f5dc655d07d0f016b477",
+  "position": {
+    "x": 767.49003984063745,
+    "y": 118.56573705179282,
+    "z": 9000,
+    "height": 107.09163346613545,
+    "width": 200.15936254980079,
+    "tabOrder": 9000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Under-reporting Factor"
+                    }
+                  },
+                  "Property": "Under-reporting Factor"
+                }
+              },
+              "queryRef": "Under-reporting Factor.Under-reporting Factor",
+              "active": true,
+              "displayName": "Multiplier per Aged Care Staff Case"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "numericStart": {
+              "expr": {
+                "Literal": {
+                  "Value": "400D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "filter": {
+              "filter": {
+                "Version": 2,
+                "From": [
+                  {
+                    "Name": "u",
+                    "Entity": "Under-reporting Factor",
+                    "Type": 0
+                  }
+                ],
+                "Where": [
+                  {
+                    "Condition": {
+                      "Comparison": {
+                        "ComparisonKind": 0,
+                        "Left": {
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "u"
+                              }
+                            },
+                            "Property": "Under-reporting Factor"
+                          }
+                        },
+                        "Right": {
+                          "Literal": {
+                            "Value": "400D"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "syncGroup": {
+      "groupName": "Under-reporting Factor",
+      "fieldChanges": true,
+      "filterChanges": true
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

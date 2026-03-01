@@ -1,0 +1,25 @@
+table 'Infection Fatality Rate'
+	lineageTag: 8634b25a-d216-4cb9-b059-077c164a9bbe
+
+	column 'Infection Fatality Rate'
+		dataType: double
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 3de780e8-4648-4a7d-afed-cfe545fa1ff5
+		summarizeBy: sum
+		sourceColumn: Infection Fatality Rate
+
+		changedProperty = FormatString
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Infection Fatality Rate-ca3d98bd-281b-43cc-8dbd-4f76475b3b38' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("Pc3LCQAgDMDQXQRvIm39zyLuv4aCmlPeLXM68W6Fk6jIUEIZFVRRQx2NJ42CFBlKKKOCKmqoo/+w+1gb", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Infection Fatality Rate" = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Infection Fatality Rate", Percentage.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

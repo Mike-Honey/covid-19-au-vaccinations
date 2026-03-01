@@ -1,0 +1,31 @@
+table 'Age Categories'
+	excludeFromModelRefresh
+	lineageTag: d8604a00-55ad-4fae-88a1-e48337160614
+
+	column 'Age Category - Slicer'
+		dataType: string
+		lineageTag: 46b8ffe5-1836-4a39-80ab-81f097f55b9c
+		summarizeBy: none
+		sourceColumn: Age Category - Slicer
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Age Category'
+		dataType: string
+		lineageTag: 77a141d9-bfd9-46bc-9759-14d8794c06fa
+		summarizeBy: none
+		sourceColumn: Age Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Age Categories-9ea84016-ee0f-4f93-ba42-e24ca8b5cbbe' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WckwpzSlR0oHSsTpAkZwcBcf01GJcgs4ZmTkpSrGxAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Age Category - Slicer" = _t, #"Age Category" = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Age Category - Slicer", type text}, {"Age Category", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

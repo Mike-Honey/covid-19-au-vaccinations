@@ -1,0 +1,139 @@
+relationship b699cd9b-92f5-4b70-b30e-314b532aa637
+	joinOnDateBehavior: datePartOnly
+	fromColumn: covid-live.LAST_UPDATED_DATE
+	toColumn: LocalDateTable_f99ad411-63d6-4e31-9906-93896836c8d8.Date
+
+relationship 37be9aa3-e0ed-4099-98e2-0f63e6506412
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Report Dates'.'covid-live key'
+	toColumn: covid-live.'covid-live key'
+
+relationship 53efcb1d-6399-4aaf-8fec-c59c1cc7ad05
+	fromColumn: covid-live.CODE
+	toColumn: Geography.CODE
+
+relationship f330a9bf-bced-48f5-898b-6df7c8f31bf4
+	fromColumn: 'Daily Doses Administered'.CODE
+	toColumn: Geography.CODE
+
+relationship 83f9239c-d47d-4413-ac3e-0a2d66537634
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dates.'End of Week'
+	toColumn: LocalDateTable_f7a8b0f0-675f-4281-8499-701d673ba300.Date
+
+relationship b956bb80-8488-45d2-9ee5-13a0c20bc755
+	fromColumn: 'Daily Doses Administered'.DATE
+	toColumn: Dates.Date
+
+relationship a8b5f6c8-516f-403a-8036-d3093ac8e2c3
+	fromColumn: Population.Geography
+	toColumn: Geography.Geography
+
+relationship 3a9889f2-33c0-4ea5-83e6-1bc3e2de66ae
+	toCardinality: many
+	fromColumn: Population.'Age Category'
+	toColumn: 'Age Categories'.'Age Category'
+
+relationship 01eb5a99-4a4d-499f-bddb-d4429255945f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: covid-live.v_End_Date_fwd
+	toColumn: LocalDateTable_3fe8df68-0c7e-4569-9a1d-7ac473d41a86.Date
+
+relationship 025ff0c5-465b-4710-a823-21dfe8edda03
+	fromColumn: covid-live.'Report Date'
+	toColumn: Dates.Date
+
+relationship e8e6262c-ce47-43d5-9249-be65373d5438
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Report Dates'.'Report Date'
+	toColumn: LocalDateTable_374e3b67-6c00-413c-ba68-ccef31635b7b.Date
+
+relationship bd76fb50-2741-4b5b-a17c-14c49d67501d
+	fromColumn: 'Death Toll'.'Report Date'
+	toColumn: Dates.Date
+
+relationship a7452dc1-e369-4c94-be57-8209e4d024a0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Days since Health Leadership faced the public on COVID'.'Last Date'
+	toColumn: LocalDateTable_d9f23e45-8846-4cfc-b712-226765304900.Date
+
+relationship c8452835-68d9-4789-be7d-b7e6a98b3a45
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Days since Health Leadership faced the public on COVID'.'Report Date'
+	toColumn: LocalDateTable_e6b77e6e-41b0-49a6-ae20-4e40715c4a17.Date
+
+relationship 43f4d93f-fd23-408e-8283-0b2b07bbe38c
+	fromColumn: 'Days since Health Leadership faced the public on COVID'.STATE
+	toColumn: Geography.STATE
+
+relationship ba2ba1db-ee52-4d49-8082-ec3f5a869872
+	fromColumn: ADHAC.'Report Date'
+	toColumn: Dates.Date
+
+relationship 19c8cfad-af31-4625-889b-e0c003310386
+	fromColumn: ADHAC.State
+	toColumn: Geography.CODE
+
+relationship 98fcc9df-3f4f-408d-9a23-e98994b58024
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dates.'End of Month'
+	toColumn: LocalDateTable_60dce26c-dbf7-4dd4-8d8c-b79a312eccbd.Date
+
+relationship 35e77ea7-1d34-4a5c-9764-d00306eff1d5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'ABS Doctor certified deaths'.'Report Date'
+	toColumn: LocalDateTable_709ac70b-9d5b-438f-b0e5-d226acec770e.Date
+
+relationship f41dd561-8a3d-36e1-73d5-0078d956dae7
+	fromColumn: NNDSS.CODE
+	toColumn: Geography.CODE
+
+relationship 646f75d0-983d-8225-2288-ab29ac9904e7
+	fromColumn: Metrics.'Data Source'
+	toColumn: 'Data Sources'.'Data Source'
+
+relationship bf2f4e53-25f2-4156-be26-f359e2701d08
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dates.Date
+	toColumn: LocalDateTable_a84528da-88f3-4264-b941-bdad4cf4f853.Date
+
+relationship cf7a126f-592f-4534-b2bd-bf5a35db8358
+	joinOnDateBehavior: datePartOnly
+	fromColumn: NNDSS.'Report Date'
+	toColumn: LocalDateTable_6e1a9156-e92c-4c20-9468-8779a7ba2429.Date
+
+relationship 51dcbd25-e275-982e-2a4f-dcbef0949b9d
+	fromColumn: NNDSS.'Case Date'
+	toColumn: Dates.Date
+
+relationship 7702548d-c407-8dbf-2f7d-5a1e781bf219
+	fromColumn: 'ABS ARI deaths'.Code
+	toColumn: Geography.CODE
+
+relationship b36802f2-af2d-2d39-9956-5ddef45a4bbc
+	fromColumn: 'ABS ARI deaths'.'Report Date'
+	toColumn: Dates.Date
+
+relationship d5cd7160-6524-3455-c371-70c1b318699c
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Aged Care Service List'.'2016 SA3 Code'
+	toColumn: 'Population by SA3'.'SA3 code'
+
+relationship 4a047e78-57b9-4417-b0eb-796a9b3f6820
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Aged Care - Active Outbreaks'.'Report Date'
+	toColumn: LocalDateTable_04d1087c-7143-4cb7-a294-93816ceb9e42.Date
+
+relationship d8dbadab-1b67-82db-2c4e-8c8113739df9
+	fromColumn: 'Aged Care - Active Outbreaks'.'Service Key'
+	toColumn: 'Aged Care Service List'.'Service Key'
+
+relationship acf64efd-3cb7-6312-937c-765552561e82
+	fromColumn: 'Aged Care Service List'.'Physical State'
+	toColumn: Geography.CODE
+
+relationship 496e122e-dcb7-450c-aa7f-c0ffb278da99
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dates.'Date in 2000'
+	toColumn: LocalDateTable_2e52e5ab-5049-4c2c-ba1e-9d9cbf1bedc5.Date
+

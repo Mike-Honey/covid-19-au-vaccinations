@@ -1,0 +1,119 @@
+table 'Days since Health Leadership faced the public on COVID'
+	lineageTag: e4b513fe-a393-4bf3-b696-57e9ebec2688
+
+	measure '# Deaths Since' =
+			
+			VAR v_Last_Date = FIRSTDATE( 'Days since Health Leadership faced the public on COVID'[Last Date] )
+			VAR v_Report_Date = LASTDATE( 'Days since Health Leadership faced the public on COVID'[Report Date] )
+			RETURN
+			CALCULATE( [# New Deaths] , Dates[Date] > v_Last_Date, Dates[Date] <= v_Report_Date )
+		formatString: #,0
+		lineageTag: 591cc515-cfac-40d5-a1ef-a032dc823c94
+
+	measure '# Cases Since' =
+			
+			VAR v_Last_Date = FIRSTDATE( 'Days since Health Leadership faced the public on COVID'[Last Date] )
+			VAR v_Report_Date = LASTDATE( 'Days since Health Leadership faced the public on COVID'[Report Date] )
+			RETURN
+			CALCULATE( [# New Cases] , Dates[Date] > v_Last_Date, Dates[Date] <= v_Report_Date )
+		formatString: #,0
+		lineageTag: 5e1fa2f7-0631-431f-ad67-424557ddce80
+
+	column Geography
+		dataType: string
+		lineageTag: 90988804-3e68-49b4-bdbe-80e28049a627
+		summarizeBy: none
+		sourceColumn: Geography
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Last Date'
+		dataType: dateTime
+		formatString: dd-mmm-yy
+		lineageTag: a77313fd-3aa9-4ccf-a1d8-d9588fb9f839
+		summarizeBy: none
+		sourceColumn: Last Date
+
+		variation Variation
+			isDefault
+			relationship: a7452dc1-e369-4c94-be57-8209e4d024a0
+			defaultHierarchy: LocalDateTable_d9f23e45-8846-4cfc-b712-226765304900.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column 'News Link'
+		dataType: string
+		lineageTag: eacb1604-e08f-4c3f-b95b-9794bd08136b
+		summarizeBy: none
+		sourceColumn: News Link
+
+		annotation SummarizationSetBy = Automatic
+
+	column STATE
+		dataType: string
+		lineageTag: 7de7c0a2-0d61-4759-b069-2dc5d965308e
+		summarizeBy: none
+		sourceColumn: STATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 706807d8-4772-45a8-803b-eb303ede418f
+		summarizeBy: none
+		sourceColumn: Report Date
+
+		variation Variation
+			isDefault
+			relationship: c8452835-68d9-4789-be7d-b7e6a98b3a45
+			defaultHierarchy: LocalDateTable_e6b77e6e-41b0-49a6-ae20-4e40715c4a17.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Days Since'
+		dataType: int64
+		formatString: 0
+		lineageTag: f38c4ff5-8cd0-4aff-bba1-d03099d5cb6b
+		summarizeBy: sum
+		sourceColumn: Days Since
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date Label' = "As at: " & FORMAT ( 'Days since Health Leadership faced the public on COVID'[Report Date] , "MMMM D, YYYY" )
+		lineageTag: 2b754c4f-edc1-49bf-a91c-0427c63a7ab9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column '# Days Since' = 'Days since Health Leadership faced the public on COVID'[Days Since]
+		formatString: 0
+		lineageTag: b9b6aedd-cd42-4c32-961b-4719edb8a67c
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Days since Health Leadership faced the public on COVID-8fb3712e-65e9-433e-ae70-4663560a00b7' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/Days-since-Health-Leadership-faced-the-public-on-COVID.xlsx"), null, true),
+				    Table1_Table = Source{[Item="Table1",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Table1_Table,{{"Geography", type text}, {"Last Date", type date}, {"News Link", type text}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Changed Type", {"Geography"}, Geography, {"CODE"}, "Geography.1", JoinKind.LeftOuter),
+				    #"Expanded Geography.1" = Table.ExpandTableColumn(#"Merged Queries", "Geography.1", {"STATE"}, {"STATE"}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Expanded Geography.1", {"STATE"}, #"Report Dates - latest cases", {"NAME"}, "Report Dates - latest cases", JoinKind.LeftOuter),
+				    #"Expanded Report Dates - latest cases" = Table.ExpandTableColumn(#"Merged Queries1", "Report Dates - latest cases", {"Report Date"}, {"Report Date"}),
+				    #"Inserted Date Subtraction" = Table.AddColumn(#"Expanded Report Dates - latest cases", "Subtraction", each Duration.Days([Report Date] - [Last Date]), Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Inserted Date Subtraction",{{"Subtraction", "Days Since"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+

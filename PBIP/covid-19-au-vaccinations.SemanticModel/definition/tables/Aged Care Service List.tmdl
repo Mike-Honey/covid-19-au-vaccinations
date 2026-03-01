@@ -1,0 +1,250 @@
+table 'Aged Care Service List'
+	lineageTag: 03278d05-0db2-43ae-a015-58684a9717ae
+
+	measure '# Aged Care Service List' = COUNTROWS( 'Aged Care Service List' )
+		formatString: 0
+		lineageTag: 4c6dec15-a288-4d7f-adaf-b63852419494
+
+	column 'Service Name'
+		dataType: string
+		lineageTag: 10d3efde-ef4d-43ea-ac27-89789a1f05dc
+		summarizeBy: none
+		sourceColumn: Service Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Physical Address'
+		dataType: string
+		lineageTag: d2ec4443-5c4d-4e27-ba00-aa27e8e00a21
+		summarizeBy: none
+		sourceColumn: Physical Address
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Physical Suburb'
+		dataType: string
+		lineageTag: b4b1bf09-5192-4eb9-a2cf-aba3cbe65e85
+		summarizeBy: none
+		sourceColumn: Physical Suburb
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Physical State'
+		dataType: string
+		lineageTag: 25d7b07c-5dab-4040-af8b-fbd941827b1a
+		summarizeBy: none
+		sourceColumn: Physical State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Physical Post Code'
+		dataType: int64
+		formatString: 0
+		lineageTag: c98d2f56-3e73-4133-a02a-59a8b015f35c
+		summarizeBy: count
+		sourceColumn: Physical Post Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2018 Aged Care Planning Region (ACPR)'
+		dataType: string
+		lineageTag: b59fd5e0-f636-4ab4-a684-f9b4f78c2c0b
+		summarizeBy: none
+		sourceColumn: 2018 Aged Care Planning Region (ACPR)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Care Type'
+		dataType: string
+		lineageTag: a245794a-c35f-42ba-8b30-032d9aa39d23
+		summarizeBy: none
+		sourceColumn: Care Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Residential Places'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4d630621-f411-4007-9004-0ef0ac816a5e
+		summarizeBy: sum
+		sourceColumn: Residential Places
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Home Care Places'
+		dataType: int64
+		formatString: 0
+		lineageTag: 948435a0-e47d-4014-8f51-cf2ee6469802
+		summarizeBy: sum
+		sourceColumn: Home Care Places
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Restorative Care Places'
+		dataType: int64
+		formatString: 0
+		lineageTag: 37fc0140-9f9a-4eff-a26a-c19531f243ff
+		summarizeBy: sum
+		sourceColumn: Restorative Care Places
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Provider Name'
+		dataType: string
+		lineageTag: 4c0f550f-e5a5-4180-96fd-787a2f3c8c4d
+		summarizeBy: none
+		sourceColumn: Provider Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Organisation Type'
+		dataType: string
+		lineageTag: 79d587e1-9a77-422f-a41c-bd8ccf06483b
+		summarizeBy: none
+		sourceColumn: Organisation Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ABS Remoteness'
+		dataType: string
+		lineageTag: 8b5568a0-667f-4b97-b9ae-c7ab99df4605
+		summarizeBy: none
+		sourceColumn: ABS Remoteness
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2019 MMM Code'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7a9897d0-c7f7-4b2b-bec1-229aafa27585
+		summarizeBy: count
+		sourceColumn: 2019 MMM Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2016 SA2 Code'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a150a8a-847a-49d9-b50f-df01e8760c45
+		summarizeBy: count
+		sourceColumn: 2016 SA2 Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2016 SA2 Name'
+		dataType: string
+		lineageTag: bd0c7381-b05c-4e8f-9617-0fb3755eb96a
+		summarizeBy: none
+		sourceColumn: 2016 SA2 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2016 SA3 Code'
+		dataType: string
+		lineageTag: 38f59327-902c-4a75-9895-c6c0b2afb646
+		summarizeBy: none
+		sourceColumn: 2016 SA3 Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2016 SA3 Name'
+		dataType: string
+		lineageTag: 7fce281a-3eaf-4b11-bb21-b25de6ebbf88
+		summarizeBy: none
+		sourceColumn: 2016 SA3 Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2023 LGA Name'
+		dataType: string
+		lineageTag: 1bf13772-3458-49f0-99b4-7725ef6f3868
+		summarizeBy: none
+		sourceColumn: 2023 LGA Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2023 LGA Code'
+		dataType: string
+		lineageTag: d1251989-59b9-4ea2-9810-b81f0548e2d8
+		summarizeBy: none
+		sourceColumn: 2023 LGA Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2017 PHN Code'
+		dataType: string
+		lineageTag: d96c4f8e-00a4-46e0-a2cb-1867dd2e4a88
+		summarizeBy: none
+		sourceColumn: 2017 PHN Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2017 PHN Name'
+		dataType: string
+		lineageTag: e9e1c76e-f0ba-46fa-9c30-73027cb28088
+		summarizeBy: none
+		sourceColumn: 2017 PHN Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Latitude
+		dataType: double
+		lineageTag: 9e53035e-3600-4503-b009-5347ec099735
+		dataCategory: Latitude
+		summarizeBy: none
+		sourceColumn: Latitude
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Longitude
+		dataType: double
+		lineageTag: 105c7cb2-0d0a-443a-a6bd-2227e08eb088
+		dataCategory: Longitude
+		summarizeBy: none
+		sourceColumn: Longitude
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Service Key'
+		dataType: string
+		lineageTag: f2db5a28-4823-468e-840e-207febef602b
+		summarizeBy: none
+		sourceColumn: Service Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column '2024-25 Australian Government Funding'
+		dataType: string
+		lineageTag: 39288801-3624-4588-abc9-a9c7d2f55ee4
+		summarizeBy: none
+		sourceColumn: 2024-25 Australian Government Funding
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Aged Care Service List' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://www.gen-agedcaredata.gov.au/getmedia/d861848c-20f5-40f3-a758-1a5938147a62/Australia-Service-List-2025"), null, false),
+				    #"Service List 2025 Australia_sheet" = Source{[Item="Service List 2025 - Australia",Kind="Sheet"]}[Data],
+				    FilterNullAndWhitespace = each List.Select(_, each _ <> null and (not (_ is text) or Text.Trim(_) <> "")),
+				    #"Removed Top Rows" = Table.Skip(#"Service List 2025 Australia_sheet", each try List.IsEmpty(List.Skip(FilterNullAndWhitespace(Record.FieldValues(_)), 1)) otherwise false),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Removed Top Rows", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Service Name", type text}, {"Physical Address", type text}, {"Physical Suburb", type text}, {"Physical State", type text}, {"Physical Post Code", Int64.Type}, {"2018 Aged Care Planning Region (ACPR)", type text}, {"Care Type", type text}, {"Residential Places", Int64.Type}, {"Home Care Places", Int64.Type}, {"Restorative Care Places", Int64.Type}, {"Provider Name", type text}, {"Organisation Type", type text}, {"ABS Remoteness", type text}, {"2019 MMM Code", Int64.Type}, {"2016 SA2 Code", Int64.Type}, {"2016 SA2 Name", type text}, {"2016 SA3 Code", type text}, {"2016 SA3 Name", type text}, {"2023 LGA Name", type text}, {"2023 LGA Code", type text}, {"2017 PHN Code", type text}, {"2017 PHN Name", type text}, {"Latitude", type number}, {"Longitude", type number}}),
+				    #"Cleaned Text" = Table.TransformColumns(#"Changed Type",{{"Service Name", Text.Clean, type text}}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Cleaned Text",{{"Service Name", Text.Trim, type text}}),
+				    #"Filtered Service Name" = Table.SelectRows(#"Trimmed Text", each [Service Name] <> null and [Service Name] <> ""),
+				    #"Inserted Uppercased Text" = Table.AddColumn(#"Filtered Service Name", "UPPERCASE", each Text.Upper([Service Name]), type text),
+				    #"Renamed Columns" = Table.RenameColumns(#"Inserted Uppercased Text",{{"UPPERCASE", "Service Key"}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Renamed Columns", {"Service Key"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,1027 @@
+table ADHAC
+	lineageTag: d6e07f6a-3401-420b-a5ba-22b4bb73d395
+
+	measure '# Value ADHAC' = ```
+			SUM ( ADHAC[Value] ) 
+			```
+		lineageTag: 0f44cb4d-5dd2-46f9-a5ae-2f84ebe73f66
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Aged Care Active Outbreaks' = ```
+			
+			COALESCE(
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Active Outbreaks" 
+			    ),
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Outbreaks - Active" 
+			    )
+			)
+			```
+		formatString: #,0.00
+		lineageTag: fa7fe66b-8bad-464e-9ee6-9b4b0af36ee1
+
+	measure '# Aged Care Active Outbreaks (7-day avg) per 1M' = DIVIDE( [# Aged Care Active Outbreaks (7-day avg)] , ( [# Population] / 1000000 ) )
+		formatString: #,0.0
+		lineageTag: 1e5ffec1-05cc-446d-8e18-d8822795b853
+
+	measure '# Aged Care Staff Cases' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Aged Care" ,
+			    ADHAC[Metric] = "Staff Cases" 
+			)
+			```
+		formatString: #,0
+		lineageTag: f2875e1a-5b4f-464a-b9d9-b9a2c1289be9
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Aged Care Staff Cases (7-day avg) per 1M' = DIVIDE( [# Aged Care Staff Cases (7-day avg)] , ( [# Population] / 1000000 ) )
+		formatString: #,0.0
+		lineageTag: 62229278-12d1-4924-83f3-272191a1291d
+
+	measure '# Aged Care Resident Cases' = ```
+			
+			COALESCE(
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Resident Cases" 
+			    ) ,
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Resident Cases - Cumulative increase (7 days)" 
+			    )
+			)
+			```
+		formatString: #,0
+		lineageTag: 6fd7bea2-1754-4806-83df-192a051ba739
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Aged Care Resident Cases (7-day avg) per 1M' = DIVIDE( [# Aged Care Resident Cases (7-day avg)] , ( [# Population] / 1000000 ) )
+		formatString: #,0.0
+		lineageTag: 3eeb5b81-8484-4249-a6b8-3c95d43477ce
+
+	measure '# Monthly PBS Scripts' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Metric] = "Monthly PBS Scripts" 
+			)
+			```
+		formatString: #,0
+		lineageTag: 49b0deda-4354-44e0-a1a5-e17f6a57b586
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Monthly PBS Scripts per 1M' = DIVIDE( [# Monthly PBS Scripts] , ( [# Population] / 1000000 ) )
+		lineageTag: 5e6237f2-0899-4193-a053-3275ee8654f0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Aged Care Active Outbreaks (7-day avg)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'ADHAC'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - ( [^ Rolling Average Days Value] - 1 )
+			RETURN
+			IF ( [# Aged Care Active Outbreaks] > 0 ,
+			    CALCULATE (
+			        SUMX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# Aged Care Active Outbreaks] 
+			        ) / [^ Rolling Average Days Value] ,
+			        ALL( 'Dates' ),
+			        ALL( 'ADHAC'[Report Date] )
+			    )
+			)
+			
+			```
+		formatString: #,0
+		lineageTag: 97faee98-a995-4bbe-94dd-313b8e049db2
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Aged Care Resident Cases (7-day avg)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'ADHAC'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - ( [^ Rolling Average Days Value] - 1 )
+			RETURN
+			IF ( [# Aged Care Resident Cases] > 0 ,
+			    CALCULATE (
+			        SUMX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# Aged Care Resident Cases] 
+			        ) / [^ Rolling Average Days Value] ,
+			        ALL( 'Dates' ),
+			        ALL( 'ADHAC'[Report Date] )
+			    )
+			)
+			
+			```
+		formatString: #,0
+		lineageTag: add9dd32-10b6-44f3-b968-be9886c05be2
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Aged Care Staff Cases (7-day avg)' = ```
+			
+			VAR v_End_Date = LASTDATE( 'ADHAC'[Report Date] ) 
+			VAR v_Start_Date = v_End_Date - ( [^ Rolling Average Days Value] - 1 )
+			RETURN
+			IF ( [# Aged Care Staff Cases] > 0 ,
+			    CALCULATE (
+			        SUMX( 
+			            FILTER (
+			                Dates ,
+			                'Dates'[Date] >= v_Start_Date
+			                    && 'Dates'[Date]  <= v_End_Date
+			            ),
+			            [# Aged Care Staff Cases] 
+			        ) / [^ Rolling Average Days Value] ,
+			        ALL( 'Dates' ),
+			        ALL( 'ADHAC'[Report Date] )
+			    )
+			)
+			
+			```
+		lineageTag: ef7eff07-4889-459b-a53d-00a6881b26f5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Aged Care Active Outbreaks Weekly Change' = ```
+			
+			VAR v_End_Date = CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , ADHAC[Metric] = "Daily Cases" , ADHAC[Value] > 0 )
+			VAR v_Earliest_Date = CALCULATE ( FIRSTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , 'ADHAC'[Report Date] < v_End_Date )
+			RETURN
+			    IF ( v_End_Date - v_Earliest_Date >= 13, 
+			        DIVIDE( 
+			            CALCULATE( [# Aged Care Active Outbreaks (7-day avg)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 6 &&
+			                     'Dates'[Date] <= v_End_Date
+			                )
+			            ),
+			            CALCULATE( [# Aged Care Active Outbreaks (7-day avg)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 13 &&
+			                     'Dates'[Date] <= v_End_Date - 7
+			                )
+			            )
+			        ) - 1
+			    )
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: bbb7e739-0e2c-498c-8659-505adcede234
+
+	measure '% Aged Care Resident Cases Weekly Change' = ```
+			
+			VAR v_End_Date = CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , ADHAC[Metric] = "Daily Cases" , ADHAC[Value] > 0 )
+			VAR v_Earliest_Date = CALCULATE ( FIRSTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , 'ADHAC'[Report Date] < v_End_Date )
+			RETURN
+			    IF ( v_End_Date - v_Earliest_Date >= 13, 
+			        DIVIDE( 
+			            CALCULATE( [# Aged Care Resident Cases (7-day avg)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 6 &&
+			                     'Dates'[Date] <= v_End_Date
+			                )
+			            ),
+			            CALCULATE( [# Aged Care Resident Cases (7-day avg)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 13 &&
+			                     'Dates'[Date] <= v_End_Date - 7
+			                )
+			            )
+			        ) - 1
+			    )
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: 94a13e03-7494-4232-bca5-738068b7430e
+
+	measure '% Aged Care Staff Cases Weekly Change' = ```
+			
+			VAR v_End_Date = CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , ADHAC[Metric] = "Daily Cases" , ADHAC[Value] > 0 )
+			VAR v_Earliest_Date = CALCULATE ( FIRSTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , 'ADHAC'[Report Date] < v_End_Date )
+			RETURN
+			    IF ( v_End_Date - v_Earliest_Date >= 13, 
+			        DIVIDE( 
+			            CALCULATE( [# Aged Care Staff Cases (7-day avg)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 6 &&
+			                     'Dates'[Date] <= v_End_Date
+			                )
+			            ),
+			            CALCULATE( [# Aged Care Staff Cases (7-day avg)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 13 &&
+			                     'Dates'[Date] <= v_End_Date - 7
+			                )
+			            )
+			        ) - 1
+			    )
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: 008b47ab-5fb2-4d0b-9d3d-eb6fdc73629b
+
+	measure '% Monthly PBS Scripts Monthly Change' = ```
+			
+			VAR v_End_Date = CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , ADHAC[Metric] = "Monthly PBS Scripts" , ADHAC[Value] > 0 )
+			VAR v_Earliest_Date = CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , ADHAC[Metric] = "Monthly PBS Scripts" , ADHAC[Value] > 0 , 'ADHAC'[Report Date] < v_End_Date )
+			RETURN
+			    IF ( v_End_Date - v_Earliest_Date >= 25, 
+			        DIVIDE( 
+			            CALCULATE( [# Monthly PBS Scripts] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] = v_End_Date
+			                )
+			            ),
+			            CALCULATE( LASTNONBLANKVALUE( 'ADHAC'[Report Date], [# Monthly PBS Scripts] ), 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] < v_End_Date
+			                )
+			            )
+			        ) - 1
+			    )
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: 85b70d92-17e8-4679-83b1-a784ee7b5015
+
+	measure '# Aged Care Active Resident Cases (Weekly)' = ```
+			
+			COALESCE(
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Aged Care Active Cases Residents" 
+			    ),
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Total number of active resident cases" 
+			    )
+			)
+			```
+		formatString: #,0
+		lineageTag: ed777b0a-ee75-462a-960b-338aeb91a688
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Aged Care Active Staff Cases (Weekly)' = ```
+			
+			COALESCE(
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Aged Care Active Cases Staff" 
+			    ),
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Total number of active staff cases" 
+			    )
+			)
+			```
+		formatString: #,0
+		lineageTag: 3615df66-ff3c-478c-b17c-ac18f1f4a53b
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Aged Care Active Resident Cases (Weekly) per 1M' = DIVIDE( [# Aged Care Active Resident Cases (Weekly)], ( [# Population] / 1000000 ) )
+		formatString: #,0.0
+		lineageTag: 0bb755fc-4a8e-4b89-9708-28040113353c
+
+	measure '# Aged Care Active Staff Cases (Weekly) per 1M' = DIVIDE( [# Aged Care Active Staff Cases (Weekly)], ( [# Population] / 1000000 ) )
+		formatString: #,0.0
+		lineageTag: 379bd8bc-9ac2-4d7f-be48-978481ce7d00
+
+	measure '% Aged Care Active Resident Cases Weekly Change' = ```
+			
+			VAR v_End_Date = CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , FILTER( 'ADHAC' , [# Aged Care Active Resident Cases (Weekly)] > 0 ) )
+			VAR v_Earliest_Date = CALCULATE ( FIRSTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , 'ADHAC'[Report Date] < v_End_Date )
+			RETURN
+			    IF ( v_End_Date - v_Earliest_Date >= 13, 
+			        DIVIDE( 
+			            CALCULATE( [# Aged Care Active Resident Cases (Weekly)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 6 &&
+			                     'Dates'[Date] <= v_End_Date
+			                )
+			            ),
+			            CALCULATE( [# Aged Care Active Resident Cases (Weekly)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 13 &&
+			                     'Dates'[Date] <= v_End_Date - 7
+			                )
+			            )
+			        ) - 1
+			    )
+			```
+		formatString: 0%;-0%;0%
+		lineageTag: 29a36afe-54b5-417a-a801-d1de2c2eec79
+
+	measure '% Aged Care Active Staff Cases Weekly Change' = ```
+			
+			VAR v_End_Date = CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , FILTER( 'ADHAC' , [# Aged Care Active Staff Cases (Weekly)] > 0 ) )
+			VAR v_Earliest_Date = CALCULATE ( FIRSTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , 'ADHAC'[Report Date] < v_End_Date )
+			RETURN
+			    IF ( v_End_Date - v_Earliest_Date >= 13, 
+			        DIVIDE( 
+			            CALCULATE( [# Aged Care Active Staff Cases (Weekly)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 6 &&
+			                     'Dates'[Date] <= v_End_Date
+			                )
+			            ),
+			            CALCULATE( [# Aged Care Active Staff Cases (Weekly)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 13 &&
+			                     'Dates'[Date] <= v_End_Date - 7
+			                )
+			            )
+			        ) - 1
+			    )
+			```
+		lineageTag: 6711468f-80f5-4bd6-84f3-e93174925c00
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Cases (Monthly)' = ```
+			
+			SWITCH( [@ Data Source Label],
+			    "health.gov.au",
+			        CALCULATE( 
+			            ADHAC[# Value ADHAC], 
+			            ADHAC[Category] = "Cases" ,
+			            ADHAC[Metric] = "Monthly Cases" 
+			        ),
+			    "NNDSS",
+			        IF ( MAX( 'Dates'[Date] ) = MAX ( Dates[End of Month] ) ||
+			                YEAR ( MAX( 'Dates'[Date] ) ) < CALCULATE( YEAR ( MAX( 'Dates'[Date] ) ), ALL ( 'Dates') ) ,
+			            [# New Cases (NNDSS)],
+			            [# New Cases (NNDSS)] / DAY( MAX ( 'Dates'[Date] ) ) * DAY ( MAX ( Dates[End of Month] ) )
+			        )
+			)
+			```
+		formatString: #,0
+		lineageTag: 88fbc953-060f-4ab4-8d87-771fdd745273
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Cases (Monthly) per 1M' = DIVIDE( [# Cases (Monthly)] , ( [# Population] / 1000000 ) )
+		formatString: #,0
+		lineageTag: ea606166-1a6d-4c2a-85fb-cc9ac3e9a6f1
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '% Cases (Monthly) Change' = ```
+			
+			VAR v_End_Date = CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , FILTER ( 'ADHAC', [# Cases (Monthly)] > 0 ) )
+			VAR v_Earliest_Date = CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , FILTER ( 'ADHAC', [# Cases (Monthly)] > 0 ), 'ADHAC'[Report Date] < v_End_Date )
+			RETURN
+			    IF ( v_End_Date - v_Earliest_Date >= 25, 
+			        DIVIDE( 
+			            CALCULATE( [# Cases (Monthly)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] = v_End_Date
+			                )
+			            ),
+			            CALCULATE( LASTNONBLANKVALUE( 'ADHAC'[Report Date], [# Cases (Monthly)] ), 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] < v_End_Date
+			                )
+			            )
+			        ) - 1
+			    )
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: bf377594-75be-4105-936c-1c76b1561863
+
+	measure '# Aged Care Outbreaks Facilities (Weekly)' = ```
+			
+			COALESCE(
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Aged Care Outbreaks Facilities" 
+			    ),
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Total RACHs with outbreaks" 
+			    )
+			)
+			```
+		formatString: #,0
+		lineageTag: ae4ac936-3eef-4d26-8b94-16ca9fd53330
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Aged Care Outbreaks Facilities (Weekly) per 1M' = DIVIDE( [# Aged Care Outbreaks Facilities (Weekly)], ( [# Population] / 1000000 ) )
+		formatString: #,0.0
+		lineageTag: 979f8b6a-ac3a-4bde-aa4e-b62729c4ac8a
+
+	measure '% Aged Care Outbreaks Facilities Weekly Change' = ```
+			
+			VAR v_End_Date = CALCULATE ( LASTDATE( 'ADHAC'[Report Date] ) , FILTER( 'ADHAC' , [# Aged Care Outbreaks Facilities (Weekly)] > 0 ) )
+			VAR v_Earliest_Date = CALCULATE ( FIRSTDATE( 'ADHAC'[Report Date] ) , ALL ( 'ADHAC'[Report Date] ) , 'ADHAC'[Report Date] < v_End_Date )
+			RETURN
+			    IF ( v_End_Date - v_Earliest_Date >= 13, 
+			        DIVIDE( 
+			            CALCULATE( [# Aged Care Outbreaks Facilities (Weekly)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 6 &&
+			                     'Dates'[Date] <= v_End_Date
+			                )
+			            ),
+			            CALCULATE( [# Aged Care Outbreaks Facilities (Weekly)] , 
+			                ALL ( 'ADHAC'[Report Date] ) , 
+			                FILTER ( ALL ( Dates ) ,  
+			                    'Dates'[Date] >= v_End_Date - 13 &&
+			                     'Dates'[Date] <= v_End_Date - 7
+			                )
+			            )
+			        ) - 1
+			    )
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: b49504ef-dbe5-400b-9d67-699e50a0e3da
+
+	measure '# Molnupiravir Prescriptions (Daily) - Residential Aged Care' = ```
+			
+			VAR v_Date = MAX ( Dates[Date] )
+			VAR v_Current_Value = 
+			CALCULATE( 
+			    MAX( ADHAC[Value] ), 
+			    ADHAC[Category] = "Treatments" ,
+			    ADHAC[Metric] = "Molnupiravir Prescriptions",
+			    ALL ( Dates ),
+			    ADHAC[Report Date] = v_Date
+			)
+			VAR v_Latest_Date = 
+			CALCULATE( 
+			    MIN( ADHAC[Report Date] ), 
+			    ADHAC[Category] = "Treatments" ,
+			    ADHAC[Metric] = "Molnupiravir Prescriptions",
+			    ALL ( Dates ),
+			    ADHAC[Report Date] <= v_Date,
+			    ADHAC[Value] = v_Current_Value
+			)
+			VAR v_Prior_Value = 
+			CALCULATE( 
+			    MAX( ADHAC[Value] ), 
+			    ADHAC[Category] = "Treatments" ,
+			    ADHAC[Metric] = "Molnupiravir Prescriptions", 
+			    ALL ( Dates ),
+			    ADHAC[Report Date] < v_Latest_Date,
+			    ADHAC[Value] < v_Current_Value
+			)
+			VAR v_Prior_Date = 
+			CALCULATE( 
+			    MIN( ADHAC[Report Date] ), 
+			    ADHAC[Category] = "Treatments" ,
+			    ADHAC[Metric] = "Molnupiravir Prescriptions", 
+			    ALL ( Dates ),
+			    ADHAC[Report Date] < v_Latest_Date,
+			    ADHAC[Value] = v_Prior_Value
+			)
+			RETURN 
+			DIVIDE(
+			    v_Current_Value - v_Prior_Value,
+			    v_Latest_Date - v_Prior_Date - 1
+			)
+			```
+		lineageTag: 6912e5b0-e54f-4eee-aa9d-2a907f850ece
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% Molnupiravir Prescriptions per Case - Residental Aged Care' = ```
+			
+			DIVIDE( 
+			    SUMX ( Dates , [# Molnupiravir Prescriptions (Daily) - Residential Aged Care] ), 
+			    SUMX ( Dates , ( [# Resident Cases (Weekly) - Residential Aged Care] / 7 ) )
+			)
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 19e77e9b-c693-4221-be9b-43fbcf35a2b7
+
+	measure '# Staff Cases (Weekly) - Residential Aged Care' = ```
+			
+			VAR v_Report_Date = 
+			CALCULATE( MAX ( ADHAC[Report Date] ),
+			    ADHAC[Category] = "Aged Care"  ,
+			    ADHAC[Metric] = "Aged Care Staff Cases" ,
+			    ADHAC[Value] >= 0
+			)
+			VAR v_Prior_Report_Date =
+			CALCULATE( MAX ( ADHAC[Report Date] ),
+			    ADHAC[Category] = "Aged Care"  ,
+			    ADHAC[Metric] = "Aged Care Staff Cases" ,
+			    ALL ( Dates ) ,
+			    ADHAC[Report Date] < v_Report_Date ,
+			    ADHAC[Value] >= 0
+			)
+			RETURN
+			COALESCE(
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Staff Cases - Cumulative increase (7 days)" 
+			    ),
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Aged Care Weekly Staff Cases" 
+			    ),
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Aged Care Staff Cases" 
+			    ) -
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Aged Care Staff Cases" ,
+			        ALL ( Dates ),
+			        Dates[Date] = v_Prior_Report_Date
+			    )
+			)
+			```
+		lineageTag: 43ef9fc5-047e-4bc3-b056-7788d4d32a04
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Staff Cases (Weekly) per 1M -  Residential Aged Care' = DIVIDE( [# Staff Cases (Weekly) - Residential Aged Care] , ( [# Population] / 1000000 ) )
+		formatString: #,0.0
+		lineageTag: 8078811e-83a3-4f73-bfb2-35b0d5bac47a
+
+	measure '# Resident Cases (Weekly) - Residential Aged Care' = ```
+			
+			VAR v_Report_Date = 
+			CALCULATE( MAX ( ADHAC[Report Date] ),
+			    ADHAC[Category] = "Aged Care"  ,
+			    ADHAC[Metric] = "Aged Care Resident Cases" ,
+			    ADHAC[Value] >= 0
+			)
+			VAR v_Prior_Report_Date =
+			CALCULATE( MAX ( ADHAC[Report Date] ),
+			    ADHAC[Category] = "Aged Care"  ,
+			    ADHAC[Metric] = "Aged Care Resident Cases" ,
+			    ALL ( Dates ) ,
+			    ADHAC[Report Date] < v_Report_Date ,
+			    ADHAC[Value] >= 0
+			)
+			RETURN
+			COALESCE(
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Aged Care Resident Cases" 
+			    ) -
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Aged Care Resident Cases" ,
+			        ALL ( Dates ),
+			        Dates[Date] = v_Prior_Report_Date
+			    ),
+			    CALCULATE( 
+			        ADHAC[# Value ADHAC], 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Resident Cases - Cumulative increase (7 days)" 
+			    )
+			)
+			
+			```
+		formatString: #,0
+		lineageTag: 7a2e6fc1-84f2-473e-a521-213c4f381f38
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '% Paxlovid Prescriptions per Case - Residental Aged Care' = ```
+			
+			DIVIDE( 
+			    SUMX ( Dates , [# Paxlovid Prescriptions (Daily) - Residential Aged Care] ), 
+			    SUMX ( Dates , ( [# Resident Cases (Weekly) - Residential Aged Care] / 7 ) )
+			)
+			
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 7c3c33a5-41a7-4e6f-b99a-f237186a4be3
+
+	measure '# Paxlovid Prescriptions (Daily) - Residential Aged Care' = ```
+			
+			VAR v_Date = MAX ( Dates[Date] )
+			VAR v_Current_Value = 
+			CALCULATE( 
+			    MAX( ADHAC[Value] ), 
+			    ADHAC[Category] = "Treatments" ,
+			    ADHAC[Metric] = "Paxlovid Prescriptions",
+			    ALL ( Dates ),
+			    ADHAC[Report Date] = v_Date
+			)
+			VAR v_Latest_Date = 
+			CALCULATE( 
+			    MIN( ADHAC[Report Date] ), 
+			    ADHAC[Category] = "Treatments" ,
+			    ADHAC[Metric] = "Paxlovid Prescriptions",
+			    ALL ( Dates ),
+			    ADHAC[Report Date] <= v_Date,
+			    ADHAC[Value] = v_Current_Value
+			)
+			VAR v_Prior_Value = 
+			CALCULATE( 
+			    MAX( ADHAC[Value] ), 
+			    ADHAC[Category] = "Treatments" ,
+			    ADHAC[Metric] = "Paxlovid Prescriptions", 
+			    ALL ( Dates ),
+			    ADHAC[Report Date] < v_Latest_Date,
+			    ADHAC[Value] < v_Current_Value
+			)
+			VAR v_Prior_Date = 
+			CALCULATE( 
+			    MIN( ADHAC[Report Date] ), 
+			    ADHAC[Category] = "Treatments" ,
+			    ADHAC[Metric] = "Paxlovid Prescriptions", 
+			    ALL ( Dates ),
+			    ADHAC[Report Date] < v_Latest_Date,
+			    ADHAC[Value] = v_Prior_Value
+			)
+			RETURN 
+			DIVIDE(
+			    v_Current_Value - v_Prior_Value,
+			    v_Latest_Date - v_Prior_Date - 1
+			)
+			
+			```
+		formatString: #,0
+		lineageTag: d14da3e1-6151-41ba-b843-65809734528d
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Molnupiravir Prescriptions - Residential Aged Care' = ```
+			
+			CALCULATE( 
+			    LASTNONBLANK( ADHAC[Value], VALUES( Dates[Date] ) ), 
+			    ADHAC[Category] = "Treatments" ,
+			    ADHAC[Metric] = "Molnupiravir Prescriptions" 
+			) 
+			```
+		formatString: #,0
+		lineageTag: ea33c9f6-b802-4686-be65-c5369c4bb676
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Paxlovid Prescriptions - Residential Aged Care' = ```
+			
+			CALCULATE( 
+			    LASTNONBLANK( ADHAC[Value], VALUES( Dates[Date] ) ), 
+			    ADHAC[Category] = "Treatments" ,
+			    ADHAC[Metric] = "Paxlovid Prescriptions" 
+			) 
+			```
+		formatString: #,0
+		lineageTag: 5d6979fa-5625-4f18-87c7-d7c0bcb07507
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Resident Cases (Daily) - Residential Aged Care' = ```
+			
+			VAR v_Date = MAX ( Dates[Date] )
+			VAR v_Latest_Date = 
+			CALCULATE( 
+			    MIN( ADHAC[Report Date] ), 
+			    ADHAC[Category] = "Aged Care" ,
+			    ADHAC[Metric] = "Aged Care Resident Cases",
+			    ALL ( Dates ),
+			    ADHAC[Report Date] >= v_Date
+			)
+			VAR v_Prior_Date = 
+			CALCULATE( 
+			    MAX( ADHAC[Report Date] ), 
+			    ADHAC[Category] = "Aged Care" ,
+			    ADHAC[Metric] = "Aged Care Resident Cases",
+			    ALL ( Dates ),
+			    ADHAC[Report Date] < v_Latest_Date
+			)
+			RETURN
+			DIVIDE(
+			    CALCULATE( 
+			        LASTNONBLANK( ADHAC[Value], VALUES( Dates[Date] ) ), 
+			        ADHAC[Category] = "Aged Care" ,
+			        ADHAC[Metric] = "Aged Care Resident Cases",
+			        ALL ( Dates ),
+			        Dates[Date] = v_Latest_Date
+			    ) ,
+			    v_Latest_Date - v_Prior_Date
+			)
+			```
+		formatString: #,0
+		lineageTag: 7d3aa678-a3a9-4430-ac7d-4971914b0a4b
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure '# Certified deaths - COVID-19' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - COVID-19" 
+			)
+			```
+		lineageTag: 28b8cd1b-12e8-4686-8b07-ab6fa8ac9f81
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Certified deaths - Total' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - Total" 
+			)
+			```
+		lineageTag: 981f4baf-f3b2-455e-88a8-94a96b7b12c0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Certified deaths - Cancer' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - Cancer" 
+			)
+			```
+		lineageTag: 3768d658-f935-4457-ab73-ad8b814e899c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Certified deaths - Cerebrovascular diseases' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - Cerebrovascular diseases" 
+			)
+			```
+		lineageTag: 2eb4fe98-8f4d-4220-ba66-d73872bbbba8
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Certified deaths - Chronic lower respiratory conditions' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - Chronic lower respiratory conditions" 
+			)
+			```
+		lineageTag: 11dcc275-a643-4418-b31b-30d6e875e4bb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Certified deaths - Dementia including Alzheimers' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - Dementia including Alzheimers" 
+			)
+			```
+		lineageTag: f0ec1b3c-effd-4ef1-88fe-92646df04050
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Certified deaths - Diabetes' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - Diabetes" 
+			)
+			```
+		lineageTag: 79b8eab3-3836-492a-828a-1b4db8b0fa06
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Certified deaths - Influenza and pneumonia' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - Influenza and pneumonia" 
+			)
+			```
+		lineageTag: a8116be7-60e4-408d-8ac9-4fbbca9f3b34
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Certified deaths - Ischaemic heart diseases' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - Ischaemic heart diseases" 
+			)
+			```
+		lineageTag: 67555dd2-de6f-4f4c-b5fa-75a350629302
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Certified deaths - Other cardiac conditions' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - Other cardiac conditions" 
+			)
+			```
+		lineageTag: d40a29a7-746e-447a-98c7-b47e671f9e44
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Certified deaths - Pneumonia' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - Pneumonia" 
+			)
+			```
+		lineageTag: ab2f0f2d-e9d4-4d3b-96ff-aa19d01b4a2f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '# Certified deaths - Respiratory diseases' = ```
+			
+			CALCULATE( 
+			    ADHAC[# Value ADHAC], 
+			    ADHAC[Category] = "Deaths" ,
+			    ADHAC[Metric] = "Certified deaths - Respiratory diseases" 
+			)
+			```
+		lineageTag: 49eb135f-4312-4ff5-b787-aecb75ad6f1e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Report Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 0289cef9-8121-4399-b871-2f1c2ad1e3e2
+		summarizeBy: none
+		sourceColumn: Report Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Attribute
+		dataType: string
+		lineageTag: 45a93499-136b-4c74-8352-790f60d2592d
+		summarizeBy: none
+		sourceColumn: Attribute
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: double
+		lineageTag: c0249023-83d4-4ee9-a612-abd85c39d760
+		summarizeBy: sum
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Category
+		dataType: string
+		lineageTag: 3429e293-39b6-4090-bc89-d9a873812005
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Metric
+		dataType: string
+		lineageTag: 6bcaa147-445a-4dd7-9e1d-42cf587f106b
+		summarizeBy: none
+		sourceColumn: Metric
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 108eb892-2f9d-40e1-a95a-ccf3ede8fb95
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column MONTH
+		dataType: string
+		lineageTag: 05933420-4d4b-4812-862e-d8083bf39df9
+		summarizeBy: none
+		sourceColumn: MONTH
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Source File Name'
+		dataType: string
+		lineageTag: 943dabea-502e-48cd-a29a-76ed5017881a
+		summarizeBy: none
+		sourceColumn: Source File Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Source Sheet'
+		dataType: string
+		lineageTag: 8f16c823-4289-4d03-96c1-57b665dae899
+		summarizeBy: none
+		sourceColumn: Source Sheet
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_file_name
+		dataType: string
+		lineageTag: 2a9d93b3-b015-488a-9cbc-e101c78f9c55
+		summarizeBy: none
+		sourceColumn: source_file_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Report Date - text'
+		dataType: string
+		lineageTag: c4ef9668-401b-44bf-a4a7-456c0754e106
+		summarizeBy: none
+		sourceColumn: Report Date - text
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ADHAC-72d9f16e-c9af-4c6b-90c1-8171213eaa2e = m
+		mode: import
+		source =
+				let
+				    Source = #"COVID-19 associated deaths",
+				    #"Appended COVID-19 Cases Monthly" = Table.Combine({Source, #"COVID-19 Cases Monthly"}),
+				    #"Appended COVID-19 Cases Daily" = Table.Combine({#"Appended COVID-19 Cases Monthly", #"COVID-19 Cases Daily"}),
+				    #"Appended COVID-19 impact on aged care" = Table.Combine({#"Appended COVID-19 Cases Daily", #"COVID-19 impact on aged care"}),
+				    #"Appended COVID-19 impact on aged care AUS" = Table.Combine({#"Appended COVID-19 impact on aged care", #"COVID-19 impact on aged care AUS"}),
+				    #"Appended COVID-19 impact on hospitals" = Table.Combine({#"Appended COVID-19 impact on aged care AUS", #"COVID-19 impact on hospitals"}),
+				    #"Appended COVID-19 treatments" = Table.Combine({#"Appended COVID-19 impact on hospitals", #"COVID-19 treatments"}),
+				    #"Appended COVID-19 treatments AUS" = Table.Combine({#"Appended COVID-19 treatments", #"COVID-19 treatments AUS"}),
+				    #"Appended COVID-19 vaccine booster doses" = Table.Combine({#"Appended COVID-19 treatments AUS", #"COVID-19 vaccine booster doses"}),
+				    #"Appended Health Aged Care Treatments" = Table.Combine({#"Appended COVID-19 vaccine booster doses", #"Health Aged Care - Treatments"}),
+				    #"Appended Health Aged Care - National Snapshot" = Table.Combine({#"Appended Health Aged Care Treatments", #"Health Aged Care - National Snapshot"}),
+				    #"Appended Health Aged Care - Active Outbreak Summary" = Table.Combine({#"Appended Health Aged Care - National Snapshot", #"Health Aged Care - Active Outbreak Summary"}),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Appended Health Aged Care - Active Outbreak Summary", "Attribute", "Attribute - Copy"),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Duplicated Column", "Attribute - Copy", Splitter.SplitTextByEachDelimiter({"_"}, QuoteStyle.Csv, true), {"Attribute - Copy.1", "Attribute - Copy.2"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Attribute - Copy.1", type text}, {"Attribute - Copy.2", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Attribute - Copy.2", "State"}, {"Attribute - Copy.1", "Metric"}}),
+				    #"Appended AUS_AgedCare" = Table.Combine({#"Renamed Columns", AUS_AgedCare}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Appended AUS_AgedCare","_"," ",Replacer.ReplaceText,{"Metric"}),
+				    #"Capitalized Each Word" = Table.TransformColumns(#"Replaced Value",{{"Metric", Text.Proper, type text}}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Capitalized Each Word","7Day","7-day",Replacer.ReplaceText,{"Metric"}),
+				    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1","Pbs ","PBS ",Replacer.ReplaceText,{"Metric"}),
+				    #"Replaced Value3" = Table.ReplaceValue(#"Replaced Value2"," Icu"," ICU",Replacer.ReplaceText,{"Metric"}),
+				    #"Appended Query" = Table.Combine({#"Replaced Value3", #"ABS Doctor certified deaths - for ADHAC"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Appended Query",{{"Value", type number}, {"Report Date", type date}, {"Category", type text}, {"State", type text}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,26 @@
+table 'Under-reporting Factor'
+	lineageTag: 62249c93-ea88-408f-b669-2272c8ba537c
+
+	measure 'Under-reporting Factor Value' = SELECTEDVALUE('Under-reporting Factor'[Under-reporting Factor], 20)
+		formatString: 0
+		lineageTag: eb89affb-3f41-4418-8927-527ba68f245d
+
+	column 'Under-reporting Factor'
+		formatString: 0
+		lineageTag: da03f55a-7eea-4cee-a291-0c5b536c1f6c
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+	partition 'Under-reporting Factor-d39441df-3655-4e5b-b4ba-a2f3173d28e8' = calculated
+		mode: import
+		source = GENERATESERIES(1, 1000, 1)
+
+	annotation PBI_Id = c8259e4f847845bb878e6b3843de54c4
+

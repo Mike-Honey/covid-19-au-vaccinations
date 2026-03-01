@@ -1,0 +1,26 @@
+table '^ Outlier Percentile'
+	lineageTag: dbef44dc-a271-4bdd-9b05-0efcf70292f1
+
+	measure '^ Outlier Percentile Value' = SELECTEDVALUE('^ Outlier Percentile'[^ Outlier Percentile], 10)
+		formatString: 0
+		lineageTag: 2b28357c-e521-4e3a-8176-a6ddb189bd9c
+
+	column '^ Outlier Percentile'
+		formatString: 0
+		lineageTag: 3a3008d4-5c7f-4d1f-869d-396df1a24285
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+	partition '^ Outlier Percentile' = calculated
+		mode: import
+		source = GENERATESERIES(0, 100, 1)
+
+	annotation PBI_Id = f8fca42265aa4a50b052aac6a0bc8176
+

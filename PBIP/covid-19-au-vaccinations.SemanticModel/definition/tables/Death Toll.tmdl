@@ -1,0 +1,91 @@
+table 'Death Toll'
+	lineageTag: 4f8660b4-3c78-45a4-941c-df6fc3c7f419
+
+	measure '@ Death Toll - Date Range' = ```
+			
+			FORMAT( SUM ( 'Death Toll'[Deaths] ) , "#,0" ) & " Deaths, from: " & 
+			FORMAT( FIRSTDATE( 'Death Toll'[Report Date] ), "d MMMM yyyy" ) & " to " &
+			FORMAT( LASTDATE( 'Death Toll'[Report Date] ), "d MMMM yyyy" ) 
+			```
+		lineageTag: d278caa5-d26b-4979-b5b4-d28f07db7c82
+
+	column 'Report Date'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 1d8f0209-98d8-4936-a7f5-c903a5e7cc3c
+		summarizeBy: none
+		sourceColumn: Report Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Outbreak Day'
+		dataType: int64
+		formatString: #,0
+		lineageTag: f353995c-5287-45d0-a82a-3e40277f5dad
+		summarizeBy: sum
+		sourceColumn: Outbreak Day
+
+		annotation SummarizationSetBy = Automatic
+
+	column Index
+		dataType: int64
+		formatString: 0
+		lineageTag: 97571053-9bb6-427c-8bd1-1eaae089afc2
+		summarizeBy: none
+		sourceColumn: Index
+
+		annotation SummarizationSetBy = User
+
+	column Year
+		dataType: string
+		lineageTag: 1f94f94b-139d-4857-9be5-6b8cdd736b54
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Deaths
+		dataType: int64
+		formatString: #,0
+		lineageTag: 19c5641c-85a6-4ce0-a63e-6a7c5f68440f
+		summarizeBy: sum
+		sourceColumn: Deaths
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Underlying cause of death'
+		dataType: string
+		lineageTag: 11a3d2f6-3468-4db0-9850-588f0f258e5b
+		summarizeBy: none
+		sourceColumn: Underlying cause of death
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Death Toll-a392d6c6-c9cd-4412-ac0f-d368daefc8f5' = m
+		mode: import
+		source =
+				let
+				    Source = #"ABS Doctor certified deaths",
+				    #"Added Burst" = Table.AddColumn(Source, "Burst", each {1..[Deaths]}),
+				    #"Expanded Burst" = Table.ExpandListColumn(#"Added Burst", "Burst"),
+				    #"Added Random 6" = Table.AddColumn(#"Expanded Burst", "Random 6", each List.Random(1)),
+				    #"Expanded Random 6" = Table.ExpandListColumn(#"Added Random 6", "Random 6"),
+				    #"Added Index" = Table.AddIndexColumn(#"Expanded Random 6", "Index", 1, 1, Int64.Type),
+				    #"Multiplied Column" = Table.TransformColumns(#"Added Index", {{"Random 6", each _ * 7, type number}}),
+				    #"Rounded Down" = Table.TransformColumns(#"Multiplied Column",{{"Random 6", Number.RoundDown, Int64.Type}}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Rounded Down",{{"Report Date", "Report Date.1"}}),
+				    #"Added Report Date" = Table.AddColumn(#"Renamed Columns1", "Report Date", each Date.AddDays ( [Report Date.1], (0 + [Random 6] ) ) ),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added Report Date",{{"Report Date", type date}, {"Random 6", type number}, {"Burst", type number}}),
+				    #"Added Outbreak Day" = Table.AddColumn(#"Changed Type", "Outbreak Day", each [Report Date] - Date.From ( "2020-02-29")),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Added Outbreak Day",{"Underlying cause of death", "Year", "Index", "Report Date", "Outbreak Day"}),
+				    #"Added Deaths" = Table.AddColumn(#"Removed Other Columns", "Deaths", each 1),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Added Deaths",{{"Outbreak Day", Int64.Type}, {"Deaths", Int64.Type}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

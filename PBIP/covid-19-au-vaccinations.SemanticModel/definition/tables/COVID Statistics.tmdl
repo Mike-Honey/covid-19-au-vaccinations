@@ -1,0 +1,105 @@
+table 'COVID Statistics'
+	lineageTag: c904057f-04f6-4be6-ae06-5851c3b3b0ff
+
+	measure '@ Geography - COVID Statistics' = ```
+			
+			VAR __SelectedValue =
+			    SELECTCOLUMNS (
+			        SUMMARIZE ( 'COVID Statistics', 'COVID Statistics'[COVID Statistics], 'COVID Statistics'[COVID Statistics Fields] ),
+			        'COVID Statistics'[COVID Statistics]
+			    )
+			RETURN 
+			FIRSTNONBLANK( 'Geography'[Geography] , 1 ) & " - " & 
+			IF ( COUNTROWS ( __SelectedValue ), __SelectedValue )
+			```
+		lineageTag: 67073f22-7263-45e2-828e-257a919bc0b2
+
+	column 'COVID Statistics'
+		lineageTag: b800df60-6b40-455b-aac6-bc91866f3f6b
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'COVID Statistics Order'
+
+		relatedColumnDetails
+			groupByColumn: 'COVID Statistics Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'COVID Statistics Fields'
+		isHidden
+		lineageTag: 8b3f595e-b841-445e-a8f0-08af3b4cf927
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'COVID Statistics Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "kind": 2,
+				  "version": 3
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'COVID Statistics Order'
+		isHidden
+		formatString: 0
+		lineageTag: 71c2ad00-bdea-4d8b-8f52-1d65a8691ef5
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'COVID Statistics-33cabcd7-7b7a-42b8-8740-af9e201c63fc' = calculated
+		mode: import
+		source = ```
+				{
+				    ("# Cases (7-day avg)", NAMEOF('covid-live'[# Cases (N-day rolling average)]), 10),
+				    ("# Cases per 1M (7-day avg)", NAMEOF('covid-live'[# Cases per 1M (N-day rolling average)]), 20),
+				    ("# Cases PCR (7-day avg)", NAMEOF('covid-live'[# Cases PCR (N-day rolling average)]), 30),
+				    ("# Cases PCR per 1M (7-day avg)", NAMEOF('covid-live'[# Cases PCR per 1M (N-day rolling average)]), 40),
+				    ("# Cases (1-year rolling average)", NAMEOF('covid-live'[# Cases (1-year rolling average)]), 45), 
+				    ("# New Cases", NAMEOF('covid-live'[# New Cases]), 50),
+				    ("# New Cases (smoothed)", NAMEOF('covid-live'[# New Cases (smoothed)]), 60),
+				    ("# New Cases PCR (smoothed)", NAMEOF('covid-live'[# New Cases PCR (smoothed)]), 70),
+				    ("/ Reff", NAMEOF('covid-live'[/ Reff]), 80),
+				    ("/ Reff PCR", NAMEOF('covid-live'[/ Reff]), 90),
+				    ("% Cases Weekly Change", NAMEOF('covid-live'[% Cases Weekly Change]), 100),
+				    ("% Cases (of population)", NAMEOF('covid-live'[% Cases (of population)]), 110),
+				    ("# Hospitalised", NAMEOF('covid-live'[# Hospitalised]), 120),
+				    ("# Hospitalised per 1M", NAMEOF('covid-live'[# Hospitalised per 1M]), 130),
+				    ("% Hospitalised Weekly Change", NAMEOF('covid-live'[% Hospitalised Weekly Change]), 140),
+				    ("% Hospitalised Rate (vs prior week cases)", NAMEOF('covid-live'[% Hospitalised Rate (vs prior week cases)]), 150),
+				    ("# ICU", NAMEOF('covid-live'[# ICU]), 160),
+				    ("# ICU per 1M", NAMEOF('covid-live'[# ICU per 1M]), 170),
+				    ("% ICU Weekly Change", NAMEOF('covid-live'[% ICU Weekly Change]), 180),
+				    ("% ICU Rate (1-week lag)", NAMEOF('covid-live'[% ICU Rate (1-week lag)]), 190),
+				    ("# Deaths", NAMEOF('covid-live'[# New Deaths]), 200),
+				    ("# Deaths (smoothed)", NAMEOF('covid-live'[# New Deaths (smoothed)]), 210),
+				    ("# Deaths per 1M", NAMEOF('covid-live'[# New Deaths per 1M]), 220),
+				    ("# Deaths (7-day avg)", NAMEOF('covid-live'[# Deaths (N-day rolling average)]), 230),
+				    ("# Deaths per 1M (7-day avg)", NAMEOF('covid-live'[# Deaths per 1M (N-day rolling average)]), 240),
+				    ("# Deaths (28-day avg)", NAMEOF('covid-live'[# Deaths (28-day rolling average)]), 250),
+				    ("# Deaths per 1M (28-day avg)", NAMEOF('covid-live'[# Deaths per 1M (28-day rolling average)]), 260),
+				    ("# Deaths (Cumulative)", NAMEOF('covid-live'[# Deaths (Cumulative)]), 270),
+				    ("# Deaths per 1M (Cumulative)", NAMEOF('covid-live'[# Deaths per 1M (Cumulative)]), 280),
+				    (": 1 death every N minutes", NAMEOF('covid-live'[: 1 death every N minutes]), 290),
+				    ("% Case Fatality Rate (14-day lag)", NAMEOF('covid-live'[% Case Fatality Rate (14-day lag)]), 300),
+				    ("% Fully Vaccinated (boosted within 120 days)", NAMEOF('covid-live'[% Fully Vaccinated (boosted within 120 days)]), 310),
+				    ("# Fully Vaccinated (boosted within 120 days)", NAMEOF('covid-live'[# Fully Vaccinated (boosted within 120 days)]), 320),
+				    ("# Vaccination Boosters", NAMEOF('covid-live'[# Vaccination Boosters]), 330),
+				    ("% Vaccination Boosters (Cumulative)", NAMEOF('covid-live'[% Vaccination Boosters (Cumulative)]), 340),
+				    ("# Vaccination Doses", NAMEOF('covid-live'[# Vaccination Doses]), 350),
+				    ("# New Vaccination Doses", NAMEOF('covid-live'[# Vaccination Doses]), 351),
+				    ("# Vaccinated People", NAMEOF('covid-live'[# Vaccinated People]), 360),
+				    ("# PCR Tests", NAMEOF('covid-live'[# New Tests]), 360),
+				    ("# PCR Tests (7-day avg)", NAMEOF('covid-live'[# Tests (N-day rolling average)]), 370),
+				    ("# PCR Tests per 1M (7-day avg)", NAMEOF('covid-live'[# Tests per 1M (N-day rolling average)]), 380),
+				    ("/ PCR Tests per Case (7-day avg)", NAMEOF('covid-live'[# Tests per Case (N-day rolling average)]), 390),
+				    ("% Currently Infectious (estimated)", NAMEOF('covid-live'[% Currently Infectious (estimated)]), 400),
+				    ("# People Infected (estimated)", NAMEOF('covid-live'[# People Infected (estimated)]), 410),
+				    ("% People Infected (estimated)", NAMEOF('covid-live'[% People Infected (estimated)]), 420)
+				}
+				```
+
+	annotation PBI_Id = 72ad7a1f865c45d7ad3025f59cbad104
+

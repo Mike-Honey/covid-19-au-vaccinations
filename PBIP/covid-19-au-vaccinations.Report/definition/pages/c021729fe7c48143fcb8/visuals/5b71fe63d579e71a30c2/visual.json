@@ -1,0 +1,169 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "5b71fe63d579e71a30c2",
+  "position": {
+    "x": 96.000000000000014,
+    "y": 112,
+    "z": 0,
+    "height": 592,
+    "width": 640,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Aged Care Service List"
+                    }
+                  },
+                  "Property": "Service Name"
+                }
+              },
+              "queryRef": "Aged Care Service List.Service Name",
+              "nativeQueryRef": "Service Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Aged Care - Active Outbreaks"
+                    }
+                  },
+                  "Property": "Service Name"
+                }
+              },
+              "queryRef": "Aged Care - Active Outbreaks.Service Name",
+              "nativeQueryRef": "Service Name1"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Aged Care - Active Outbreaks"
+                        }
+                      },
+                      "Property": "Staff Cases"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(Aged Care - Active Outbreaks.Staff  Cases)",
+              "nativeQueryRef": "Staff  Cases"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Aged Care - Active Outbreaks"
+                        }
+                      },
+                      "Property": "Report Date"
+                    }
+                  },
+                  "Function": 4
+                }
+              },
+              "queryRef": "Aged Care - Active Outbreaks.Report Date",
+              "nativeQueryRef": "Latest Report Date"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Aggregation": {
+                "Expression": {
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "Aged Care - Active Outbreaks"
+                      }
+                    },
+                    "Property": "Report Date"
+                  }
+                },
+                "Function": 4
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "cffd2e915b6cd2156993",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Aged Care Service List"
+              }
+            },
+            "Property": "Service Name"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "a",
+              "Entity": "Aged Care Service List",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "a"
+                          }
+                        },
+                        "Property": "Service Name"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "null"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

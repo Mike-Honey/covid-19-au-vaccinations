@@ -1,0 +1,193 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "4591cc5fbfeb6034d304",
+  "position": {
+    "x": 736,
+    "y": 16,
+    "z": 6000,
+    "height": 400,
+    "width": 208,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Source data:",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "9pt"
+                    }
+                  },
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "9pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "dbRaevn",
+                    "textStyle": {},
+                    "url": "https://github.com/dbRaevn/covid19/"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Australian Health Department",
+                    "textStyle": {
+                      "fontSize": "9pt"
+                    },
+                    "url": "https://www.health.gov.au"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "abs.gov.au",
+                    "textStyle": {
+                      "fontFamily": "inherit",
+                      "fontSize": "inherit"
+                    },
+                    "url": "https://www.abs.gov.au/ausstats/abs@.nsf/Lookup/by%20Subject/1270.0.55.003~June%202020~Main%20Features~Local%20Government%20Areas%20(LGAs)~3"
+                  },
+                  {
+                    "value": " (Population)",
+                    "textStyle": {
+                      "fontFamily": "inherit",
+                      "fontSize": "inherit"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Data prep & Viz",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontSize": "9pt"
+                    }
+                  },
+                  {
+                    "value": ": ",
+                    "textStyle": {
+                      "fontSize": "9pt"
+                    }
+                  },
+                  {
+                    "value": "Power BI",
+                    "textStyle": {
+                      "fontSize": "9pt"
+                    },
+                    "url": "https://powerbi.microsoft.com"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Credits & License:",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Calibri",
+                      "fontSize": "8.25pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "This report was developed on a \"best efforts\" basis by Mike Honey of Manga Solutions.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "8.25pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "www.mangasolutions.com",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "8.25pt"
+                    },
+                    "url": "http://www.mangasolutions.com/"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Source code and data available",
+                    "textStyle": {
+                      "fontSize": "8pt"
+                    },
+                    "url": "https://github.com/Mike-Honey/covid-19-au-vaccinations#readme"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "This work is licensed under the MIT License.",
+                    "textStyle": {
+                      "fontFamily": "Calibri",
+                      "fontSize": "8.25pt"
+                    },
+                    "url": "https://github.com/Mike-Honey/covid-19-au-vaccinations/blob/main/LICENSE"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

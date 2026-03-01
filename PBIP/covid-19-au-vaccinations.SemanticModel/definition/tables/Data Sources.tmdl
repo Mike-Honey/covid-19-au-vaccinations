@@ -1,0 +1,31 @@
+table 'Data Sources'
+	lineageTag: ff3ce24f-1e7c-45e3-972b-56a15a3d36bc
+
+	measure '@ Data Source Label' = ```
+			SELECTEDVALUE( 'Data Sources'[Data Source], "covidlive.com.au" ) 
+			```
+		lineageTag: 4bf3b389-3fe9-4faa-8f48-fdf52b051ba1
+
+	column 'Data Source'
+		dataType: string
+		lineageTag: 022ab2a1-678f-49a0-ad8e-e750ab28a589
+		summarizeBy: none
+		sourceColumn: Data Source
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Data Sources-dad13a6e-d82f-43ab-b892-63ecdf873c89' = m
+		mode: import
+		source =
+				let
+				    Source = Metrics,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Data Source"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Duplicates",{{"Data Source", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

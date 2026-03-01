@@ -1,0 +1,233 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "9ff610f8e348e5712e73",
+  "position": {
+    "x": 1076.3130434782609,
+    "y": 373.98260869565217,
+    "z": 15000,
+    "height": 346.15652173913043,
+    "width": 203.68695652173912,
+    "tabOrder": 15000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "This page estimates the % of the Australian population Currently Infectious, based on Aged Care Staff Cases. The (somewhat heroic) assumption is that this data series has been consistent across the time period, with data shared for all states and territories, with the same data collection and testing methods used in every jurisdiction and over time, and with the same relative relationship to population cases.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Starting from that assumption, the total of Aged Care Staff Cases were translated into population level infections using this method:",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Starting from the "
+                  },
+                  {
+                    "value": "Kirby seroprevalence surveys",
+                    "textStyle": {},
+                    "url": "https://www.kirby.unsw.edu.au/research/projects/serosurveillance-sars-cov-2-infection-inform-public-health-responses"
+                  },
+                  {
+                    "value": ":"
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Between Round 1 and 2, seroprevalence increased by 29%"
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Add 20% for the limits of seroprevalence testing (maxes out at 80%) = 35% infected"
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "35% of the Australian population of ~26M = 9M"
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Between the dates for Round 1 (23 Feb - 3 Mar 2022) and Round 2 (9 - 18 Jun 2022), around 22,500 Australian Aged Care Staff cases were reported"
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Therefore, each Aged Care Staff Case represents ~400 infections in the broader population (9M / 22,500 = 400)"
+                  }
+                ],
+                "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "The last 6 months are shown.  A median Infectious Period of 10 days is used to get from daily cases to the percentage Currently Infected. ",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "The estimated total number of people infected across that period is calculated, both as a % of the Australian population and as the number of people. This ignores re-infections during the period, which are less likely over a 6-month window.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#000000"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FDF3EF'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

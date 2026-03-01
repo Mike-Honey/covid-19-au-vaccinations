@@ -1,0 +1,257 @@
+table Metrics
+	lineageTag: 7480416f-aaa7-48a5-9d37-a4f083e0fe3d
+
+	measure '# Metric' =
+			SWITCH ( SELECTEDVALUE( Metrics[Metric] ) ,
+			    "# Registered deaths - COVID-19", 'ABS ARI deaths'[# Registered deaths - COVID-19],
+			    "# Registered deaths - COVID-19 (Cumulative)", 'ABS ARI deaths'[# Registered deaths - COVID-19 (Cumulative)],
+			    "# Registered deaths - Influenza", 'ABS ARI deaths'[# Registered deaths - Influenza],
+			    "# Registered deaths - Influenza (Cumulative)", 'ABS ARI deaths'[# Registered deaths - Influenza (Cumulative)],
+			    "# Registered deaths - RSV", 'ABS ARI deaths'[# Registered deaths - RSV],
+			    "# Registered deaths - RSV (Cumulative)", 'ABS ARI deaths'[# Registered deaths - RSV (Cumulative)],
+			    "# Cases (7-day avg)", 'covid-live'[# Cases (N-day rolling average)],
+			    "# Cases per 1M (7-day avg)", 'covid-live'[# Cases per 1M (N-day rolling average)],
+			    "# Cases (Monthly)", 'ADHAC'[# Cases (Monthly)],
+			    "# Cases per 1M (Monthly)", 'ADHAC'[# Cases (Monthly) per 1M],
+			    "# Cases (Cumulative)", 'covid-live'[# Cases (Cumulative)],
+			    "# Cases (1-year rolling average)", 'covid-live'[# Cases (1-year rolling average)],
+			    "# Cases per 1M (Cumulative)", 'covid-live'[# Cases per 1M (Cumulative)],
+			    "# Cases PCR (7-day avg)", 'covid-live'[# Cases PCR (N-day rolling average)],
+			    "# Cases PCR per 1M (7-day avg)", 'covid-live'[# Cases PCR per 1M (N-day rolling average)],
+			    "# New Cases", 'covid-live'[# New Cases],
+			    "# New Cases (smoothed)", 'covid-live'[# New Cases (smoothed)],
+			    "# New Cases PCR (smoothed)", 'covid-live'[# New Cases PCR (smoothed)],
+			    "/ Reff", 'covid-live'[/ Reff],
+			    "/ Reff PCR", 'covid-live'[/ Reff],
+			    "% Cases Weekly Change", 'covid-live'[% Cases Weekly Change],
+			    "% Cases Monthly Change", 'ADHAC'[% Cases (Monthly) Change],
+			    "% Cases (of population)", 'covid-live'[% Cases (of population)],
+			    "# Hospitalised", 'covid-live'[# Hospitalised],
+			    "# Hospitalised per 1M", 'covid-live'[# Hospitalised per 1M],
+			    "% Hospitalised Weekly Change", 'covid-live'[% Hospitalised Weekly Change],
+			    "% Hospitalised Rate (vs prior week cases)", 'covid-live'[% Hospitalised Rate (vs prior week cases)],
+			    "# ICU", 'covid-live'[# ICU],
+			    "# ICU per 1M", 'covid-live'[# ICU per 1M],
+			    "% ICU Weekly Change", 'covid-live'[% ICU Weekly Change],
+			    "% ICU Rate (1-week lag)", 'covid-live'[% ICU Rate (1-week lag)],
+			    "# Deaths", 'covid-live'[# New Deaths],
+			    "# Deaths (smoothed)", 'covid-live'[# New Deaths (smoothed)],
+			    "# Deaths per 1M", 'covid-live'[# New Deaths per 1M],
+			    "# Deaths (7-day avg)", 'covid-live'[# Deaths (N-day rolling average)],
+			    "# Deaths per 1M (7-day avg)", 'covid-live'[# Deaths per 1M (N-day rolling average)],
+			    "# Deaths (28-day avg)", 'covid-live'[# Deaths (28-day rolling average)],
+			    "# Deaths per 1M (28-day avg)", 'covid-live'[# Deaths per 1M (28-day rolling average)],
+			    "# Deaths (Cumulative)", 'covid-live'[# Deaths (Cumulative)],
+			    "# Deaths per 1M (Cumulative)", 'covid-live'[# Deaths per 1M (Cumulative)],
+			    "# Certified deaths - COVID-19", [# Certified deaths - COVID-19],
+			    "# Certified deaths - Cancer", [# Certified deaths - Cancer],
+			    "# Certified deaths - Cerebrovascular diseases", [# Certified deaths - Cerebrovascular diseases],
+			    "# Certified deaths - Chronic lower respiratory conditions", [# Certified deaths - Chronic lower respiratory conditions],
+			    "# Certified deaths - Dementia including Alzheimers", [# Certified deaths - Dementia including Alzheimers],
+			    "# Certified deaths - Diabetes", [# Certified deaths - Diabetes],
+			    "# Certified deaths - Influenza and pneumonia", [# Certified deaths - Influenza and pneumonia],
+			    "# Certified deaths - Ischaemic heart diseases", [# Certified deaths - Ischaemic heart diseases],
+			    "# Certified deaths - Other cardiac conditions", [# Certified deaths - Other cardiac conditions],
+			    "# Certified deaths - Pneumonia", [# Certified deaths - Pneumonia],
+			    "# Certified deaths - Respiratory diseases", [# Certified deaths - Respiratory diseases],
+			    "# Certified deaths - Total", [# Certified deaths - Total],
+			    ": 1 death every N minutes", 'covid-live'[: 1 death every N minutes],
+			    "% Case Fatality Rate (14-day lag)", 'covid-live'[% Case Fatality Rate (14-day lag)],
+			    "% Fully Vaccinated (boosted within 120 days)", 'covid-live'[% Fully Vaccinated (boosted within 120 days)],
+			    "# Fully Vaccinated (boosted within 120 days)", 'covid-live'[# Fully Vaccinated (boosted within 120 days)],
+			    "# Vaccination Boosters", 'covid-live'[# Vaccination Boosters],
+			    "% Vaccination Boosters (Cumulative)", 'covid-live'[% Vaccination Boosters (Cumulative)],
+			    "# Vaccination Doses", 'covid-live'[# Vaccination Doses],
+			    "# Vaccinated People", 'covid-live'[# Vaccinated People],
+			    "# New Vaccination Doses", 'covid-live'[# New Vaccination Doses],
+			    "# New Vaccination Doses (7-day avg)", 'covid-live'[# New Vaccination Doses (N-day rolling average)],
+			    "# PCR Tests", 'covid-live'[# New Tests],
+			    "# PCR Tests (7-day avg)", 'covid-live'[# Tests (N-day rolling average)],
+			    "# PCR Tests per 1M (7-day avg)", 'covid-live'[# Tests per 1M (N-day rolling average)],
+			    "/ PCR Tests per Case (7-day avg)", 'covid-live'[# Tests per Case (N-day rolling average)],
+			    "% Currently Infectious (estimated)", 'covid-live'[% Currently Infectious (estimated)],
+			    "# Aged Care Resident Cases", [# Aged Care Resident Cases],
+			    "# Aged Care Resident Cases (7-day avg)", [# Aged Care Resident Cases (7-day avg)],
+			    "# Aged Care Resident Cases (7-day avg) per 1M", [# Aged Care Resident Cases (7-day avg) per 1M],
+			    "%\ Aged Care Resident Cases Weekly Change", [% Aged Care Resident Cases Weekly Change],
+			    "# Aged Care Active Resident Cases (Weekly)", [# Aged Care Active Resident Cases (Weekly)],
+			    "# Aged Care Active Resident Cases (Weekly) per 1M", [# Aged Care Active Resident Cases (Weekly) per 1M],
+			    "% Aged Care Active Resident Cases Weekly Change", [% Aged Care Active Resident Cases Weekly Change],
+			    "# Aged Care Staff Cases", [# Aged Care Staff Cases],
+			    "# Aged Care Staff Cases (7-day avg)", [# Aged Care Staff Cases (7-day avg)],
+			    "# Aged Care Staff Cases (7-day avg) per 1M", [# Aged Care Staff Cases (7-day avg) per 1M],
+			    "% Aged Care Staff Cases Weekly Change", [% Aged Care Staff Cases Weekly Change],
+			    "# Aged Care Active Staff Cases (Weekly)", [# Aged Care Active Staff Cases (Weekly)],
+			    "# Aged Care Active Staff Cases (Weekly) per 1M", [# Aged Care Active Staff Cases (Weekly) per 1M],
+			    "% Aged Care Active Staff Cases Weekly Change", [% Aged Care Active Staff Cases Weekly Change],
+			    "# Aged Care Active Outbreaks", [# Aged Care Active Outbreaks],
+			    "# Aged Care Active Outbreaks (7-day avg)", [# Aged Care Active Outbreaks (7-day avg)],
+			    "# Aged Care Active Outbreaks (7-day avg) per 1M", [# Aged Care Active Outbreaks (7-day avg) per 1M],
+			    "% Aged Care Active Outbreaks Weekly Change", [% Aged Care Active Outbreaks Weekly Change],
+			    "# Aged Care Outbreaks Facilities (Weekly)", [# Aged Care Outbreaks Facilities (Weekly)],
+			    "# Aged Care Outbreaks Facilities (Weekly) per 1M", [# Aged Care Outbreaks Facilities (Weekly) per 1M],
+			    "% Aged Care Outbreaks Facilities Weekly Change", [% Aged Care Outbreaks Facilities Weekly Change],
+			    "# Resident Cases (Daily) - Residential Aged Care", [# Resident Cases (Daily) - Residential Aged Care],
+			    "# Resident Cases (Weekly) - Residential Aged Care", [# Resident Cases (Weekly) - Residential Aged Care],
+			    "# Staff Cases (Weekly) - Residential Aged Care", [# Staff Cases (Weekly) - Residential Aged Care],
+			    "# Staff Cases (Weekly) per 1M -  Residential Aged Care", [# Staff Cases (Weekly) per 1M -  Residential Aged Care],
+			    "# Molnupiravir Prescriptions - Residential Aged Care", [# Molnupiravir Prescriptions - Residential Aged Care],
+			    "# Molnupiravir Prescriptions (Daily) - Residential Aged Care", [# Molnupiravir Prescriptions (Daily) - Residential Aged Care],
+			    "% Molnupiravir Prescriptions per Case - Residental Aged Care", [% Molnupiravir Prescriptions per Case - Residental Aged Care],
+			    "# Paxlovid Prescriptions - Residential Aged Care", [# Paxlovid Prescriptions - Residential Aged Care],
+			    "# Paxlovid Prescriptions (Daily) - Residential Aged Care", [# Paxlovid Prescriptions (Daily) - Residential Aged Care],
+			    "% Paxlovid Prescriptions per Case - Residental Aged Care", [% Paxlovid Prescriptions per Case - Residental Aged Care],
+			    "# Monthly PBS Scripts", [# Monthly PBS Scripts],
+			    "# Monthly PBS Scripts per 1M", [# Monthly PBS Scripts per 1M],
+			    "% Monthly PBS Scripts Change", [% Monthly PBS Scripts Monthly Change]
+			)
+		lineageTag: 4079801f-3fdd-4479-a538-20251c81bc63
+
+		formatStringDefinition =
+				VAR v_Metric = SELECTEDVALUE( Metrics[Metric] )
+				RETURN
+				SWITCH ( TRUE() ,
+				    SEARCH( "%", v_Metric, 1, -1 ) > 0 , "0.0%",
+				    SEARCH( " per ", v_Metric, 1, -1 ) > 0 , "#,0.0",
+				    SEARCH( "avg", v_Metric, 1, -1 ) > 0 , "#,0.0",
+				    SEARCH( "/", v_Metric, 1, -1 ) > 0 , "#,0.00",
+				    "#,0"
+				    )
+
+	measure '# Metric Last' = LASTNONBLANKVALUE( Dates[Date], [# Metric] )
+		lineageTag: d6c4f7fa-1315-4c88-9252-011e6d9f2770
+
+		formatStringDefinition =
+				VAR v_Metric = SELECTEDVALUE( Metrics[Metric] )
+				RETURN
+				SWITCH ( TRUE() ,
+				    SEARCH( "%", v_Metric, 1, -1 ) > 0 , "0%",
+				    SEARCH( " per ", v_Metric, 1, -1 ) > 0 , "#,0.0",
+				    SEARCH( "/", v_Metric, 1, -1 ) > 0 , "#,0.00",
+				    "#,0"
+				    )
+
+	measure '# Metric Sum' = SUMX ( DISTINCT( Dates[Date]), [# Metric] )
+		lineageTag: e5310078-d440-40ac-b8ac-b01f0eea1635
+
+		formatStringDefinition =
+				VAR v_Metric = SELECTEDVALUE( Metrics[Metric] )
+				RETURN
+				SWITCH ( TRUE() ,
+				    SEARCH( "%", v_Metric, 1, -1 ) > 0 , "0.0%",
+				    SEARCH( " per ", v_Metric, 1, -1 ) > 0 , "#,0.0",
+				    SEARCH( "/", v_Metric, 1, -1 ) > 0 , "#,0.00",
+				    "#,0"
+				    )
+
+	measure '# Metric Filter Outliers' = ```
+			
+			VAR v_Percentile = '^ Outlier Percentile'[^ Outlier Percentile Value] / 100
+			RETURN
+			SWITCH (
+			    TRUE(),
+			    v_Percentile = 0,
+			    1,
+			    CALCULATE (
+			        PERCENTILEX.INC ( 'Dates' , [# Metric] , 1 - v_Percentile ),
+			        ALLSELECTED ( 'Dates' )
+			    ) >= [# Metric] &&
+			    CALCULATE (
+			        PERCENTILEX.INC ( 'Dates' , [# Metric] , v_Percentile ),
+			        ALLSELECTED ( 'Dates' )
+			    ) <= [# Metric] 
+			    ,1
+			    ,0
+			)
+			```
+		formatString: 0
+		lineageTag: 6036ca7b-f2a6-4af0-b731-02e894555860
+
+	column 'Metric Category'
+		dataType: string
+		lineageTag: ebdc9eb0-c6db-476d-8773-667e5d0d4f37
+		summarizeBy: none
+		sourceColumn: Metric Category
+		sortByColumn: 'Metric Category - Sort'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric Category - Sort'
+		dataType: int64
+		formatString: 0
+		lineageTag: 24dec6da-ba03-41e0-a8f6-21a8111d01d3
+		summarizeBy: sum
+		sourceColumn: Metric Category - Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column Metric
+		dataType: string
+		lineageTag: 5fc2af6d-efe1-4ef4-aa9d-71a0cbda10ef
+		summarizeBy: none
+		sourceColumn: Metric
+		sortByColumn: 'Metric - Sort'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric - Sort'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d2cf28d-1c3f-4f2c-b8fe-a5212fa7ffd4
+		summarizeBy: sum
+		sourceColumn: Metric - Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data Source'
+		dataType: string
+		lineageTag: c1b978c7-89ba-42e0-9032-3823d1abf812
+		summarizeBy: none
+		sourceColumn: Data Source
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric - Copy'
+		dataType: string
+		lineageTag: 220cc325-e3fd-4651-bd7a-a48bb3da8bdf
+		summarizeBy: none
+		sourceColumn: Metric - Copy
+		sortByColumn: 'Metric - Sort - Copy'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric - Sort - Copy'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9582ace9-8ac9-4b2b-9952-dce6d5b3e0e3
+		summarizeBy: sum
+		sourceColumn: Metric - Sort - Copy
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Metrics-e4fa7c11-b49c-488a-9211-9ba994331420 = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents("https://github.com/Mike-Honey/covid-19-au-vaccinations/raw/main/Metrics.xlsx"), null, true),
+				    Metrics_Table = Source{[Item="Metrics",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Metrics_Table,{{"Metric Catergory", type text}, {"Metric Catergory - Sort", Int64.Type}, {"Metric", type text}, {"Metric - Sort", Int64.Type}, {"covidlive.com.au", type text}, {"health.gov.au", type any}}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Changed Type", {"Metric Catergory", "Metric Catergory - Sort", "Metric", "Metric - Sort"}, "Attribute", "Value"),
+				    #"Filtered Rows" = Table.SelectRows(#"Unpivoted Other Columns", each ([Value] = "X")),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"Value"}),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Removed Columns", "Metric", "Metric - Copy"),
+				    #"Duplicated Column1" = Table.DuplicateColumn(#"Duplicated Column", "Metric - Sort", "Metric - Sort - Copy"),
+				    #"Renamed Columns" = Table.RenameColumns(#"Duplicated Column1",{{"Attribute", "Data Source"}, {"Metric Catergory", "Metric Category"}, {"Metric Catergory - Sort", "Metric Category - Sort"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,58 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-AU
+	dataAccessOptions
+		fastCombine
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Row - Column base","Rows","Columns","Population","Age Categories","Geography - ABS Sort","Geography","covid-live - base","covid-live","Report Dates - base","Report Dates - latest","Report Dates - base cases","Report Dates - latest cases","Report Dates","Daily Doses Administered - aus","Daily Doses Administered - nsw","Daily Doses Administered - vic","Daily Doses Administered - qld","Daily Doses Administered - sa","Daily Doses Administered - wa","Daily Doses Administered - tas","Daily Doses Administered - nt","Daily Doses Administered - act","Daily Doses Administered","Infection Fatality Rate","Dates","COP files","ABS Doctor certified deaths weekly 2015-2021","ABS Doctor certified deaths weekly 2022-2023","ABS Doctor certified deaths weekly 2024","ABS Doctor certified deaths weekly 2025","ABS Doctor certified deaths","ABS Doctor certified deaths - for ADHAC","Death Toll","Days since Health Leadership faced the public on COVID","health-aged-care xlsx file","Health Aged Care - Treatments","Health Aged Care - National Snapshot","Health Aged Care - Active Outbreak Summary","Aged Care Service List","Aged Care - Active Outbreaks","Aged Care - Active Outbreaks - DV Service Name","Aged Care Service Name Fuzzy Matches","AUS_AgedCare csv file","AUS_AgedCare","AUS_COVID19Cases xlsx file","COVID-19 Cases Monthly","COVID-19 Cases Daily","AUS_COVID19Data_Monthly xlsx file","COVID-19 associated deaths","COVID-19 impact on aged care","COVID-19 impact on aged care AUS","COVID-19 impact on hospitals","COVID-19 treatments","COVID-19 treatments AUS","COVID-19 vaccine booster doses","ADHAC","Data Sources","Metrics","NNDSS-COVID-19","NNDSS-Influenza","NNDSS-Measles","NNDSS-RSV","NNDSS - daily dates","NNDSS - base","NNDSS - AUS","NNDSS","Year","Month","ABS ARI deaths","Population by SA3"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table DateTableTemplate_50697d0d-479f-4e8b-a623-cf5e2caed67a
+ref table Rows
+ref table Columns
+ref table Population
+ref table 'Age Categories'
+ref table Geography
+ref table covid-live
+ref table LocalDateTable_f99ad411-63d6-4e31-9906-93896836c8d8
+ref table 'Report Dates'
+ref table 'Daily Doses Administered'
+ref table 'Infection Fatality Rate'
+ref table Dates
+ref table LocalDateTable_f7a8b0f0-675f-4281-8499-701d673ba300
+ref table '^ Rolling Average Days'
+ref table 'COVID Statistics'
+ref table '^ Y-axis Minimum'
+ref table LocalDateTable_3fe8df68-0c7e-4569-9a1d-7ac473d41a86
+ref table LocalDateTable_374e3b67-6c00-413c-ba68-ccef31635b7b
+ref table 'Median Infectious Period (Days)'
+ref table 'Under-reporting Factor'
+ref table 'Death Toll'
+ref table 'Days since Health Leadership faced the public on COVID'
+ref table LocalDateTable_d9f23e45-8846-4cfc-b712-226765304900
+ref table LocalDateTable_e6b77e6e-41b0-49a6-ae20-4e40715c4a17
+ref table ADHAC
+ref table 'Data Sources'
+ref table Metrics
+ref table LocalDateTable_60dce26c-dbf7-4dd4-8d8c-b79a312eccbd
+ref table '^ Outlier Percentile'
+ref table 'ABS Doctor certified deaths'
+ref table LocalDateTable_709ac70b-9d5b-438f-b0e5-d226acec770e
+ref table NNDSS
+ref table LocalDateTable_a84528da-88f3-4264-b941-bdad4cf4f853
+ref table LocalDateTable_6e1a9156-e92c-4c20-9468-8779a7ba2429
+ref table 'ABS ARI deaths'
+ref table 'Population by SA3'
+ref table 'Aged Care Service List'
+ref table 'Aged Care - Active Outbreaks'
+ref table LocalDateTable_04d1087c-7143-4cb7-a294-93816ceb9e42
+ref table LocalDateTable_2e52e5ab-5049-4c2c-ba1e-9d9cbf1bedc5
+
+ref cultureInfo en-US
+

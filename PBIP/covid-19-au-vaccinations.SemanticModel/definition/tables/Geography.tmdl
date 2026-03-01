@@ -1,0 +1,82 @@
+table Geography
+	lineageTag: 358b4290-84a8-4438-ba17-b5c6e89cda08
+
+	column Geography
+		dataType: string
+		lineageTag: 4fcbeda0-cf6f-415d-9b5e-dfac7ba2b829
+		summarizeBy: none
+		sourceColumn: Geography
+		sortByColumn: 'Geography - Sort'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Geography - Sort'
+		dataType: double
+		lineageTag: 762e9485-92dd-4675-a1f1-bb04fa018f0a
+		summarizeBy: sum
+		sourceColumn: Geography - Sort
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CODE
+		dataType: string
+		lineageTag: ad62882e-12e3-4bc3-a14e-4b9a6165a759
+		summarizeBy: none
+		sourceColumn: CODE
+		sortByColumn: 'Geography - Sort'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column STATE
+		dataType: string
+		lineageTag: 9cbbc150-a648-459e-a926-84d0cb122dcc
+		summarizeBy: none
+		sourceColumn: STATE
+		sortByColumn: 'STATE- Sort'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Colour Code'
+		dataType: string
+		lineageTag: a5893297-cb69-42fe-9b10-a848c6c778a3
+		summarizeBy: none
+		sourceColumn: Colour Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'STATE- Sort'
+		dataType: int64
+		formatString: 0
+		lineageTag: 714d6f05-f939-4b73-8fdd-e218dac61ca6
+		summarizeBy: sum
+		sourceColumn: STATE- Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Geography-a1951987-7b26-4c5d-b3be-682071b6f4eb = m
+		mode: import
+		source =
+				let
+				    Source = #"covid-live",
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"CODE", "NAME"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Duplicates",{{"NAME", "STATE"}}),
+				    #"Added Geography" = Table.AddColumn(#"Renamed Columns", "Geography", each if [STATE] = "NSW" then "New South Wales" else if [STATE] = "WA" then "Western Australia" else if [STATE] = "SA" then "South Australia" else if [STATE] = "NT" then "Northern Territory" else if [STATE] = "ACT" then "Australian Capital Territory" else [STATE]),
+				    #"Merged Queries" = Table.NestedJoin(#"Added Geography", {"Geography"}, #"Geography - ABS Sort", {"Geography"}, "Geography - ABS Sort", JoinKind.LeftOuter),
+				    #"Expanded Geography - ABS Sort" = Table.ExpandTableColumn(#"Merged Queries", "Geography - ABS Sort", {"Geography - Sort"}, {"Geography - Sort"}),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Expanded Geography - ABS Sort", "Geography - Sort", "Geography - Sort - Copy"),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Duplicated Column",{{"Geography - Sort - Copy", "STATE- Sort"}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Renamed Columns1",null,0,Replacer.ReplaceValue,{"Geography - Sort"}),
+				    #"Sorted Rows" = Table.Sort(#"Replaced Value",{{"Geography - Sort", Order.Ascending}}),
+				    #"Added Colour Code" = Table.AddColumn(#"Sorted Rows", "Colour Code", each if [CODE] = "AUS" then "00843D" else if [CODE] = "NSW" then "87CEEB" else if [CODE] = "VIC" then "000080" else if [CODE] = "QLD" then "800000" else if [CODE] = "SA" then "FF0000" else if [CODE] = "WA" then "000000" else if [CODE] = "TAS" then "006A4E" else if [CODE] = "NT" then "E65A00" else if [CODE] = "ACT" then "FFD700" else null, type text)
+				in
+				    #"Added Colour Code"
+
+	annotation PBI_ResultType = Table
+

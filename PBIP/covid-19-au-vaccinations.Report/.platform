@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "covid-19-au-vaccinations"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ab8ee2d4-e236-407a-bf83-15e17dc8a619"
+  }
+}
