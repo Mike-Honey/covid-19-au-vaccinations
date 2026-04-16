@@ -225,11 +225,11 @@ The Risk Analysis page estimates the % of the Australian population Currently In
 Starting from that assumption, the total of Aged Care Staff Cases were translated into population level infections using this method:
 
 Starting from the Kirby seroprevalence surveys:
-- Between Round 3 and 4, seroprevalence increased by 19%
+- Between Round 1 and 2, seroprevalence increased by 29%
 - Add 20% for the limits of seroprevalence testing (maxes out at 80%) = 23% infected
-- 23% of the Australian population of ~26M = 6M
-- Between the end date for Round 3 (2 Sep 2022) and Round 4 (13 Dec 2022), around 7,600 Australian Aged Care Staff cases were reported
-- Therefore, each Aged Care Staff Case represents ~800 infections in the broader population (6M / 7,600 = 789)
+- 35% of the Australian population of ~26M = 9M
+- Between the end date for Round 1 (23 Feb - 3 Mar 2022) and Round 2 (9 - 18 Jun 2022), around 22,500 Australian Aged Care Staff cases were reported
+- Therefore, each Aged Care Staff Case represents ~400 infections in the broader population (9M / 22,500 = 400)
 
 The last 6 months are shown.  A median Infectious Period of 10 days is used to get from daily cases to the percentage Currently Infected. 
 
